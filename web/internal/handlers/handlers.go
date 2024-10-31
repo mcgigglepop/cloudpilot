@@ -152,3 +152,10 @@ func (m *Repository) PostRegister(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) Dashboard(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "dashboard.page.tmpl", &models.TemplateData{})
 }
+
+// Logout is the logout handler
+func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
+	_ = m.App.Session.Destroy(r.Context())
+	_ = m.App.Session.RenewToken(r.Context())
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
+}
