@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/justinas/nosurf"
+	"github.com/mcgigglepop/cloudpilot/web/internal/helpers"
 )
 
 // NoSurf adds CSRF protection to all POST requests
