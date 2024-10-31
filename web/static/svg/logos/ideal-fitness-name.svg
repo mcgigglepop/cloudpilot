@@ -1,0 +1,11 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 47" width="300" height="47">
+	<title>New Project</title>
+	<style>
+		tspan { white-space:pre } 
+		.t0 { font-size: 39px;fill: #000000;font-weight: 700;font-family: "Roboto-Bold", "Roboto" } 
+	</style>
+	<text id="IDEAL FITNESS" style="transform: matrix(1,0,0,1,-2,37)" >
+		<tspan x="0" y="0" class="t0">I</tspan><tspan  y="0" class="t0">D</tspan><tspan  y="0" class="t0">E</tspan><tspan  y="0" class="t0">A</tspan><tspan  y="0" class="t0">L</tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0">F</tspan><tspan  y="0" class="t0">I</tspan><tspan  y="0" class="t0">T</tspan><tspan  y="0" class="t0">N</tspan><tspan  y="0" class="t0">E</tspan><tspan  y="0" class="t0">S</tspan><tspan  y="0" class="t0">S</tspan><tspan  y="0" class="t0">
+</tspan>
+	</text>
+</svg>
