@@ -3,6 +3,7 @@ import Quill from '../core/quill';
 import Module from '../core/module';
 import CodeBlock from '../formats/code';
 
+
 class SyntaxCodeBlock extends CodeBlock {
   replaceWith(block) {
     this.domNode.textContent = this.domNode.textContent;
@@ -24,9 +25,11 @@ class SyntaxCodeBlock extends CodeBlock {
 }
 SyntaxCodeBlock.className = 'ql-syntax';
 
+
 let CodeToken = new Parchment.Attributor.Class('token', 'hljs', {
-  scope: Parchment.Scope.INLINE,
+  scope: Parchment.Scope.INLINE
 });
+
 
 class Syntax extends Module {
   static register() {
@@ -37,9 +40,7 @@ class Syntax extends Module {
   constructor(quill, options) {
     super(quill, options);
     if (typeof this.options.highlight !== 'function') {
-      throw new Error(
-        'Syntax module requires highlight.js. Please include the library on the page before Quill.'
-      );
+      throw new Error('Syntax module requires highlight.js. Please include the library on the page before Quill.');
     }
     let timer = null;
     this.quill.on(Quill.events.SCROLL_OPTIMIZE, () => {
@@ -66,14 +67,15 @@ class Syntax extends Module {
   }
 }
 Syntax.DEFAULTS = {
-  highlight: (function () {
+  highlight: (function() {
     if (window.hljs == null) return null;
-    return function (text) {
+    return function(text) {
       let result = window.hljs.highlightAuto(text);
       return result.value;
     };
   })(),
-  interval: 1000,
+  interval: 1000
 };
 
-export { SyntaxCodeBlock as CodeBlock, CodeToken, Syntax as default };
+
+export { SyntaxCodeBlock as CodeBlock, CodeToken, Syntax as default};

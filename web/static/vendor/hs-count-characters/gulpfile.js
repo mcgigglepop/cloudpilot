@@ -8,59 +8,49 @@ var gulp = require('gulp'),
   webpackStream = require('webpack-stream');
 
 gulp.task('sass-build', function () {
-  return gulp
-    .src('./src/scss/**/*.scss')
-    .pipe(sass({ outputStyle: 'expanded' }))
-    .pipe(autoprefixer(['last 5 versions', '> 1%'], { cascade: true }))
+  return gulp.src('./src/scss/**/*.scss')
+    .pipe(sass({outputStyle: 'expanded'}))
+    .pipe(autoprefixer(['last 5 versions', '> 1%'], {cascade: true}))
     .pipe(gulp.dest('./src/css'))
     .pipe(gulp.dest('./dist'))
-    .pipe(
-      cssnano({
-        zindex: false,
-      })
-    )
-    .pipe(
-      rename({
-        suffix: '.min',
-      })
-    )
-    .pipe(gulp.dest('./dist'));
+    .pipe(cssnano({
+      zindex: false
+    }))
+    .pipe(rename({
+      suffix: '.min'
+    }))
+    .pipe(gulp.dest('./dist'))
 });
 
 gulp.task('js-build', function () {
-  return gulp
-    .src('./src/js/hs-count-characters.js')
-    .pipe(
-      webpackStream({
-        mode: 'development',
-        output: {
-          library: 'HSCountCharacters',
-          libraryTarget: 'umd',
-          libraryExport: 'default',
-          filename: 'hs-count-characters.js',
-        },
-        module: {
-          rules: [
-            {
-              test: /\.(js)$/,
-              exclude: /(node_modules)/,
-              loader: 'babel-loader',
-              query: {
-                presets: ['@babel/preset-env'],
-              },
-            },
-          ],
-        },
-      })
-    )
+  return gulp.src('./src/js/hs-count-characters.js')
+    .pipe(webpackStream({
+      mode: 'development',
+      output: {
+        library: 'HSCountCharacters',
+        libraryTarget: 'umd',
+        libraryExport: 'default',
+        filename: 'hs-count-characters.js',
+      },
+      module: {
+        rules: [
+          {
+            test: /\.(js)$/,
+            exclude: /(node_modules)/,
+            loader: 'babel-loader',
+            query: {
+              presets: ["@babel/preset-env"]
+            }
+          }
+        ]
+      }
+    }))
     .pipe(gulp.dest('./dist/js'))
     .pipe(uglify())
-    .pipe(
-      rename({
-        suffix: '.min',
-      })
-    )
-    .pipe(gulp.dest('./dist/js'));
+    .pipe(rename({
+      suffix: '.min'
+    }))
+    .pipe(gulp.dest('./dist/js'))
 });
 
 gulp.task('main-watch', function () {

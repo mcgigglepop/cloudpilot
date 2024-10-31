@@ -16,54 +16,58 @@
 import TomSelect from '../../tom-select';
 import { nodeIndex, removeClasses } from '../../vanilla';
 
-export default function (this: TomSelect) {
-  var self = this;
 
-  /**
-   * Moves the caret to the specified index.
-   *
-   * The input must be moved by leaving it in place and moving the
-   * siblings, due to the fact that focus cannot be restored once lost
-   * on mobile webkit devices
-   *
-   */
-  self.hook('instead', 'setCaret', (new_pos: number) => {
-    if (
-      self.settings.mode === 'single' ||
-      !self.control.contains(self.control_input)
-    ) {
-      new_pos = self.items.length;
-    } else {
-      new_pos = Math.max(0, Math.min(self.items.length, new_pos));
+export default function(this:TomSelect) {
+	var self = this;
 
-      if (new_pos != self.caretPos && !self.isPending) {
-        self.controlChildren().forEach((child, j) => {
-          if (j < new_pos) {
-            self.control_input.insertAdjacentElement('beforebegin', child);
-          } else {
-            self.control.appendChild(child);
-          }
-        });
-      }
-    }
+	/**
+	 * Moves the caret to the specified index.
+	 *
+	 * The input must be moved by leaving it in place and moving the
+	 * siblings, due to the fact that focus cannot be restored once lost
+	 * on mobile webkit devices
+	 *
+	 */
+	self.hook('instead','setCaret',(new_pos:number) => {
 
-    self.caretPos = new_pos;
-  });
+		if( self.settings.mode === 'single' || !self.control.contains(self.control_input) ) {
+			new_pos = self.items.length;
+		} else {
+			new_pos = Math.max(0, Math.min(self.items.length, new_pos));
 
-  self.hook('instead', 'moveCaret', (direction: number) => {
-    if (!self.isFocused) return;
+			if( new_pos != self.caretPos && !self.isPending ){
 
-    // move caret before or after selected items
-    const last_active = self.getLastActive(direction);
-    if (last_active) {
-      const idx = nodeIndex(last_active);
-      self.setCaret(direction > 0 ? idx + 1 : idx);
-      self.setActiveItem();
-      removeClasses(last_active as HTMLElement, 'last-active');
+				self.controlChildren().forEach((child,j) => {
+					if( j < new_pos ){
+						self.control_input.insertAdjacentElement('beforebegin', child );
+					} else {
+						self.control.appendChild( child );
+					}
+				});
+			}
+		}
 
-      // move caret left or right of current position
-    } else {
-      self.setCaret(self.caretPos + direction);
-    }
-  });
-}
+		self.caretPos = new_pos;
+	});
+
+	self.hook('instead','moveCaret',(direction:number) => {
+
+		if( !self.isFocused ) return;
+
+		// move caret before or after selected items
+		const last_active		= self.getLastActive(direction);
+		if( last_active ){
+			const idx = nodeIndex(last_active);
+			self.setCaret(direction > 0 ? idx + 1: idx);
+			self.setActiveItem();
+			removeClasses(last_active as HTMLElement,'last-active');
+
+		// move caret left or right of current position
+		}else{
+			self.setCaret(self.caretPos + direction);
+
+		}
+
+	});
+
+};

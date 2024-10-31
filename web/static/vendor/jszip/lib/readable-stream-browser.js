@@ -6,4 +6,4 @@
  * reduce the final size of the bundle (only one stream implementation, not
  * two).
  */
-module.exports = require('stream');
+module.exports = require("stream");

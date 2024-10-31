@@ -1,7 +1,8 @@
-import { Map } from '../Map';
-import { Handler } from '../../core/Handler';
-import { on, off, stop } from '../../dom/DomEvent';
-import { toPoint } from '../../geometry/Point';
+import {Map} from '../Map';
+import {Handler} from '../../core/Handler';
+import {on, off, stop} from '../../dom/DomEvent';
+import {toPoint} from '../../geometry/Point';
+
 
 /*
  * L.Map.Keyboard is handling keyboard interaction with the map, enabled by default.
@@ -10,185 +11,164 @@ import { toPoint } from '../../geometry/Point';
 // @namespace Map
 // @section Keyboard Navigation Options
 Map.mergeOptions({
-  // @option keyboard: Boolean = true
-  // Makes the map focusable and allows users to navigate the map with keyboard
-  // arrows and `+`/`-` keys.
-  keyboard: true,
+	// @option keyboard: Boolean = true
+	// Makes the map focusable and allows users to navigate the map with keyboard
+	// arrows and `+`/`-` keys.
+	keyboard: true,
 
-  // @option keyboardPanDelta: Number = 80
-  // Amount of pixels to pan when pressing an arrow key.
-  keyboardPanDelta: 80,
+	// @option keyboardPanDelta: Number = 80
+	// Amount of pixels to pan when pressing an arrow key.
+	keyboardPanDelta: 80
 });
 
 export var Keyboard = Handler.extend({
-  keyCodes: {
-    left: [37],
-    right: [39],
-    down: [40],
-    up: [38],
-    zoomIn: [187, 107, 61, 171],
-    zoomOut: [189, 109, 54, 173],
-  },
 
-  initialize: function (map) {
-    this._map = map;
+	keyCodes: {
+		left:    [37],
+		right:   [39],
+		down:    [40],
+		up:      [38],
+		zoomIn:  [187, 107, 61, 171],
+		zoomOut: [189, 109, 54, 173]
+	},
 
-    this._setPanDelta(map.options.keyboardPanDelta);
-    this._setZoomDelta(map.options.zoomDelta);
-  },
+	initialize: function (map) {
+		this._map = map;
 
-  addHooks: function () {
-    var container = this._map._container;
+		this._setPanDelta(map.options.keyboardPanDelta);
+		this._setZoomDelta(map.options.zoomDelta);
+	},
 
-    // make the container focusable by tabbing
-    if (container.tabIndex <= 0) {
-      container.tabIndex = '0';
-    }
+	addHooks: function () {
+		var container = this._map._container;
 
-    on(
-      container,
-      {
-        focus: this._onFocus,
-        blur: this._onBlur,
-        mousedown: this._onMouseDown,
-      },
-      this
-    );
+		// make the container focusable by tabbing
+		if (container.tabIndex <= 0) {
+			container.tabIndex = '0';
+		}
 
-    this._map.on(
-      {
-        focus: this._addHooks,
-        blur: this._removeHooks,
-      },
-      this
-    );
-  },
+		on(container, {
+			focus: this._onFocus,
+			blur: this._onBlur,
+			mousedown: this._onMouseDown
+		}, this);
 
-  removeHooks: function () {
-    this._removeHooks();
+		this._map.on({
+			focus: this._addHooks,
+			blur: this._removeHooks
+		}, this);
+	},
 
-    off(
-      this._map._container,
-      {
-        focus: this._onFocus,
-        blur: this._onBlur,
-        mousedown: this._onMouseDown,
-      },
-      this
-    );
+	removeHooks: function () {
+		this._removeHooks();
 
-    this._map.off(
-      {
-        focus: this._addHooks,
-        blur: this._removeHooks,
-      },
-      this
-    );
-  },
+		off(this._map._container, {
+			focus: this._onFocus,
+			blur: this._onBlur,
+			mousedown: this._onMouseDown
+		}, this);
 
-  _onMouseDown: function () {
-    if (this._focused) {
-      return;
-    }
+		this._map.off({
+			focus: this._addHooks,
+			blur: this._removeHooks
+		}, this);
+	},
 
-    var body = document.body,
-      docEl = document.documentElement,
-      top = body.scrollTop || docEl.scrollTop,
-      left = body.scrollLeft || docEl.scrollLeft;
+	_onMouseDown: function () {
+		if (this._focused) { return; }
 
-    this._map._container.focus();
+		var body = document.body,
+		    docEl = document.documentElement,
+		    top = body.scrollTop || docEl.scrollTop,
+		    left = body.scrollLeft || docEl.scrollLeft;
 
-    window.scrollTo(left, top);
-  },
+		this._map._container.focus();
 
-  _onFocus: function () {
-    this._focused = true;
-    this._map.fire('focus');
-  },
+		window.scrollTo(left, top);
+	},
 
-  _onBlur: function () {
-    this._focused = false;
-    this._map.fire('blur');
-  },
+	_onFocus: function () {
+		this._focused = true;
+		this._map.fire('focus');
+	},
 
-  _setPanDelta: function (panDelta) {
-    var keys = (this._panKeys = {}),
-      codes = this.keyCodes,
-      i,
-      len;
+	_onBlur: function () {
+		this._focused = false;
+		this._map.fire('blur');
+	},
 
-    for (i = 0, len = codes.left.length; i < len; i++) {
-      keys[codes.left[i]] = [-1 * panDelta, 0];
-    }
-    for (i = 0, len = codes.right.length; i < len; i++) {
-      keys[codes.right[i]] = [panDelta, 0];
-    }
-    for (i = 0, len = codes.down.length; i < len; i++) {
-      keys[codes.down[i]] = [0, panDelta];
-    }
-    for (i = 0, len = codes.up.length; i < len; i++) {
-      keys[codes.up[i]] = [0, -1 * panDelta];
-    }
-  },
+	_setPanDelta: function (panDelta) {
+		var keys = this._panKeys = {},
+		    codes = this.keyCodes,
+		    i, len;
 
-  _setZoomDelta: function (zoomDelta) {
-    var keys = (this._zoomKeys = {}),
-      codes = this.keyCodes,
-      i,
-      len;
+		for (i = 0, len = codes.left.length; i < len; i++) {
+			keys[codes.left[i]] = [-1 * panDelta, 0];
+		}
+		for (i = 0, len = codes.right.length; i < len; i++) {
+			keys[codes.right[i]] = [panDelta, 0];
+		}
+		for (i = 0, len = codes.down.length; i < len; i++) {
+			keys[codes.down[i]] = [0, panDelta];
+		}
+		for (i = 0, len = codes.up.length; i < len; i++) {
+			keys[codes.up[i]] = [0, -1 * panDelta];
+		}
+	},
 
-    for (i = 0, len = codes.zoomIn.length; i < len; i++) {
-      keys[codes.zoomIn[i]] = zoomDelta;
-    }
-    for (i = 0, len = codes.zoomOut.length; i < len; i++) {
-      keys[codes.zoomOut[i]] = -zoomDelta;
-    }
-  },
+	_setZoomDelta: function (zoomDelta) {
+		var keys = this._zoomKeys = {},
+		    codes = this.keyCodes,
+		    i, len;
 
-  _addHooks: function () {
-    on(document, 'keydown', this._onKeyDown, this);
-  },
+		for (i = 0, len = codes.zoomIn.length; i < len; i++) {
+			keys[codes.zoomIn[i]] = zoomDelta;
+		}
+		for (i = 0, len = codes.zoomOut.length; i < len; i++) {
+			keys[codes.zoomOut[i]] = -zoomDelta;
+		}
+	},
 
-  _removeHooks: function () {
-    off(document, 'keydown', this._onKeyDown, this);
-  },
+	_addHooks: function () {
+		on(document, 'keydown', this._onKeyDown, this);
+	},
 
-  _onKeyDown: function (e) {
-    if (e.altKey || e.ctrlKey || e.metaKey) {
-      return;
-    }
+	_removeHooks: function () {
+		off(document, 'keydown', this._onKeyDown, this);
+	},
 
-    var key = e.keyCode,
-      map = this._map,
-      offset;
+	_onKeyDown: function (e) {
+		if (e.altKey || e.ctrlKey || e.metaKey) { return; }
 
-    if (key in this._panKeys) {
-      if (!map._panAnim || !map._panAnim._inProgress) {
-        offset = this._panKeys[key];
-        if (e.shiftKey) {
-          offset = toPoint(offset).multiplyBy(3);
-        }
+		var key = e.keyCode,
+		    map = this._map,
+		    offset;
 
-        map.panBy(offset);
+		if (key in this._panKeys) {
+			if (!map._panAnim || !map._panAnim._inProgress) {
+				offset = this._panKeys[key];
+				if (e.shiftKey) {
+					offset = toPoint(offset).multiplyBy(3);
+				}
 
-        if (map.options.maxBounds) {
-          map.panInsideBounds(map.options.maxBounds);
-        }
-      }
-    } else if (key in this._zoomKeys) {
-      map.setZoom(map.getZoom() + (e.shiftKey ? 3 : 1) * this._zoomKeys[key]);
-    } else if (
-      key === 27 &&
-      map._popup &&
-      map._popup.options.closeOnEscapeKey
-    ) {
-      map.closePopup();
-    } else {
-      return;
-    }
+				map.panBy(offset);
 
-    stop(e);
-  },
+				if (map.options.maxBounds) {
+					map.panInsideBounds(map.options.maxBounds);
+				}
+			}
+		} else if (key in this._zoomKeys) {
+			map.setZoom(map.getZoom() + (e.shiftKey ? 3 : 1) * this._zoomKeys[key]);
+
+		} else if (key === 27 && map._popup && map._popup.options.closeOnEscapeKey) {
+			map.closePopup();
+
+		} else {
+			return;
+		}
+
+		stop(e);
+	}
 });
 
 // @section Handlers

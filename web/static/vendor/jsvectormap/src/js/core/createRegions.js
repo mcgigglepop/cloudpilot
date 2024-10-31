@@ -1,12 +1,10 @@
-import { merge } from '../util';
-import Region from '../components/region';
+import { merge } from '../util'
+import Region from '../components/region'
 
 export default function createRegions() {
-  let code, region;
+  let code, region
 
-  this.regionLabelsGroup =
-    this.regionLabelsGroup ||
-    this.canvas.createGroup('jvm-regions-labels-group');
+  this.regionLabelsGroup = this.regionLabelsGroup || this.canvas.createGroup('jvm-regions-labels-group')
 
   for (code in this.mapData.paths) {
     region = new Region({
@@ -14,14 +12,14 @@ export default function createRegions() {
       code: code,
       path: this.mapData.paths[code].path,
       style: merge({}, this.params.regionStyle),
-      labelStyle: this.params.regionLabelStyle,
+      labelStyle: this.params.regionLabelStyle, 
       labelsGroup: this.regionLabelsGroup,
       label: this.params.labels && this.params.labels.regions,
-    });
+    })
 
     this.regions[code] = {
       config: this.mapData.paths[code],
-      element: region,
-    };
+      element: region
+    }
   }
 }

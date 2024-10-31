@@ -1,112 +1,113 @@
 /*
- * HSRemoveElement Plugin
- * @version: 2.0.0 (Sun, 1 Aug 2021)
- * @author: HtmlStream
- * @event-namespace: .HSRemoveElement
- * @license: Htmlstream Libraries (https://htmlstream.com/)
- * Copyright 2021 Htmlstream
- */
+* HSRemoveElement Plugin
+* @version: 2.0.0 (Sun, 1 Aug 2021)
+* @author: HtmlStream
+* @event-namespace: .HSRemoveElement
+* @license: Htmlstream Libraries (https://htmlstream.com/)
+* Copyright 2021 Htmlstream
+*/
 
-const dataAttributeName = 'data-hs-remove-element-options';
+const dataAttributeName = 'data-hs-remove-element-options'
 const defaults = {
-  targetEl: null,
+	targetEl: null,
 
-  beforeDelete: null,
-  afterDelete: null,
-};
+	beforeDelete: null,
+	afterDelete: null,
+}
 
 export default class HSRemoveElement {
-  constructor(el, options, id) {
-    this.collection = [];
-    const that = this;
-    let elems;
+	constructor(el, options, id) {
+		this.collection = []
+		const that = this
+		let elems
 
-    if (el instanceof HTMLElement) {
-      elems = [el];
-    } else if (el instanceof Object) {
-      elems = el;
-    } else {
-      elems = document.querySelectorAll(el);
-    }
+		if (el instanceof HTMLElement) {
+			elems = [el]
+		} else if (el instanceof Object) {
+			elems = el
+		} else {
+			elems = document.querySelectorAll(el)
+		}
 
-    for (let i = 0; i < elems.length; i += 1) {
-      that.addToCollection(elems[i], options, id || elems[i].id);
-    }
+		for (let i = 0; i < elems.length; i += 1) {
+			that.addToCollection(elems[i], options, id || elems[i].id)
+		}
 
-    if (!that.collection.length) {
-      return false;
-    }
+		if (!that.collection.length) {
+			return false
+		}
 
-    // initialization calls
-    that._init();
+		// initialization calls
+		that._init()
 
-    return this;
-  }
+		return this
+	}
 
-  _init() {
-    const that = this;
+	_init() {
+		const that = this;
 
-    for (let i = 0; i < that.collection.length; i += 1) {
-      let _$el;
-      let _options;
+		for (let i = 0; i < that.collection.length; i += 1) {
+			let _$el
+			let _options
 
-      if (that.collection[i].hasOwnProperty('$initializedEl')) {
-        continue;
-      }
+			if (that.collection[i].hasOwnProperty('$initializedEl')) {
+				continue
+			}
 
-      _$el = that.collection[i].$el;
-      _options = that.collection[i].options;
+			_$el = that.collection[i].$el
+			_options = that.collection[i].options
 
-      _options.targetEl = document.querySelector(_options.targetEl);
-      this.removeElement(_$el, _options);
+			_options.targetEl = document.querySelector(_options.targetEl)
+			this.removeElement(_$el, _options)
 
-      that.collection[i].$initializedEl = _options;
-    }
-  }
+			that.collection[i].$initializedEl = _options
+		}
+	}
 
-  removeElement($el, settings) {
-    $el.addEventListener('click', () => {
-      if (typeof settings.beforeDelete === 'function') {
-        let before = settings.beforeDelete($el, settings);
+	removeElement($el, settings) {
+		$el.addEventListener('click', () => {
+			if (typeof settings.beforeDelete === 'function') {
+				let before = settings.beforeDelete($el, settings)
 
-        if (before === false) return;
-      }
+				if (before === false) return
+			}
 
-      settings.targetEl.parentNode.removeChild(settings.targetEl);
+			settings.targetEl.parentNode.removeChild(settings.targetEl)
 
-      if (typeof settings.afterDelete === 'function') {
-        settings.afterDelete($el, settings);
-      }
-    });
-  }
+			if (typeof settings.afterDelete === 'function') {
+				settings.afterDelete($el, settings)
+			}
+		})
+	}
 
-  addToCollection(item, options, id) {
-    this.collection.push({
-      $el: item,
-      id: id || null,
-      options: Object.assign(
-        {},
-        defaults,
-        item.hasAttribute(dataAttributeName)
-          ? JSON.parse(item.getAttribute(dataAttributeName))
-          : {},
-        options
-      ),
-    });
-  }
+	addToCollection(item, options, id) {
+		this.collection.push({
+			$el: item,
+			id: id || null,
+			options: Object.assign(
+				{},
+				defaults,
+				item.hasAttribute(dataAttributeName)
+					? JSON.parse(item.getAttribute(dataAttributeName))
+					: {},
+				options,
+			),
+		});
+	}
 
-  getItems() {
-    const that = this;
-    let newCollection = [];
+	getItems() {
+		const that = this;
+		let newCollection = [];
 
-    for (let i = 0; i < that.collection.length; i += 1) {
-      newCollection.push(that.collection[i].$initializedEl);
-    }
+		for (let i = 0; i < that.collection.length; i += 1) {
+			newCollection.push(that.collection[i].$initializedEl);
+		}
 
-    return newCollection;
-  }
+		return newCollection;
+	}
 
-  getItem(ind) {
-    return this.collection[ind].$initializedEl;
-  }
+	getItem(ind) {
+		return this.collection[ind].$initializedEl;
+	}
 }
+

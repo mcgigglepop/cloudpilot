@@ -10,14 +10,14 @@ function maskedClass(mask) {
     throw new Error('mask property should be defined');
   } // $FlowFixMe
 
+
   if (mask instanceof RegExp) return IMask.MaskedRegExp; // $FlowFixMe
 
   if (isString(mask)) return IMask.MaskedPattern; // $FlowFixMe
 
   if (mask instanceof Date || mask === Date) return IMask.MaskedDate; // $FlowFixMe
 
-  if (mask instanceof Number || typeof mask === 'number' || mask === Number)
-    return IMask.MaskedNumber; // $FlowFixMe
+  if (mask instanceof Number || typeof mask === 'number' || mask === Number) return IMask.MaskedNumber; // $FlowFixMe
 
   if (Array.isArray(mask) || mask === Array) return IMask.MaskedDynamic; // $FlowFixMe
 
@@ -41,10 +41,7 @@ function createMask(opts) {
 
   if (IMask.Masked && mask instanceof IMask.Masked) return mask;
   var MaskedClass = maskedClass(mask);
-  if (!MaskedClass)
-    throw new Error(
-      'Masked class is not found for provided mask, appropriate module needs to be import manually before creating mask.'
-    );
+  if (!MaskedClass) throw new Error('Masked class is not found for provided mask, appropriate module needs to be import manually before creating mask.');
   return new MaskedClass(opts);
 }
 IMask.createMask = createMask;

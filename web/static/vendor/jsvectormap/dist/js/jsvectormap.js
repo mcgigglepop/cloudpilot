@@ -1,33 +1,23 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined'
-    ? (module.exports = factory())
-    : typeof define === 'function' && define.amd
-      ? define(factory)
-      : ((global =
-          typeof globalThis !== 'undefined' ? globalThis : global || self),
-        (global.jsVectorMap = factory()));
-})(this, function () {
-  'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.jsVectorMap = factory());
+})(this, (function () { 'use strict';
 
   // Matches polyfill
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
   if (!Element.prototype.matches) {
-    Element.prototype.matches =
-      Element.prototype.matchesSelector ||
-      Element.prototype.mozMatchesSelector ||
-      Element.prototype.msMatchesSelector ||
-      Element.prototype.oMatchesSelector ||
-      Element.prototype.webkitMatchesSelector ||
-      function (s) {
-        var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+    Element.prototype.matches = Element.prototype.matchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector || Element.prototype.webkitMatchesSelector || function (s) {
+      var matches = (this.document || this.ownerDocument).querySelectorAll(s),
           i = matches.length;
 
-        while (--i >= 0 && matches.item(i) !== this) {}
+      while (--i >= 0 && matches.item(i) !== this) {}
 
-        return i > -1;
-      };
+      return i > -1;
+    };
   } // Object.assign polyfill
   // https://gist.github.com/spiralx/68cf40d7010d829340cb
+
 
   if (!Object.assign) {
     Object.defineProperty(Object, 'assign', {
@@ -35,6 +25,7 @@
       configurable: true,
       writable: true,
       value: function value(target) {
+
         if (target === undefined || target === null) {
           throw new TypeError('Cannot convert first argument to object');
         }
@@ -51,11 +42,7 @@
           nextSource = Object(nextSource);
           var keysArray = Object.keys(Object(nextSource));
 
-          for (
-            var nextIndex = 0, len = keysArray.length;
-            nextIndex < len;
-            nextIndex++
-          ) {
+          for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
             var nextKey = keysArray[nextIndex];
             var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
 
@@ -66,7 +53,7 @@
         }
 
         return to;
-      },
+      }
     });
   }
 
@@ -84,13 +71,9 @@
 
   function isSpecial(value) {
     var stringValue = Object.prototype.toString.call(value);
-    return (
-      stringValue === '[object RegExp]' ||
-      stringValue === '[object Date]' ||
-      isNode(value) ||
-      isReactElement(value)
-    );
+    return stringValue === '[object RegExp]' || stringValue === '[object Date]' || isNode(value) || isReactElement(value);
   } // see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
+
 
   var canUseSymbol = typeof Symbol === 'function' && Symbol.for;
   var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7;
@@ -108,9 +91,7 @@
   }
 
   function cloneUnlessOtherwiseSpecified(value, options) {
-    return options.clone !== false && options.isMergeableObject(value)
-      ? deepmerge(emptyTarget(value), value, options)
-      : value;
+    return options.clone !== false && options.isMergeableObject(value) ? deepmerge(emptyTarget(value), value, options) : value;
   }
 
   function defaultArrayMerge(target, source, options) {
@@ -129,11 +110,9 @@
   }
 
   function getEnumerableOwnPropertySymbols(target) {
-    return Object.getOwnPropertySymbols
-      ? Object.getOwnPropertySymbols(target).filter(function (symbol) {
-          return target.propertyIsEnumerable(symbol);
-        })
-      : [];
+    return Object.getOwnPropertySymbols ? Object.getOwnPropertySymbols(target).filter(function (symbol) {
+      return target.propertyIsEnumerable(symbol);
+    }) : [];
   }
 
   function getKeys(target) {
@@ -148,14 +127,11 @@
     }
   } // Protects from prototype poisoning and unexpected merging up the prototype chain.
 
+
   function propertyIsUnsafe(target, key) {
-    return (
-      propertyIsOnObject(target, key) && // Properties are safe to merge if they don't exist in the target yet,
-      !(
-        Object.hasOwnProperty.call(target, key) && // unsafe if they exist up the prototype chain,
-        Object.propertyIsEnumerable.call(target, key)
-      )
-    ); // and also unsafe if they're nonenumerable.
+    return propertyIsOnObject(target, key) // Properties are safe to merge if they don't exist in the target yet,
+    && !(Object.hasOwnProperty.call(target, key) // unsafe if they exist up the prototype chain,
+    && Object.propertyIsEnumerable.call(target, key)); // and also unsafe if they're nonenumerable.
   }
 
   function mergeObject(target, source, options) {
@@ -172,15 +148,8 @@
         return;
       }
 
-      if (
-        propertyIsOnObject(target, key) &&
-        options.isMergeableObject(source[key])
-      ) {
-        destination[key] = getMergeFunction(key, options)(
-          target[key],
-          source[key],
-          options
-        );
+      if (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {
+        destination[key] = getMergeFunction(key, options)(target[key], source[key], options);
       } else {
         destination[key] = cloneUnlessOtherwiseSpecified(source[key], options);
       }
@@ -215,10 +184,7 @@
    */
 
   var getElement = function getElement(selector) {
-    if (
-      typeof selector === 'object' &&
-      typeof selector.nodeType !== 'undefined'
-    ) {
+    if (typeof selector === 'object' && typeof selector.nodeType !== 'undefined') {
       return selector;
     }
 
@@ -260,11 +226,9 @@
   };
 
   var hyphenate = function hyphenate(string) {
-    return string
-      .replace(/[\w]([A-Z])/g, function (m) {
-        return m[0] + '-' + m[1];
-      })
-      .toLowerCase();
+    return string.replace(/[\w]([A-Z])/g, function (m) {
+      return m[0] + "-" + m[1];
+    }).toLowerCase();
   };
 
   var merge = function merge(target, source, deep) {
@@ -280,7 +244,7 @@
   };
 
   var getLineUid = function getLineUid(from, to) {
-    return from.toLowerCase() + ':to:' + to.toLowerCase();
+    return from.toLowerCase() + ":to:" + to.toLowerCase();
   };
 
   var inherit = function inherit(target, source) {
@@ -304,7 +268,7 @@
     lineStyle: {
       stroke: '#808080',
       strokeWidth: 1,
-      strokeLinecap: 'round',
+      strokeLinecap: 'round'
     },
     // Marker options
     markersSelectable: false,
@@ -316,16 +280,16 @@
         fillOpacity: 1,
         stroke: '#FFF',
         strokeWidth: 5,
-        strokeOpacity: 0.5,
+        strokeOpacity: .5
       },
       hover: {
         fill: '#3cc0ff',
-        cursor: 'pointer',
+        cursor: 'pointer'
       },
       selected: {
-        fill: 'blue',
+        fill: 'blue'
       },
-      selectedHover: {},
+      selectedHover: {}
     },
     markerLabelStyle: {
       initial: {
@@ -333,13 +297,13 @@
         fontSize: 12,
         fontWeight: 500,
         cursor: 'default',
-        fill: '#374151',
+        fill: '#374151'
       },
       hover: {
-        cursor: 'pointer',
+        cursor: 'pointer'
       },
       selected: {},
-      selectedHover: {},
+      selectedHover: {}
     },
     // Region options
     regionsSelectable: false,
@@ -349,16 +313,16 @@
         fill: '#dee2e8',
         fillOpacity: 1,
         stroke: 'none',
-        strokeWidth: 0,
+        strokeWidth: 0
       },
       hover: {
-        fillOpacity: 0.7,
-        cursor: 'pointer',
+        fillOpacity: .7,
+        cursor: 'pointer'
       },
       selected: {
-        fill: '#9ca3af',
+        fill: '#9ca3af'
       },
-      selectedHover: {},
+      selectedHover: {}
     },
     regionLabelStyle: {
       initial: {
@@ -366,12 +330,12 @@
         fontSize: '12',
         fontWeight: 'bold',
         cursor: 'default',
-        fill: '#35373e',
+        fill: '#35373e'
       },
       hover: {
-        cursor: 'pointer',
-      },
-    },
+        cursor: 'pointer'
+      }
+    }
   };
 
   function _inheritsLoose(subClass, superClass) {
@@ -382,20 +346,16 @@
   }
 
   function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf
-      ? Object.setPrototypeOf.bind()
-      : function _setPrototypeOf(o, p) {
-          o.__proto__ = p;
-          return o;
-        };
+    _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
     return _setPrototypeOf(o, p);
   }
 
   function _assertThisInitialized(self) {
     if (self === void 0) {
-      throw new ReferenceError(
-        "this hasn't been initialised - super() hasn't been called"
-      );
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
 
     return self;
@@ -403,12 +363,11 @@
 
   function _unsupportedIterableToArray(o, minLen) {
     if (!o) return;
-    if (typeof o === 'string') return _arrayLikeToArray(o, minLen);
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === 'Object' && o.constructor) n = o.constructor.name;
-    if (n === 'Map' || n === 'Set') return Array.from(o);
-    if (n === 'Arguments' || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray(o, minLen);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
   }
 
   function _arrayLikeToArray(arr, len) {
@@ -420,32 +379,24 @@
   }
 
   function _createForOfIteratorHelperLoose(o, allowArrayLike) {
-    var it =
-      (typeof Symbol !== 'undefined' && o[Symbol.iterator]) || o['@@iterator'];
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (it) return (it = it.call(o)).next.bind(it);
 
-    if (
-      Array.isArray(o) ||
-      (it = _unsupportedIterableToArray(o)) ||
-      (allowArrayLike && o && typeof o.length === 'number')
-    ) {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
       if (it) o = it;
       var i = 0;
       return function () {
-        if (i >= o.length)
-          return {
-            done: true,
-          };
+        if (i >= o.length) return {
+          done: true
+        };
         return {
           done: false,
-          value: o[i++],
+          value: o[i++]
         };
       };
     }
 
-    throw new TypeError(
-      'Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.'
-    );
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
   /**
@@ -454,7 +405,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var SVGElement = /*#__PURE__*/ (function () {
+  var SVGElement = /*#__PURE__*/function () {
     function SVGElement(name, config) {
       this.node = this._createElement(name);
 
@@ -463,6 +414,7 @@
       }
     } // Create new SVG element `svg`, `g`, `path`, `line`, `circle`, `image`, etc.
     // https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS#important_namespace_uris
+
 
     var _proto = SVGElement.prototype;
 
@@ -476,7 +428,8 @@
 
     _proto.getBBox = function getBBox() {
       return this.node.getBBox();
-    }; // Apply attributes on the current node element
+    } // Apply attributes on the current node element
+    ;
 
     _proto.set = function set(property, value) {
       if (typeof property === 'object') {
@@ -501,7 +454,7 @@
     };
 
     return SVGElement;
-  })();
+  }();
 
   /**
    * ------------------------------------------------------------------------
@@ -509,7 +462,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var SVGShapeElement = /*#__PURE__*/ (function (_SVGElement) {
+  var SVGShapeElement = /*#__PURE__*/function (_SVGElement) {
     _inheritsLoose(SVGShapeElement, _SVGElement);
 
     function SVGShapeElement(name, config, style) {
@@ -538,10 +491,7 @@
       } else {
         var _merge;
 
-        merge(
-          this.style.current,
-          ((_merge = {}), (_merge[property] = value), _merge)
-        );
+        merge(this.style.current, (_merge = {}, _merge[property] = value, _merge));
       }
 
       this.updateStyle();
@@ -568,7 +518,7 @@
     };
 
     return SVGShapeElement;
-  })(SVGElement);
+  }(SVGElement);
 
   /**
    * ------------------------------------------------------------------------
@@ -576,7 +526,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var SVGTextElement = /*#__PURE__*/ (function (_SVGShapeElement) {
+  var SVGTextElement = /*#__PURE__*/function (_SVGShapeElement) {
     _inheritsLoose(SVGTextElement, _SVGShapeElement);
 
     function SVGTextElement(config, style) {
@@ -586,13 +536,11 @@
     var _proto = SVGTextElement.prototype;
 
     _proto.applyAttr = function applyAttr(attr, value) {
-      attr === 'text'
-        ? (this.node.textContent = value)
-        : _SVGShapeElement.prototype.applyAttr.call(this, attr, value);
+      attr === 'text' ? this.node.textContent = value : _SVGShapeElement.prototype.applyAttr.call(this, attr, value);
     };
 
     return SVGTextElement;
-  })(SVGShapeElement);
+  }(SVGShapeElement);
 
   /**
    * ------------------------------------------------------------------------
@@ -600,7 +548,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var SVGImageElement = /*#__PURE__*/ (function (_SVGShapeElement) {
+  var SVGImageElement = /*#__PURE__*/function (_SVGShapeElement) {
     _inheritsLoose(SVGImageElement, _SVGShapeElement);
 
     function SVGImageElement(config, style) {
@@ -622,11 +570,7 @@
           this.offset = [0, 0];
         }
 
-        this.node.setAttributeNS(
-          'http://www.w3.org/1999/xlink',
-          'href',
-          imageUrl
-        ); // Set width and height then call this `applyAttr` again
+        this.node.setAttributeNS('http://www.w3.org/1999/xlink', 'href', imageUrl); // Set width and height then call this `applyAttr` again
 
         this.width = 23;
         this.height = 23;
@@ -653,7 +597,7 @@
     };
 
     return SVGImageElement;
-  })(SVGShapeElement);
+  }(SVGShapeElement);
 
   /**
    * ------------------------------------------------------------------------
@@ -661,7 +605,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var SVGCanvasElement = /*#__PURE__*/ (function (_SVGElement) {
+  var SVGCanvasElement = /*#__PURE__*/function (_SVGElement) {
     _inheritsLoose(SVGCanvasElement, _SVGElement);
 
     function SVGCanvasElement(container) {
@@ -674,12 +618,14 @@
       _this._defsElement = new SVGElement('defs'); // Create group element which will hold the paths (regions)
 
       _this._rootElement = new SVGElement('g', {
-        id: 'jvm-regions-group',
+        id: 'jvm-regions-group'
       }); // Append the defs element to the this.node (SVG tag)
 
       _this.node.appendChild(_this._defsElement.node); // Append the group to this.node (SVG tag)
 
+
       _this.node.appendChild(_this._rootElement.node); // Append this.node (SVG tag) to the container
+
 
       _this._container.appendChild(_this.node);
 
@@ -693,44 +639,43 @@
       this.node.setAttribute('height', height);
     };
 
-    _proto.applyTransformParams = function applyTransformParams(
-      scale,
-      transX,
-      transY
-    ) {
-      this._rootElement.node.setAttribute(
-        'transform',
-        'scale(' + scale + ') translate(' + transX + ', ' + transY + ')'
-      );
-    }; // Create `path` element
+    _proto.applyTransformParams = function applyTransformParams(scale, transX, transY) {
+      this._rootElement.node.setAttribute('transform', "scale(" + scale + ") translate(" + transX + ", " + transY + ")");
+    } // Create `path` element
+    ;
 
     _proto.createPath = function createPath(config, style) {
       var path = new SVGShapeElement('path', config, style);
       path.node.setAttribute('fill-rule', 'evenodd');
       return this.add(path);
-    }; // Create `circle` element
+    } // Create `circle` element
+    ;
 
     _proto.createCircle = function createCircle(config, style, group) {
       var circle = new SVGShapeElement('circle', config, style);
       return this.add(circle, group);
-    }; // Create `line` element
+    } // Create `line` element
+    ;
 
     _proto.createLine = function createLine(config, style, group) {
       var line = new SVGShapeElement('line', config, style);
       return this.add(line, group);
-    }; // Create `text` element
+    } // Create `text` element
+    ;
 
     _proto.createText = function createText(config, style, group) {
       var text = new SVGTextElement(config, style); // extends SVGShapeElement
 
       return this.add(text, group);
-    }; // Create `image` element
+    } // Create `image` element
+    ;
 
     _proto.createImage = function createImage(config, style, group) {
       var image = new SVGImageElement(config, style); // extends SVGShapeElement
 
       return this.add(image, group);
-    }; // Create `g` element
+    } // Create `g` element
+    ;
 
     _proto.createGroup = function createGroup(id) {
       var group = new SVGElement('g');
@@ -742,7 +687,8 @@
 
       group.canvas = this;
       return group;
-    }; // Add some element to a spcific group or the root element if the group isn't given
+    } // Add some element to a spcific group or the root element if the group isn't given
+    ;
 
     _proto.add = function add(element, group) {
       group = group || this._rootElement;
@@ -751,7 +697,7 @@
     };
 
     return SVGCanvasElement;
-  })(SVGElement);
+  }(SVGElement);
 
   var eventRegistry = {};
   var eventUid = 1;
@@ -767,10 +713,10 @@
         options = {};
       }
 
-      var uid = 'jvm:' + event + '::' + eventUid++;
+      var uid = "jvm:" + event + "::" + eventUid++;
       eventRegistry[uid] = {
         selector: element,
-        handler: handler,
+        handler: handler
       };
       handler._uid = uid;
       element.addEventListener(event, handler, options);
@@ -794,25 +740,21 @@
     },
     flush: function flush() {
       Object.keys(eventRegistry).forEach(function (event) {
-        EventHandler.off(
-          eventRegistry[event].selector,
-          event,
-          eventRegistry[event].handler
-        );
+        EventHandler.off(eventRegistry[event].selector, event, eventRegistry[event].handler);
       });
     },
     getEventRegistry: function getEventRegistry() {
       return eventRegistry;
-    },
+    }
   };
 
   function setupContainerEvents() {
     var _this = this;
 
     var mouseDown = false,
-      oldPageX,
-      oldPageY,
-      map = this;
+        oldPageX,
+        oldPageY,
+        map = this;
 
     if (this.params.draggable) {
       EventHandler.on(this.container, 'mousemove', function (e) {
@@ -846,12 +788,9 @@
         deltaY = deltaY * 75;
 
         var rect = _this.container.getBoundingClientRect(),
-          offsetX = event.pageX - rect.left - window.pageXOffset,
-          offsetY = event.pageY - rect.top - window.pageYOffset,
-          zoomStep = Math.pow(
-            1 + map.params.zoomOnScrollSpeed / 1000,
-            -1.5 * deltaY
-          );
+            offsetX = event.pageX - rect.left - window.pageXOffset,
+            offsetY = event.pageY - rect.top - window.pageYOffset,
+            zoomStep = Math.pow(1 + map.params.zoomOnScrollSpeed / 1000, -1.5 * deltaY);
 
         if (map.tooltip) {
           map.tooltip.hide();
@@ -873,41 +812,32 @@
     onRegionTooltipShow: 'region.tooltip:show',
     onMarkerTooltipShow: 'marker.tooltip:show',
     onLoaded: 'map:loaded',
-    onDestroyed: 'map:destroyed',
+    onDestroyed: 'map:destroyed'
   };
 
   function parseEvent(map, selector, isTooltip) {
     var element = getElement(selector),
-      classes = element.getAttribute('class'),
-      type = classes.indexOf('jvm-region') === -1 ? 'marker' : 'region',
-      code =
-        type === 'region'
-          ? element.getAttribute('data-code')
-          : element.getAttribute('data-index'),
-      event = type + ':selected'; // Init tooltip event
+        classes = element.getAttribute('class'),
+        type = classes.indexOf('jvm-region') === -1 ? 'marker' : 'region',
+        code = type === 'region' ? element.getAttribute('data-code') : element.getAttribute('data-index'),
+        event = type + ":selected"; // Init tooltip event
 
     if (isTooltip) {
-      event = type + '.tooltip:show';
+      event = type + ".tooltip:show";
     }
 
     return {
       event: event,
       type: type,
       code: code,
-      element:
-        type === 'region'
-          ? map.regions[code].element
-          : map.markers[code].element,
-      tooltipText:
-        type === 'region'
-          ? map.mapData.paths[code].name || ''
-          : map.markers[code].config.name || '',
+      element: type === 'region' ? map.regions[code].element : map.markers[code].element,
+      tooltipText: type === 'region' ? map.mapData.paths[code].name || '' : map.markers[code].config.name || ''
     };
   }
 
   function setupElementEvents() {
     var map = this,
-      container = this.container;
+        container = this.container;
     var pageX, pageY, mouseMoved;
     EventHandler.on(container, 'mousemove', function (event) {
       if (Math.abs(pageX - event.pageX) + Math.abs(pageY - event.pageY) > 2) {
@@ -915,91 +845,66 @@
       }
     }); // When the mouse is pressed
 
-    EventHandler.delegate(
-      container,
-      'mousedown',
-      '.jvm-element',
-      function (event) {
-        pageX = event.pageX;
-        pageY = event.pageY;
-        mouseMoved = false;
-      }
-    ); // When the mouse is over the region/marker | When the mouse is out the region/marker
+    EventHandler.delegate(container, 'mousedown', '.jvm-element', function (event) {
+      pageX = event.pageX;
+      pageY = event.pageY;
+      mouseMoved = false;
+    }); // When the mouse is over the region/marker | When the mouse is out the region/marker
 
-    EventHandler.delegate(
-      container,
-      'mouseover mouseout',
-      '.jvm-element',
-      function (event) {
-        var data = parseEvent(map, this, true);
-        var showTooltip = map.params.showTooltip;
+    EventHandler.delegate(container, 'mouseover mouseout', '.jvm-element', function (event) {
+      var data = parseEvent(map, this, true);
+      var showTooltip = map.params.showTooltip;
 
-        if (event.type === 'mouseover') {
-          data.element.hover(true);
-          map.tooltip.text(data.tooltipText);
+      if (event.type === 'mouseover') {
+        data.element.hover(true);
+        map.tooltip.text(data.tooltipText);
 
-          map._emit(data.event, [event, map.tooltip, data.code]);
+        map._emit(data.event, [event, map.tooltip, data.code]);
 
-          if (!event.defaultPrevented) {
-            if (showTooltip) {
-              map.tooltip.show();
-            }
-          }
-        } else {
-          data.element.hover(false);
-
+        if (!event.defaultPrevented) {
           if (showTooltip) {
-            map.tooltip.hide();
+            map.tooltip.show();
           }
+        }
+      } else {
+        data.element.hover(false);
+
+        if (showTooltip) {
+          map.tooltip.hide();
         }
       }
-    ); // When the click is released
+    }); // When the click is released
 
-    EventHandler.delegate(
-      container,
-      'mouseup',
-      '.jvm-element',
-      function (event) {
-        var data = parseEvent(map, this);
+    EventHandler.delegate(container, 'mouseup', '.jvm-element', function (event) {
+      var data = parseEvent(map, this);
 
-        if (mouseMoved) {
-          return;
-        }
-
-        if (
-          (data.type === 'region' && map.params.regionsSelectable) ||
-          (data.type === 'marker' && map.params.markersSelectable)
-        ) {
-          var element = data.element; // We're checking if regions/markers|SelectableOne option is presented
-
-          if (map.params[data.type + 'sSelectableOne']) {
-            map._clearSelected(data.type + 's');
-          }
-
-          if (data.element.isSelected) {
-            element.select(false);
-          } else {
-            element.select(true);
-          }
-
-          map._emit(data.event, [
-            data.code,
-            element.isSelected,
-            map._getSelected(data.type + 's'),
-          ]);
-        }
+      if (mouseMoved) {
+        return;
       }
-    ); // When region/marker is clicked
+
+      if (data.type === 'region' && map.params.regionsSelectable || data.type === 'marker' && map.params.markersSelectable) {
+        var element = data.element; // We're checking if regions/markers|SelectableOne option is presented
+
+        if (map.params[data.type + "sSelectableOne"]) {
+          map._clearSelected(data.type + "s");
+        }
+
+        if (data.element.isSelected) {
+          element.select(false);
+        } else {
+          element.select(true);
+        }
+
+        map._emit(data.event, [data.code, element.isSelected, map._getSelected(data.type + "s")]);
+      }
+    }); // When region/marker is clicked
 
     EventHandler.delegate(container, 'click', '.jvm-element', function (event) {
       var _parseEvent = parseEvent(map, this),
-        type = _parseEvent.type,
-        code = _parseEvent.code;
+          type = _parseEvent.type,
+          code = _parseEvent.code;
 
-      map._emit(
-        type === 'region' ? Events.onRegionClick : Events.onMarkerClick,
-        [event, code]
-      );
+      map._emit(type === 'region' ? Events.onRegionClick : Events.onMarkerClick, [event, code]);
     });
   }
 
@@ -1008,50 +913,33 @@
 
     var map = this;
     var zoomin = createElement('div', 'jvm-zoom-btn jvm-zoomin', '&#43;', true);
-    var zoomout = createElement(
-      'div',
-      'jvm-zoom-btn jvm-zoomout',
-      '&#x2212',
-      true
-    );
+    var zoomout = createElement('div', 'jvm-zoom-btn jvm-zoomout', '&#x2212', true);
     this.container.appendChild(zoomin);
     this.container.appendChild(zoomout);
     EventHandler.on(zoomin, 'click', function () {
-      _this._setScale(
-        map.scale * map.params.zoomStep,
-        map.width / 2,
-        map.height / 2,
-        false,
-        map.params.zoomAnimate
-      );
+      _this._setScale(map.scale * map.params.zoomStep, map.width / 2, map.height / 2, false, map.params.zoomAnimate);
     });
     EventHandler.on(zoomout, 'click', function () {
-      _this._setScale(
-        map.scale / map.params.zoomStep,
-        map.width / 2,
-        map.height / 2,
-        false,
-        map.params.zoomAnimate
-      );
+      _this._setScale(map.scale / map.params.zoomStep, map.width / 2, map.height / 2, false, map.params.zoomAnimate);
     });
   }
 
   function setupContainerTouchEvents() {
     var map = this,
-      touchStartScale,
-      touchStartDistance,
-      touchX,
-      touchY,
-      centerTouchX,
-      centerTouchY,
-      lastTouchesLength;
+        touchStartScale,
+        touchStartDistance,
+        touchX,
+        touchY,
+        centerTouchX,
+        centerTouchY,
+        lastTouchesLength;
 
     var handleTouchEvent = function handleTouchEvent(e) {
       var touches = e.touches,
-        offset,
-        scale,
-        transXOld,
-        transYOld;
+          offset,
+          scale,
+          transXOld,
+          transYOld;
 
       if (e.type == 'touchstart') {
         lastTouchesLength = 0;
@@ -1076,11 +964,7 @@
         touchY = touches[0].pageY;
       } else if (touches.length == 2) {
         if (lastTouchesLength == 2) {
-          scale =
-            Math.sqrt(
-              Math.pow(touches[0].pageX - touches[1].pageX, 2) +
-                Math.pow(touches[0].pageY - touches[1].pageY, 2)
-            ) / touchStartDistance;
+          scale = Math.sqrt(Math.pow(touches[0].pageX - touches[1].pageX, 2) + Math.pow(touches[0].pageY - touches[1].pageY, 2)) / touchStartDistance;
 
           map._setScale(touchStartScale * scale, centerTouchX, centerTouchY);
 
@@ -1090,32 +974,25 @@
           var rect = map.container.selector.getBoundingClientRect();
           offset = {
             top: rect.top + window.scrollY,
-            left: rect.left + window.scrollX,
+            left: rect.left + window.scrollX
           };
 
           if (touches[0].pageX > touches[1].pageX) {
-            centerTouchX =
-              touches[1].pageX + (touches[0].pageX - touches[1].pageX) / 2;
+            centerTouchX = touches[1].pageX + (touches[0].pageX - touches[1].pageX) / 2;
           } else {
-            centerTouchX =
-              touches[0].pageX + (touches[1].pageX - touches[0].pageX) / 2;
+            centerTouchX = touches[0].pageX + (touches[1].pageX - touches[0].pageX) / 2;
           }
 
           if (touches[0].pageY > touches[1].pageY) {
-            centerTouchY =
-              touches[1].pageY + (touches[0].pageY - touches[1].pageY) / 2;
+            centerTouchY = touches[1].pageY + (touches[0].pageY - touches[1].pageY) / 2;
           } else {
-            centerTouchY =
-              touches[0].pageY + (touches[1].pageY - touches[0].pageY) / 2;
+            centerTouchY = touches[0].pageY + (touches[1].pageY - touches[0].pageY) / 2;
           }
 
           centerTouchX -= offset.left;
           centerTouchY -= offset.top;
           touchStartScale = map.scale;
-          touchStartDistance = Math.sqrt(
-            Math.pow(touches[0].pageX - touches[1].pageX, 2) +
-              Math.pow(touches[0].pageY - touches[1].pageY, 2)
-          );
+          touchStartDistance = Math.sqrt(Math.pow(touches[0].pageX - touches[1].pageX, 2) + Math.pow(touches[0].pageY - touches[1].pageY, 2));
         }
       }
 
@@ -1132,7 +1009,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var BaseComponent = /*#__PURE__*/ (function () {
+  var BaseComponent = /*#__PURE__*/function () {
     function BaseComponent() {}
 
     var _proto = BaseComponent.prototype;
@@ -1145,21 +1022,14 @@
         this.shape.remove();
       }
 
-      for (
-        var _iterator = _createForOfIteratorHelperLoose(
-            Object.getOwnPropertyNames(this)
-          ),
-          _step;
-        !(_step = _iterator()).done;
-
-      ) {
+      for (var _iterator = _createForOfIteratorHelperLoose(Object.getOwnPropertyNames(this)), _step; !(_step = _iterator()).done;) {
         var propertyName = _step.value;
         this[propertyName] = null;
       }
     };
 
     return BaseComponent;
-  })();
+  }();
 
   /**
    * ------------------------------------------------------------------------
@@ -1179,6 +1049,7 @@
           params.push(this.config.marker);
         } // Becuase we need to add the key always at the end
 
+
         params.push(key);
         return label.render.apply(this, params);
       }
@@ -1189,6 +1060,7 @@
       if (typeof label.offsets === 'function') {
         return label.offsets(key);
       } // If offsets are an array of offsets e.g offsets: [ [0, 25], [10, 15] ]
+
 
       if (Array.isArray(label.offsets)) {
         return label.offsets[key];
@@ -1219,7 +1091,7 @@
         this.label[property] = state;
         this.label.updateStyle();
       }
-    },
+    }
   };
 
   /**
@@ -1228,44 +1100,41 @@
    * ------------------------------------------------------------------------
    */
 
-  var Region = /*#__PURE__*/ (function (_BaseComponent) {
+  var Region = /*#__PURE__*/function (_BaseComponent) {
     _inheritsLoose(Region, _BaseComponent);
 
     function Region(_ref) {
       var _this;
 
       var map = _ref.map,
-        code = _ref.code,
-        path = _ref.path,
-        style = _ref.style,
-        label = _ref.label,
-        labelStyle = _ref.labelStyle,
-        labelsGroup = _ref.labelsGroup;
+          code = _ref.code,
+          path = _ref.path,
+          style = _ref.style,
+          label = _ref.label,
+          labelStyle = _ref.labelStyle,
+          labelsGroup = _ref.labelsGroup;
       _this = _BaseComponent.call(this) || this;
       _this._map = map;
       _this.shape = _this._createRegion(path, code, style);
 
       var bbox = _this.shape.getBBox();
 
-      var text = _this.getLabelText(code, label); // If label is passed and render function returns something
+      var text = _this.getLabelText(code, label); // If label is passed and render function returns something 
+
 
       if (label && text) {
         var offsets = _this.getLabelOffsets(code);
 
         _this.labelX = bbox.x + bbox.width / 2 + offsets[0];
         _this.labelY = bbox.y + bbox.height / 2 + offsets[1];
-        _this.label = _this._map.canvas.createText(
-          {
-            text: text,
-            textAnchor: 'middle',
-            alignmentBaseline: 'central',
-            dataCode: code,
-            x: _this.labelX,
-            y: _this.labelY,
-          },
-          labelStyle,
-          labelsGroup
-        );
+        _this.label = _this._map.canvas.createText({
+          text: text,
+          textAnchor: 'middle',
+          alignmentBaseline: 'central',
+          dataCode: code,
+          x: _this.labelX,
+          y: _this.labelY
+        }, labelStyle, labelsGroup);
 
         _this.label.addClass('jvm-region jvm-element');
       }
@@ -1276,13 +1145,10 @@
     var _proto = Region.prototype;
 
     _proto._createRegion = function _createRegion(path, code, style) {
-      path = this._map.canvas.createPath(
-        {
-          d: path,
-          dataCode: code,
-        },
-        style
-      );
+      path = this._map.canvas.createPath({
+        d: path,
+        dataCode: code
+      }, style);
       path.addClass('jvm-region jvm-element');
       return path;
     };
@@ -1291,21 +1157,19 @@
       if (this.label) {
         this.label.set({
           x: this.labelX * this._map.scale + this._map.transX * this._map.scale,
-          y: this.labelY * this._map.scale + this._map.transY * this._map.scale,
+          y: this.labelY * this._map.scale + this._map.transY * this._map.scale
         });
       }
     };
 
     return Region;
-  })(BaseComponent);
+  }(BaseComponent);
 
   inherit(Region, Interactable);
 
   function createRegions() {
     var code, region;
-    this.regionLabelsGroup =
-      this.regionLabelsGroup ||
-      this.canvas.createGroup('jvm-regions-labels-group');
+    this.regionLabelsGroup = this.regionLabelsGroup || this.canvas.createGroup('jvm-regions-labels-group');
 
     for (code in this.mapData.paths) {
       region = new Region({
@@ -1315,11 +1179,11 @@
         style: merge({}, this.params.regionStyle),
         labelStyle: this.params.regionLabelStyle,
         labelsGroup: this.regionLabelsGroup,
-        label: this.params.labels && this.params.labels.regions,
+        label: this.params.labels && this.params.labels.regions
       });
       this.regions[code] = {
         config: this.mapData.paths[code],
-        element: region,
+        element: region
       };
     }
   }
@@ -1330,34 +1194,30 @@
    * ------------------------------------------------------------------------
    */
 
-  var Line = /*#__PURE__*/ (function (_BaseComponent) {
+  var Line = /*#__PURE__*/function (_BaseComponent) {
     _inheritsLoose(Line, _BaseComponent);
 
     function Line(_ref) {
       var _this;
 
       var index = _ref.index,
-        map = _ref.map,
-        style = _ref.style,
-        x1 = _ref.x1,
-        y1 = _ref.y1,
-        x2 = _ref.x2,
-        y2 = _ref.y2,
-        group = _ref.group,
-        config = _ref.config;
+          map = _ref.map,
+          style = _ref.style,
+          x1 = _ref.x1,
+          y1 = _ref.y1,
+          x2 = _ref.x2,
+          y2 = _ref.y2,
+          group = _ref.group,
+          config = _ref.config;
       _this = _BaseComponent.call(this) || this;
       _this.config = config;
-      _this.shape = map.canvas.createLine(
-        {
-          x1: x1,
-          y1: y1,
-          x2: x2,
-          y2: y2,
-          dataIndex: index,
-        },
-        style,
-        group
-      );
+      _this.shape = map.canvas.createLine({
+        x1: x1,
+        y1: y1,
+        x2: x2,
+        y2: y2,
+        dataIndex: index
+      }, style, group);
 
       _this.shape.addClass('jvm-line');
 
@@ -1371,7 +1231,7 @@
     };
 
     return Line;
-  })(BaseComponent);
+  }(BaseComponent);
 
   function createLines(lines, markers, isRecentlyCreated) {
     if (isRecentlyCreated === void 0) {
@@ -1379,20 +1239,17 @@
     }
 
     var point1 = false,
-      point2 = false; // Create group for holding lines
+        point2 = false; // Create group for holding lines
     // we're checking if `linesGroup` exists or not becuase we may add lines
     // after the map has loaded so we will append the futured lines to this group as well.
 
-    this.linesGroup =
-      this.linesGroup || this.canvas.createGroup('jvm-lines-group');
+    this.linesGroup = this.linesGroup || this.canvas.createGroup('jvm-lines-group');
 
     for (var index in lines) {
       var config = lines[index];
 
       for (var mindex in markers) {
-        var markerConfig = isRecentlyCreated
-          ? markers[mindex].config
-          : markers[mindex];
+        var markerConfig = isRecentlyCreated ? markers[mindex].config : markers[mindex];
 
         if (markerConfig.name === config.from) {
           point1 = this.getMarkerPosition(markerConfig);
@@ -1409,21 +1266,17 @@
           index: index,
           map: this,
           // Merge the default `lineStyle` object with the custom `line` config style
-          style: merge(
-            {
-              initial: this.params.lineStyle,
-            },
-            {
-              initial: config.style || {},
-            },
-            true
-          ),
+          style: merge({
+            initial: this.params.lineStyle
+          }, {
+            initial: config.style || {}
+          }, true),
           x1: point1.x,
           y1: point1.y,
           x2: point2.x,
           y2: point2.y,
           group: this.linesGroup,
-          config: config,
+          config: config
         });
       }
     }
@@ -1435,34 +1288,30 @@
    * ------------------------------------------------------------------------
    */
 
-  var Marker = /*#__PURE__*/ (function (_BaseComponent) {
+  var Marker = /*#__PURE__*/function (_BaseComponent) {
     _inheritsLoose(Marker, _BaseComponent);
 
     function Marker(_ref) {
       var _this;
 
       var index = _ref.index,
-        style = _ref.style,
-        label = _ref.label,
-        cx = _ref.cx,
-        cy = _ref.cy,
-        map = _ref.map,
-        group = _ref.group;
+          style = _ref.style,
+          label = _ref.label,
+          cx = _ref.cx,
+          cy = _ref.cy,
+          map = _ref.map,
+          group = _ref.group;
       _this = _BaseComponent.call(this) || this; // Private
 
       _this._map = map;
       _this._isImage = !!style.initial.image; // Protected
 
       _this.config = arguments[0];
-      _this.shape = map.canvas[_this._isImage ? 'createImage' : 'createCircle'](
-        {
-          dataIndex: index,
-          cx: cx,
-          cy: cy,
-        },
-        _this._getStyle(),
-        group
-      );
+      _this.shape = map.canvas[_this._isImage ? 'createImage' : 'createCircle']({
+        dataIndex: index,
+        cx: cx,
+        cy: cy
+      }, _this._getStyle(), group);
 
       _this.shape.addClass('jvm-marker jvm-element');
 
@@ -1482,49 +1331,32 @@
     _proto.updateLabelPosition = function updateLabelPosition() {
       if (this.label) {
         this.label.set({
-          x:
-            this._labelX * this._map.scale +
-            this._offsets[0] +
-            this._map.transX * this._map.scale +
-            5 +
-            (this._isImage
-              ? (this.shape.width || 0) / 2
-              : this.shape.node.r.baseVal.value),
-          y:
-            this._labelY * this._map.scale +
-            this._map.transY * this._map.scale +
-            this._offsets[1],
+          x: this._labelX * this._map.scale + this._offsets[0] + this._map.transX * this._map.scale + 5 + (this._isImage ? (this.shape.width || 0) / 2 : this.shape.node.r.baseVal.value),
+          y: this._labelY * this._map.scale + this._map.transY * this._map.scale + this._offsets[1]
         });
       }
     };
 
     _proto._createLabel = function _createLabel(_ref2) {
       var index = _ref2.index,
-        map = _ref2.map,
-        label = _ref2.label,
-        labelsGroup = _ref2.labelsGroup,
-        cx = _ref2.cx,
-        cy = _ref2.cy,
-        marker = _ref2.marker,
-        isRecentlyCreated = _ref2.isRecentlyCreated;
+          map = _ref2.map,
+          label = _ref2.label,
+          labelsGroup = _ref2.labelsGroup,
+          cx = _ref2.cx,
+          cy = _ref2.cy,
+          marker = _ref2.marker,
+          isRecentlyCreated = _ref2.isRecentlyCreated;
       var labelText = this.getLabelText(index, label);
       this._labelX = cx / map.scale - map.transX;
       this._labelY = cy / map.scale - map.transY;
-      this._offsets =
-        isRecentlyCreated && marker.offsets
-          ? marker.offsets
-          : this.getLabelOffsets(index, label);
-      this.label = map.canvas.createText(
-        {
-          text: labelText,
-          dataIndex: index,
-          x: this._labelX,
-          y: this._labelY,
-          dy: '0.6ex',
-        },
-        map.params.markerLabelStyle,
-        labelsGroup
-      );
+      this._offsets = isRecentlyCreated && marker.offsets ? marker.offsets : this.getLabelOffsets(index, label);
+      this.label = map.canvas.createText({
+        text: labelText,
+        dataIndex: index,
+        x: this._labelX,
+        y: this._labelY,
+        dy: '0.6ex'
+      }, map.params.markerLabelStyle, labelsGroup);
       this.label.addClass('jvm-marker jvm-element');
 
       if (isRecentlyCreated) {
@@ -1537,7 +1369,7 @@
 
       if (this._isImage) {
         style.initial = {
-          image: this.config.style.initial.image,
+          image: this.config.style.initial.image
         };
       } else {
         style = this.config.style;
@@ -1547,7 +1379,7 @@
     };
 
     return Marker;
-  })(BaseComponent);
+  }(BaseComponent);
 
   inherit(Marker, Interactable);
 
@@ -1566,11 +1398,8 @@
     // We're checking if `markersGroup` exists or not becuase we may add markers after the map has loaded
     // So we will append the futured markers to this group as well.
 
-    this.markersGroup =
-      this.markersGroup || this.canvas.createGroup('jvm-markers-group');
-    this.markerLabelsGroup =
-      this.markerLabelsGroup ||
-      this.canvas.createGroup('jvm-markers-labels-group');
+    this.markersGroup = this.markersGroup || this.canvas.createGroup('jvm-markers-group');
+    this.markerLabelsGroup = this.markerLabelsGroup || this.canvas.createGroup('jvm-markers-labels-group');
 
     for (var index in markers) {
       markerConfig = markers[index];
@@ -1580,11 +1409,9 @@
       // Becuase we may have more than one marker.
 
       if (isRecentlyCreated) {
-        if (
-          Object.keys(this.markers).filter(function (i) {
-            return _this.markers[i]._uid === uid;
-          }).length
-        ) {
+        if (Object.keys(this.markers).filter(function (i) {
+          return _this.markers[i]._uid === uid;
+        }).length) {
           continue;
         }
 
@@ -1596,20 +1423,16 @@
           index: index,
           map: this,
           // Merge the `markerStyle` object with the marker config `style` if presented.
-          style: merge(
-            this.params.markerStyle,
-            {
-              initial: markerConfig.style || {},
-            },
-            true
-          ),
+          style: merge(this.params.markerStyle, {
+            initial: markerConfig.style || {}
+          }, true),
           label: this.params.labels && this.params.labels.markers,
           labelsGroup: this.markerLabelsGroup,
           cx: point.x,
           cy: point.y,
           group: this.markersGroup,
           marker: markerConfig,
-          isRecentlyCreated: isRecentlyCreated,
+          isRecentlyCreated: isRecentlyCreated
         }); // Check for marker duplication
         // this is useful when for example: a user clicks a button for creating marker two times
         // so it will remove the old one and the new one will take its place.
@@ -1621,7 +1444,7 @@
         this.markers[index] = {
           _uid: uid,
           config: markerConfig,
-          element: marker,
+          element: marker
         };
       }
     }
@@ -1633,7 +1456,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var Legend = /*#__PURE__*/ (function () {
+  var Legend = /*#__PURE__*/function () {
     function Legend(options) {
       if (options === void 0) {
         options = {};
@@ -1661,19 +1484,15 @@
 
     _proto.render = function render() {
       var ticks = this._series.scale.getTicks(),
-        inner = createElement('div', 'jvm-legend-inner'),
-        tick,
-        sample,
-        label;
+          inner = createElement('div', 'jvm-legend-inner'),
+          tick,
+          sample,
+          label;
 
       this._body.innderHTML = '';
 
       if (this._options.title) {
-        var legendTitle = createElement(
-          'div',
-          'jvm-legend-title',
-          this._options.title
-        );
+        var legendTitle = createElement('div', 'jvm-legend-title', this._options.title);
 
         this._body.appendChild(legendTitle);
       }
@@ -1687,7 +1506,7 @@
         switch (this._series.config.attribute) {
           case 'fill':
             if (isImageUrl(ticks[i].value)) {
-              sample.style.background = 'url(' + ticks[i].value + ')';
+              sample.style.background = "url(" + ticks[i].value + ")";
             } else {
               sample.style.background = ticks[i].value;
             }
@@ -1699,12 +1518,7 @@
             break;
 
           case 'image':
-            sample.style.background =
-              'url(' +
-              (typeof ticks[i].value === 'object'
-                ? ticks[i].value.url
-                : ticks[i].value) +
-              ') no-repeat center center';
+            sample.style.background = "url(" + (typeof ticks[i].value === 'object' ? ticks[i].value.url : ticks[i].value) + ") no-repeat center center";
             sample.style.backgroundSize = 'cover';
             break;
         }
@@ -1723,14 +1537,14 @@
     };
 
     return Legend;
-  })();
+  }();
 
   /**
    * ------------------------------------------------------------------------
    * Class Definition
    * ------------------------------------------------------------------------
    */
-  var OrdinalScale = /*#__PURE__*/ (function () {
+  var OrdinalScale = /*#__PURE__*/function () {
     function OrdinalScale(scale) {
       this._scale = scale;
     }
@@ -1747,7 +1561,7 @@
       for (var key in this._scale) {
         ticks.push({
           label: key,
-          value: this._scale[key],
+          value: this._scale[key]
         });
       }
 
@@ -1755,7 +1569,7 @@
     };
 
     return OrdinalScale;
-  })();
+  }();
 
   /**
    * ------------------------------------------------------------------------
@@ -1763,7 +1577,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var Series = /*#__PURE__*/ (function () {
+  var Series = /*#__PURE__*/function () {
     function Series(config, elements, map) {
       if (config === void 0) {
         config = {};
@@ -1787,15 +1601,10 @@
       }
 
       if (this.config.legend) {
-        this.legend = new Legend(
-          merge(
-            {
-              map: this._map,
-              series: this,
-            },
-            this.config.legend
-          )
-        );
+        this.legend = new Legend(merge({
+          map: this._map,
+          series: this
+        }, this.config.legend));
       }
 
       this.setValues(this._values);
@@ -1818,24 +1627,18 @@
     _proto.setAttributes = function setAttributes(attrs) {
       for (var code in attrs) {
         if (this._elements[code]) {
-          this._elements[code].element.setStyle(
-            this.config.attribute,
-            attrs[code]
-          );
+          this._elements[code].element.setStyle(this.config.attribute, attrs[code]);
         }
       }
     };
 
     _proto.clear = function clear() {
       var key,
-        attrs = {};
+          attrs = {};
 
       for (key in this._values) {
         if (this._elements[key]) {
-          attrs[key] =
-            this._elements[key].element.shape.style.initial[
-              this.config.attribute
-            ];
+          attrs[key] = this._elements[key].element.shape.style.initial[this.config.attribute];
         }
       }
 
@@ -1844,21 +1647,17 @@
     };
 
     return Series;
-  })();
+  }();
 
   function createSeries() {
     this.series = {
       markers: [],
-      regions: [],
+      regions: []
     };
 
     for (var key in this.params.series) {
       for (var i = 0; i < this.params.series[key].length; i++) {
-        this.series[key][i] = new Series(
-          this.params.series[key][i],
-          this[key],
-          this
-        );
+        this.series[key][i] = new Series(this.params.series[key][i], this[key], this);
       }
     }
   }
@@ -1867,20 +1666,16 @@
     var maxTransX, maxTransY, minTransX, minTransY;
 
     if (this.defaultWidth * this.scale <= this.width) {
-      maxTransX =
-        (this.width - this.defaultWidth * this.scale) / (2 * this.scale);
-      minTransX =
-        (this.width - this.defaultWidth * this.scale) / (2 * this.scale);
+      maxTransX = (this.width - this.defaultWidth * this.scale) / (2 * this.scale);
+      minTransX = (this.width - this.defaultWidth * this.scale) / (2 * this.scale);
     } else {
       maxTransX = 0;
       minTransX = (this.width - this.defaultWidth * this.scale) / this.scale;
     }
 
     if (this.defaultHeight * this.scale <= this.height) {
-      maxTransY =
-        (this.height - this.defaultHeight * this.scale) / (2 * this.scale);
-      minTransY =
-        (this.height - this.defaultHeight * this.scale) / (2 * this.scale);
+      maxTransY = (this.height - this.defaultHeight * this.scale) / (2 * this.scale);
+      minTransY = (this.height - this.defaultHeight * this.scale) / (2 * this.scale);
     } else {
       maxTransY = 0;
       minTransY = (this.height - this.defaultHeight * this.scale) / this.scale;
@@ -1916,14 +1711,10 @@
 
     if (this.width / this.height > this.defaultWidth / this.defaultHeight) {
       this.baseScale = this.height / this.defaultHeight;
-      this.baseTransX =
-        Math.abs(this.width - this.defaultWidth * this.baseScale) /
-        (2 * this.baseScale);
+      this.baseTransX = Math.abs(this.width - this.defaultWidth * this.baseScale) / (2 * this.baseScale);
     } else {
       this.baseScale = this.width / this.defaultWidth;
-      this.baseTransY =
-        Math.abs(this.height - this.defaultHeight * this.baseScale) /
-        (2 * this.baseScale);
+      this.baseTransY = Math.abs(this.height - this.defaultHeight * this.baseScale) / (2 * this.baseScale);
     }
 
     this.scale *= this.baseScale / curBaseScale;
@@ -1935,19 +1726,17 @@
     var _this = this;
 
     var zoomStep,
-      interval,
-      i = 0,
-      count = Math.abs(
-        Math.round(((scale - this.scale) * 60) / Math.max(scale, this.scale))
-      ),
-      scaleStart,
-      scaleDiff,
-      transXStart,
-      transXDiff,
-      transYStart,
-      transYDiff,
-      transX,
-      transY;
+        interval,
+        i = 0,
+        count = Math.abs(Math.round((scale - this.scale) * 60 / Math.max(scale, this.scale))),
+        scaleStart,
+        scaleDiff,
+        transXStart,
+        transXDiff,
+        transYStart,
+        transYDiff,
+        transX,
+        transY;
 
     if (scale > this.params.zoomMax * this.baseScale) {
       scale = this.params.zoomMax * this.baseScale;
@@ -1959,16 +1748,11 @@
       zoomStep = scale / this.scale;
 
       if (isCentered) {
-        transX =
-          anchorX +
-          (this.defaultWidth * (this.width / (this.defaultWidth * scale))) / 2;
-        transY =
-          anchorY +
-          (this.defaultHeight * (this.height / (this.defaultHeight * scale))) /
-            2;
+        transX = anchorX + this.defaultWidth * (this.width / (this.defaultWidth * scale)) / 2;
+        transY = anchorY + this.defaultHeight * (this.height / (this.defaultHeight * scale)) / 2;
       } else {
-        transX = this.transX - ((zoomStep - 1) / scale) * anchorX;
-        transY = this.transY - ((zoomStep - 1) / scale) * anchorY;
+        transX = this.transX - (zoomStep - 1) / scale * anchorX;
+        transY = this.transY - (zoomStep - 1) / scale * anchorY;
       }
     }
 
@@ -1990,11 +1774,7 @@
         if (i == count) {
           clearInterval(interval);
 
-          _this._emit(Events.onViewportChange, [
-            _this.scale,
-            _this.transX,
-            _this.transY,
-          ]);
+          _this._emit(Events.onViewportChange, [_this.scale, _this.transX, _this.transY]);
         }
       }, 10);
     } else {
@@ -2004,11 +1784,7 @@
 
       this._applyTransform();
 
-      this._emit(Events.onViewportChange, [
-        this.scale,
-        this.transX,
-        this.transY,
-      ]);
+      this._emit(Events.onViewportChange, [this.scale, this.transX, this.transY]);
     }
   }
 
@@ -2020,7 +1796,7 @@
     }
 
     var bbox,
-      codes = [];
+        codes = [];
 
     if (config.region) {
       codes.push(config.region);
@@ -2043,35 +1819,19 @@
               bbox = {
                 x: Math.min(bbox.x, itemBbox.x),
                 y: Math.min(bbox.y, itemBbox.y),
-                width:
-                  Math.max(bbox.x + bbox.width, itemBbox.x + itemBbox.width) -
-                  Math.min(bbox.x, itemBbox.x),
-                height:
-                  Math.max(bbox.y + bbox.height, itemBbox.y + itemBbox.height) -
-                  Math.min(bbox.y, itemBbox.y),
+                width: Math.max(bbox.x + bbox.width, itemBbox.x + itemBbox.width) - Math.min(bbox.x, itemBbox.x),
+                height: Math.max(bbox.y + bbox.height, itemBbox.y + itemBbox.height) - Math.min(bbox.y, itemBbox.y)
               };
             }
           }
         }
       });
-      return this._setScale(
-        Math.min(this.width / bbox.width, this.height / bbox.height),
-        -(bbox.x + bbox.width / 2),
-        -(bbox.y + bbox.height / 2),
-        true,
-        config.animate
-      );
+      return this._setScale(Math.min(this.width / bbox.width, this.height / bbox.height), -(bbox.x + bbox.width / 2), -(bbox.y + bbox.height / 2), true, config.animate);
     } else if (config.coords) {
       var point = this.coordsToPoint(config.coords[0], config.coords[1]);
       var x = this.transX - point.x / this.scale;
       var y = this.transY - point.y / this.scale;
-      return this._setScale(
-        config.scale * this.baseScale,
-        x,
-        y,
-        true,
-        config.animate
-      );
+      return this._setScale(config.scale * this.baseScale, x, y, true, config.animate);
     }
   }
 
@@ -2104,9 +1864,7 @@
     mill: function mill(lat, lng, c) {
       return {
         x: this.radius * (lng - c) * this.radDeg,
-        y:
-          (-this.radius * Math.log(Math.tan((45 + 0.4 * lat) * this.radDeg))) /
-          0.8,
+        y: -this.radius * Math.log(Math.tan((45 + 0.4 * lat) * this.radDeg)) / 0.8
       };
     },
 
@@ -2119,9 +1877,7 @@
     merc: function merc(lat, lng, c) {
       return {
         x: this.radius * (lng - c) * this.radDeg,
-        y:
-          -this.radius *
-          Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360)),
+        y: -this.radius * Math.log(Math.tan(Math.PI / 4 + lat * Math.PI / 360))
       };
     },
 
@@ -2133,19 +1889,19 @@
     }, */
     aea: function aea(lat, lng, c) {
       var fi0 = 0,
-        lambda0 = c * this.radDeg,
-        fi1 = 29.5 * this.radDeg,
-        fi2 = 45.5 * this.radDeg,
-        fi = lat * this.radDeg,
-        lambda = lng * this.radDeg,
-        n = (Math.sin(fi1) + Math.sin(fi2)) / 2,
-        C = Math.cos(fi1) * Math.cos(fi1) + 2 * n * Math.sin(fi1),
-        theta = n * (lambda - lambda0),
-        ro = Math.sqrt(C - 2 * n * Math.sin(fi)) / n,
-        ro0 = Math.sqrt(C - 2 * n * Math.sin(fi0)) / n;
+          lambda0 = c * this.radDeg,
+          fi1 = 29.5 * this.radDeg,
+          fi2 = 45.5 * this.radDeg,
+          fi = lat * this.radDeg,
+          lambda = lng * this.radDeg,
+          n = (Math.sin(fi1) + Math.sin(fi2)) / 2,
+          C = Math.cos(fi1) * Math.cos(fi1) + 2 * n * Math.sin(fi1),
+          theta = n * (lambda - lambda0),
+          ro = Math.sqrt(C - 2 * n * Math.sin(fi)) / n,
+          ro0 = Math.sqrt(C - 2 * n * Math.sin(fi0)) / n;
       return {
         x: ro * Math.sin(theta) * this.radius,
-        y: -(ro0 - ro * Math.cos(theta)) * this.radius,
+        y: -(ro0 - ro * Math.cos(theta)) * this.radius
       };
     },
 
@@ -2168,25 +1924,20 @@
     }, */
     lcc: function lcc(lat, lng, c) {
       var fi0 = 0,
-        lambda0 = c * this.radDeg,
-        lambda = lng * this.radDeg,
-        fi1 = 33 * this.radDeg,
-        fi2 = 45 * this.radDeg,
-        fi = lat * this.radDeg,
-        n =
-          Math.log(Math.cos(fi1) * (1 / Math.cos(fi2))) /
-          Math.log(
-            Math.tan(Math.PI / 4 + fi2 / 2) *
-              (1 / Math.tan(Math.PI / 4 + fi1 / 2))
-          ),
-        F = (Math.cos(fi1) * Math.pow(Math.tan(Math.PI / 4 + fi1 / 2), n)) / n,
-        ro = F * Math.pow(1 / Math.tan(Math.PI / 4 + fi / 2), n),
-        ro0 = F * Math.pow(1 / Math.tan(Math.PI / 4 + fi0 / 2), n);
+          lambda0 = c * this.radDeg,
+          lambda = lng * this.radDeg,
+          fi1 = 33 * this.radDeg,
+          fi2 = 45 * this.radDeg,
+          fi = lat * this.radDeg,
+          n = Math.log(Math.cos(fi1) * (1 / Math.cos(fi2))) / Math.log(Math.tan(Math.PI / 4 + fi2 / 2) * (1 / Math.tan(Math.PI / 4 + fi1 / 2))),
+          F = Math.cos(fi1) * Math.pow(Math.tan(Math.PI / 4 + fi1 / 2), n) / n,
+          ro = F * Math.pow(1 / Math.tan(Math.PI / 4 + fi / 2), n),
+          ro0 = F * Math.pow(1 / Math.tan(Math.PI / 4 + fi0 / 2), n);
       return {
         x: ro * Math.sin(n * (lambda - lambda0)) * this.radius,
-        y: -(ro0 - ro * Math.cos(n * (lambda - lambda0))) * this.radius,
+        y: -(ro0 - ro * Math.cos(n * (lambda - lambda0))) * this.radius
       };
-    },
+    }
     /* lcc_inv(xCoord, yCoord, c) {
       var x = xCoord / this.radius,
           y = yCoord / this.radius,
@@ -2204,6 +1955,7 @@
         lng: (lambda0 + theta / n) * this.degRad
       };
     } */
+
   };
   Proj.degRad = 180 / Math.PI;
   Proj.radDeg = Math.PI / 180;
@@ -2211,26 +1963,20 @@
 
   function coordsToPoint(lat, lng) {
     var point,
-      proj = Map.maps[this.params.map].projection,
-      centralMeridian = proj.centralMeridian,
-      inset,
-      bbox;
+        proj = Map.maps[this.params.map].projection,
+        centralMeridian = proj.centralMeridian,
+        inset,
+        bbox;
     point = Proj[proj.type](lat, lng, centralMeridian);
     inset = this.getInsetForPoint(point.x, point.y);
 
     if (inset) {
       bbox = inset.bbox;
-      point.x =
-        ((point.x - bbox[0].x) / (bbox[1].x - bbox[0].x)) *
-        inset.width *
-        this.scale;
-      point.y =
-        ((point.y - bbox[0].y) / (bbox[1].y - bbox[0].y)) *
-        inset.height *
-        this.scale;
+      point.x = (point.x - bbox[0].x) / (bbox[1].x - bbox[0].x) * inset.width * this.scale;
+      point.y = (point.y - bbox[0].y) / (bbox[1].y - bbox[0].y) * inset.height * this.scale;
       return {
         x: point.x + this.transX * this.scale + inset.left * this.scale,
-        y: point.y + this.transY * this.scale + inset.top * this.scale,
+        y: point.y + this.transY * this.scale + inset.top * this.scale
       };
     }
 
@@ -2239,8 +1985,8 @@
 
   function getInsetForPoint(x, y) {
     var index,
-      bbox,
-      insets = Map.maps[this.params.map].insets;
+        bbox,
+        insets = Map.maps[this.params.map].insets;
 
     for (index = 0; index < insets.length; index++) {
       bbox = insets[index].bbox;
@@ -2260,13 +2006,13 @@
 
     return {
       x: coords[0] * this.scale + this.transX * this.scale,
-      y: coords[1] * this.scale + this.transY * this.scale,
+      y: coords[1] * this.scale + this.transY * this.scale
     };
   }
 
   function repositionLines() {
     var point1 = false,
-      point2 = false;
+        point2 = false;
 
     for (var index in this.lines) {
       for (var mindex in this.markers) {
@@ -2286,7 +2032,7 @@
           x1: point1.x,
           y1: point1.y,
           x2: point2.x,
-          y2: point2.y,
+          y2: point2.y
         });
       }
     }
@@ -2301,7 +2047,7 @@
       if (point !== false) {
         this.markers[index].element.setStyle({
           cx: point.x,
-          cy: point.y,
+          cy: point.y
         });
       }
     }
@@ -2314,11 +2060,13 @@
       return;
     } // Regions labels
 
+
     if (labels.regions) {
       for (var key in this.regions) {
         this.regions[key].element.updateLabelPosition();
       }
     } // Markers labels
+
 
     if (labels.markers) {
       for (var _key in this.markers) {
@@ -2346,7 +2094,7 @@
     getMarkerPosition: getMarkerPosition,
     _repositionLines: repositionLines,
     _repositionMarkers: repositionMarkers,
-    _repositionLabels: repositionLabels,
+    _repositionLabels: repositionLabels
   };
 
   /**
@@ -2355,7 +2103,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var Tooltip = /*#__PURE__*/ (function (_BaseComponent) {
+  var Tooltip = /*#__PURE__*/function (_BaseComponent) {
     _inheritsLoose(Tooltip, _BaseComponent);
 
     function Tooltip(map) {
@@ -2381,16 +2129,13 @@
           return;
         }
 
-        var container = findElement(
-          _this2._map.container,
-          '#jvm-regions-group'
-        ).getBoundingClientRect();
+        var container = findElement(_this2._map.container, '#jvm-regions-group').getBoundingClientRect();
         var space = 5; // Space between the cursor and tooltip element
         // Tooltip
 
         var _this2$_tooltip$getBo = _this2._tooltip.getBoundingClientRect(),
-          height = _this2$_tooltip$getBo.height,
-          width = _this2$_tooltip$getBo.width;
+            height = _this2$_tooltip$getBo.height,
+            width = _this2$_tooltip$getBo.width;
 
         var topIsPassed = event.clientY <= container.top + height + space;
         var top = event.pageY - height - space;
@@ -2413,8 +2158,8 @@
         }
 
         _this2.css({
-          top: top + 'px',
-          left: left + 'px',
+          top: top + "px",
+          left: left + "px"
         });
       });
     };
@@ -2448,12 +2193,12 @@
     };
 
     return Tooltip;
-  })(BaseComponent);
+  }(BaseComponent);
 
-  var DataVisualization = /*#__PURE__*/ (function () {
+  var DataVisualization = /*#__PURE__*/function () {
     function DataVisualization(_ref, map) {
       var scale = _ref.scale,
-        values = _ref.values;
+          values = _ref.values;
       // Private
       this._scale = scale;
       this._values = values;
@@ -2485,7 +2230,7 @@
 
     _proto.visualize = function visualize() {
       var attrs = {},
-        value;
+          value;
 
       for (var regionCode in this._values) {
         value = parseFloat(this._values[regionCode]);
@@ -2508,15 +2253,11 @@
 
     _proto.getValue = function getValue(value) {
       var hex,
-        color = '#';
+          color = "#";
 
       for (var i = 0; i < 3; i++) {
-        hex = Math.round(
-          this._fromColor[i] +
-            (this._toColor[i] - this._fromColor[i]) *
-              ((value - this.min) / (this.max - this.min))
-        ).toString(16);
-        color += (hex.length === 1 ? '0' : '') + hex;
+        hex = Math.round(this._fromColor[i] + (this._toColor[i] - this._fromColor[i]) * ((value - this.min) / (this.max - this.min))).toString(16);
+        color += (hex.length === 1 ? "0" : "") + hex;
       }
 
       return color;
@@ -2524,24 +2265,24 @@
 
     _proto.hexToRgb = function hexToRgb(h) {
       var r = 0,
-        g = 0,
-        b = 0;
+          g = 0,
+          b = 0;
 
       if (h.length == 4) {
-        r = '0x' + h[1] + h[1];
-        g = '0x' + h[2] + h[2];
-        b = '0x' + h[3] + h[3];
+        r = "0x" + h[1] + h[1];
+        g = "0x" + h[2] + h[2];
+        b = "0x" + h[3] + h[3];
       } else if (h.length == 7) {
-        r = '0x' + h[1] + h[2];
-        g = '0x' + h[3] + h[4];
-        b = '0x' + h[5] + h[6];
+        r = "0x" + h[1] + h[2];
+        g = "0x" + h[3] + h[4];
+        b = "0x" + h[5] + h[6];
       }
 
       return [parseInt(r), parseInt(g), parseInt(b)];
     };
 
     return DataVisualization;
-  })();
+  }();
 
   /**
    * ------------------------------------------------------------------------
@@ -2549,7 +2290,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var Map = /*#__PURE__*/ (function () {
+  var Map = /*#__PURE__*/function () {
     function Map(options) {
       var _this = this;
 
@@ -2562,9 +2303,7 @@
       // the map that was set in map file
 
       if (!Map.maps[this.params.map]) {
-        throw new Error(
-          'Attempt to use map which was not loaded: ' + options.map
-        );
+        throw new Error("Attempt to use map which was not loaded: " + options.map);
       }
 
       this.mapData = Map.maps[this.params.map];
@@ -2605,92 +2344,89 @@
 
       this._createRegions(); // Update size
 
+
       this.updateSize(); // Create lines
 
       this._createLines(options.lines || {}, options.markers || {}); // Create markers
 
+
       this._createMarkers(options.markers); // Position labels
+
 
       this._repositionLabels(); // Setup the container events
 
+
       this._setupContainerEvents(); // Setup regions/markers events
 
+
       this._setupElementEvents(); // Create zoom buttons if `zoomButtons` is presented
+
 
       if (options.zoomButtons) {
         this._setupZoomButtons();
       } // Create toolip
 
+
       if (options.showTooltip) {
         this.tooltip = new Tooltip(this);
       } // Set selected regions if any
+
 
       if (options.selectedRegions) {
         this._setSelected('regions', options.selectedRegions);
       } // Set selected regions if any
 
+
       if (options.selectedMarkers) {
         this._setSelected('markers', options.selectedMarkers);
       } // Set focus on a spcific region
+
 
       if (options.focusOn) {
         this.setFocus(options.focusOn);
       } // Data visualization
 
+
       if (options.visualizeData) {
-        this.dataVisualization = new DataVisualization(
-          options.visualizeData,
-          this
-        );
+        this.dataVisualization = new DataVisualization(options.visualizeData, this);
       } // Bind touch events if true
 
+
       if (options.bindTouchEvents) {
-        if (
-          'ontouchstart' in window ||
-          (window.DocumentTouch && document instanceof DocumentTouch)
-        ) {
+        if ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch) {
           this._setupContainerTouchEvents();
         }
       } // Create series if any
 
+
       if (options.series) {
-        this.container.appendChild(
-          (this.legendHorizontal = createElement(
-            'div',
-            'jvm-series-container jvm-series-h'
-          ))
-        );
-        this.container.appendChild(
-          (this.legendVertical = createElement(
-            'div',
-            'jvm-series-container jvm-series-v'
-          ))
-        );
+        this.container.appendChild(this.legendHorizontal = createElement('div', 'jvm-series-container jvm-series-h'));
+        this.container.appendChild(this.legendVertical = createElement('div', 'jvm-series-container jvm-series-v'));
 
         this._createSeries();
       } // Fire loaded event
+
 
       this._emit(Events.onLoaded, [this]);
     };
 
     _proto._emit = function _emit(eventName, args) {
       for (var event in Events) {
-        if (
-          Events[event] === eventName &&
-          typeof this.params[event] === 'function'
-        ) {
+        if (Events[event] === eventName && typeof this.params[event] === 'function') {
           this.params[event].apply(this, args);
         }
       }
-    }; // Public
+    } // Public
+    ;
 
     _proto.setBackgroundColor = function setBackgroundColor(color) {
       this.container.style.backgroundColor = color;
-    }; // Get selected markers/regions
+    } // Get selected markers/regions
+    ;
 
     _proto._getSelected = function _getSelected(type) {
       var key,
-        selected = [];
+          selected = [];
 
       for (key in this[type]) {
         if (this[type][key].element.isSelected) {
@@ -2717,7 +2453,8 @@
       this._getSelected(type).forEach(function (i) {
         _this3[type][i].element.select(false);
       });
-    }; // Region methods
+    } // Region methods
+    ;
 
     _proto.getSelectedRegions = function getSelectedRegions() {
       return this._getSelected('regions');
@@ -2725,7 +2462,8 @@
 
     _proto.clearSelectedRegions = function clearSelectedRegions() {
       this._clearSelected('regions');
-    }; // Markers methods
+    } // Markers methods
+    ;
 
     _proto.getSelectedMarkers = function getSelectedMarkers() {
       return this._getSelected('markers');
@@ -2754,6 +2492,7 @@
         // Remove the element from the DOM
         _this4.markers[index].element.remove(); // Remove the element from markers object
 
+
         delete _this4.markers[index];
       });
     };
@@ -2763,21 +2502,13 @@
         style = {};
       }
 
-      console.warn(
-        '`addLine` method is deprecated, please use `addLines` instead.'
-      );
+      console.warn('`addLine` method is deprecated, please use `addLines` instead.');
 
-      this._createLines(
-        [
-          {
-            from: from,
-            to: to,
-            style: style,
-          },
-        ],
-        this.markers,
-        true
-      );
+      this._createLines([{
+        from: from,
+        to: to,
+        style: style
+      }], this.markers, true);
     };
 
     _proto.addLines = function addLines(config) {
@@ -2787,13 +2518,9 @@
         config = [config];
       }
 
-      this._createLines(
-        config.filter(function (line) {
-          return !(uids.indexOf(getLineUid(line.from, line.to)) > -1);
-        }),
-        this.markers,
-        true
-      );
+      this._createLines(config.filter(function (line) {
+        return !(uids.indexOf(getLineUid(line.from, line.to)) > -1);
+      }), this.markers, true);
     };
 
     _proto.removeLines = function removeLines(lines) {
@@ -2819,16 +2546,15 @@
     };
 
     _proto.removeLine = function removeLine(from, to) {
-      console.warn(
-        '`removeLine` method is deprecated, please use `removeLines` instead.'
-      );
+      console.warn('`removeLine` method is deprecated, please use `removeLines` instead.');
       var uid = getLineUid(from, to);
 
       if (this.lines.hasOwnProperty(uid)) {
         this.lines[uid].element.remove();
         delete this.lines[uid];
       }
-    }; // Reset map
+    } // Reset map
+    ;
 
     _proto.reset = function reset() {
       for (var key in this.series) {
@@ -2856,7 +2582,8 @@
       this.clearSelectedMarkers();
       this.clearSelectedRegions();
       this.removeMarkers();
-    }; // Destroy the map
+    } // Destroy the map
+    ;
 
     _proto.destroy = function destroy(destroyInstance) {
       var _this6 = this;
@@ -2872,6 +2599,7 @@
 
       this._emit(Events.onDestroyed); // Remove references
 
+
       if (destroyInstance) {
         Object.keys(this).forEach(function (key) {
           try {
@@ -2883,18 +2611,14 @@
 
     _proto.extend = function extend(name, callback) {
       if (typeof this[name] === 'function') {
-        throw new Error(
-          'The method [' +
-            name +
-            '] already exists internally please use another name.'
-        );
+        throw new Error("The method [" + name + "] already exists internally please use another name.");
       }
 
       Map.prototype[name] = callback;
     };
 
     return Map;
-  })();
+  }();
 
   Map.maps = {};
   Map.defaults = Defaults;
@@ -2911,7 +2635,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var jsVectorMap = /*#__PURE__*/ (function () {
+  var jsVectorMap = /*#__PURE__*/function () {
     function jsVectorMap(options) {
       if (options === void 0) {
         options = {};
@@ -2924,14 +2648,16 @@
       return new Map(options);
     } // Public
 
+
     jsVectorMap.addMap = function addMap(name, map) {
       Map.maps[name] = map;
     };
 
     return jsVectorMap;
-  })();
+  }();
 
-  var jsvectormap = (window.jsVectorMap = jsVectorMap);
+  var jsvectormap = window.jsVectorMap = jsVectorMap;
 
   return jsvectormap;
-});
+
+}));

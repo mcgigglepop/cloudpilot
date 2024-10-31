@@ -4,25 +4,10 @@
  * (c) 2017-2021 chartjs-plugin-datalabels contributors
  * Released under the MIT license
  */
-import {
-  isNullOrUndef,
-  merge,
-  toFont,
-  resolve,
-  toPadding,
-  valueOrDefault,
-  callback,
-  isObject,
-  each,
-} from 'chart.js/helpers';
-import {
-  defaults as defaults$1,
-  ArcElement,
-  PointElement,
-  BarElement,
-} from 'chart.js';
+import { isNullOrUndef, merge, toFont, resolve, toPadding, valueOrDefault, callback, isObject, each } from 'chart.js/helpers';
+import { defaults as defaults$1, ArcElement, PointElement, BarElement } from 'chart.js';
 
-var devicePixelRatio = (function () {
+var devicePixelRatio = (function() {
   if (typeof window !== 'undefined') {
     if (window.devicePixelRatio) {
       return window.devicePixelRatio;
@@ -38,11 +23,11 @@ var devicePixelRatio = (function () {
   }
 
   return 1;
-})();
+}());
 
 var utils = {
   // @todo move this in Chart.helpers.toTextLines
-  toTextLines: function (inputs) {
+  toTextLines: function(inputs) {
     var lines = [];
     var input;
 
@@ -63,7 +48,7 @@ var utils = {
 
   // @todo move this in Chart.helpers.canvas.textSize
   // @todo cache calls of measureText if font doesn't change?!
-  textSize: function (ctx, lines, font) {
+  textSize: function(ctx, lines, font) {
     var items = [].concat(lines);
     var ilen = items.length;
     var prev = ctx.font;
@@ -80,7 +65,7 @@ var utils = {
 
     return {
       height: ilen * font.lineHeight,
-      width: width,
+      width: width
     };
   },
 
@@ -89,7 +74,7 @@ var utils = {
    * @todo move this method in Chart.helpers.bound
    * https://doc.qt.io/qt-5/qtglobal.html#qBound
    */
-  bound: function (min, value, max) {
+  bound: function(min, value, max) {
     return Math.max(min, Math.min(value, max));
   },
 
@@ -98,7 +83,7 @@ var utils = {
    * * -1: value is only in a0 (removed)
    * *  1: value is only in a1 (added)
    */
-  arrayDiff: function (a0, a1) {
+  arrayDiff: function(a0, a1) {
     var prev = a0.slice();
     var updates = [];
     var i, j, ilen, v;
@@ -124,9 +109,9 @@ var utils = {
   /**
    * https://github.com/chartjs/chartjs-plugin-datalabels/issues/70
    */
-  rasterize: function (v) {
+  rasterize: function(v) {
     return Math.round(v * devicePixelRatio) / devicePixelRatio;
-  },
+  }
 };
 
 function orient(point, origin) {
@@ -134,10 +119,10 @@ function orient(point, origin) {
   var y0 = origin.y;
 
   if (x0 === null) {
-    return { x: 0, y: -1 };
+    return {x: 0, y: -1};
   }
   if (y0 === null) {
-    return { x: 1, y: 0 };
+    return {x: 1, y: 0};
   }
 
   var dx = point.x - x0;
@@ -146,51 +131,51 @@ function orient(point, origin) {
 
   return {
     x: ln ? dx / ln : 0,
-    y: ln ? dy / ln : -1,
+    y: ln ? dy / ln : -1
   };
 }
 
 function aligned(x, y, vx, vy, align) {
   switch (align) {
-    case 'center':
-      vx = vy = 0;
-      break;
-    case 'bottom':
-      vx = 0;
-      vy = 1;
-      break;
-    case 'right':
-      vx = 1;
-      vy = 0;
-      break;
-    case 'left':
-      vx = -1;
-      vy = 0;
-      break;
-    case 'top':
-      vx = 0;
-      vy = -1;
-      break;
-    case 'start':
-      vx = -vx;
-      vy = -vy;
-      break;
-    case 'end':
-      // keep natural orientation
-      break;
-    default:
-      // clockwise rotation (in degree)
-      align *= Math.PI / 180;
-      vx = Math.cos(align);
-      vy = Math.sin(align);
-      break;
+  case 'center':
+    vx = vy = 0;
+    break;
+  case 'bottom':
+    vx = 0;
+    vy = 1;
+    break;
+  case 'right':
+    vx = 1;
+    vy = 0;
+    break;
+  case 'left':
+    vx = -1;
+    vy = 0;
+    break;
+  case 'top':
+    vx = 0;
+    vy = -1;
+    break;
+  case 'start':
+    vx = -vx;
+    vy = -vy;
+    break;
+  case 'end':
+    // keep natural orientation
+    break;
+  default:
+    // clockwise rotation (in degree)
+    align *= (Math.PI / 180);
+    vx = Math.cos(align);
+    vy = Math.sin(align);
+    break;
   }
 
   return {
     x: x,
     y: y,
     vx: vx,
-    vy: vy,
+    vy: vy
   };
 }
 
@@ -231,7 +216,7 @@ function clipped(segment, area) {
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    if (!(r0 | r1) || r0 & r1) {
+    if (!(r0 | r1) || (r0 & r1)) {
       // both points inside or on the same side: no clipping
       break;
     }
@@ -240,16 +225,16 @@ function clipped(segment, area) {
     r = r0 || r1;
 
     if (r & R_TOP) {
-      x = x0 + ((x1 - x0) * (area.top - y0)) / (y1 - y0);
+      x = x0 + (x1 - x0) * (area.top - y0) / (y1 - y0);
       y = area.top;
     } else if (r & R_BOTTOM) {
-      x = x0 + ((x1 - x0) * (area.bottom - y0)) / (y1 - y0);
+      x = x0 + (x1 - x0) * (area.bottom - y0) / (y1 - y0);
       y = area.bottom;
     } else if (r & R_RIGHT) {
-      y = y0 + ((y1 - y0) * (area.right - x0)) / (x1 - x0);
+      y = y0 + (y1 - y0) * (area.right - x0) / (x1 - x0);
       x = area.right;
     } else if (r & R_LEFT) {
-      y = y0 + ((y1 - y0) * (area.left - x0)) / (x1 - x0);
+      y = y0 + (y1 - y0) * (area.left - x0) / (x1 - x0);
       x = area.left;
     }
 
@@ -268,7 +253,7 @@ function clipped(segment, area) {
     x0: x0,
     x1: x1,
     y0: y0,
-    y1: y1,
+    y1: y1
   };
 }
 
@@ -296,45 +281,39 @@ function compute$1(range, config) {
 }
 
 var positioners = {
-  arc: function (el, config) {
+  arc: function(el, config) {
     var angle = (el.startAngle + el.endAngle) / 2;
     var vx = Math.cos(angle);
     var vy = Math.sin(angle);
     var r0 = el.innerRadius;
     var r1 = el.outerRadius;
 
-    return compute$1(
-      {
-        x0: el.x + vx * r0,
-        y0: el.y + vy * r0,
-        x1: el.x + vx * r1,
-        y1: el.y + vy * r1,
-        vx: vx,
-        vy: vy,
-      },
-      config
-    );
+    return compute$1({
+      x0: el.x + vx * r0,
+      y0: el.y + vy * r0,
+      x1: el.x + vx * r1,
+      y1: el.y + vy * r1,
+      vx: vx,
+      vy: vy
+    }, config);
   },
 
-  point: function (el, config) {
+  point: function(el, config) {
     var v = orient(el, config.origin);
     var rx = v.x * el.options.radius;
     var ry = v.y * el.options.radius;
 
-    return compute$1(
-      {
-        x0: el.x - rx,
-        y0: el.y - ry,
-        x1: el.x + rx,
-        y1: el.y + ry,
-        vx: v.x,
-        vy: v.y,
-      },
-      config
-    );
+    return compute$1({
+      x0: el.x - rx,
+      y0: el.y - ry,
+      x1: el.x + rx,
+      y1: el.y + ry,
+      vx: v.x,
+      vy: v.y
+    }, config);
   },
 
-  bar: function (el, config) {
+  bar: function(el, config) {
     var v = orient(el, config.origin);
     var x = el.x;
     var y = el.y;
@@ -349,34 +328,28 @@ var positioners = {
       sy = Math.abs(el.base - el.y);
     }
 
-    return compute$1(
-      {
-        x0: x,
-        y0: y + sy,
-        x1: x + sx,
-        y1: y,
-        vx: v.x,
-        vy: v.y,
-      },
-      config
-    );
+    return compute$1({
+      x0: x,
+      y0: y + sy,
+      x1: x + sx,
+      y1: y,
+      vx: v.x,
+      vy: v.y
+    }, config);
   },
 
-  fallback: function (el, config) {
+  fallback: function(el, config) {
     var v = orient(el, config.origin);
 
-    return compute$1(
-      {
-        x0: el.x,
-        y0: el.y,
-        x1: el.x,
-        y1: el.y,
-        vx: v.x,
-        vy: v.y,
-      },
-      config
-    );
-  },
+    return compute$1({
+      x0: el.x,
+      y0: el.y,
+      x1: el.x,
+      y1: el.y,
+      vx: v.x,
+      vy: v.y
+    }, config);
+  }
 };
 
 var rasterize = utils.rasterize;
@@ -394,14 +367,14 @@ function boundingRects(model) {
       x: tx - padding.left - borderWidth,
       y: ty - padding.top - borderWidth,
       w: tw + padding.width + borderWidth * 2,
-      h: th + padding.height + borderWidth * 2,
+      h: th + padding.height + borderWidth * 2
     },
     text: {
       x: tx,
       y: ty,
       w: tw,
-      h: th,
-    },
+      h: th
+    }
   };
 }
 
@@ -413,11 +386,13 @@ function getScaleOrigin(el, context) {
   }
 
   if (scale.xCenter !== undefined && scale.yCenter !== undefined) {
-    return { x: scale.xCenter, y: scale.yCenter };
+    return {x: scale.xCenter, y: scale.yCenter};
   }
 
   var pixel = scale.getBasePixel();
-  return el.horizontal ? { x: pixel, y: null } : { x: null, y: pixel };
+  return el.horizontal ?
+    {x: pixel, y: null} :
+    {x: null, y: pixel};
 }
 
 function getPositioner(el) {
@@ -483,8 +458,7 @@ function drawFrame(ctx, rect, model) {
     rasterize(rect.y) + borderWidth / 2,
     rasterize(rect.w) - borderWidth,
     rasterize(rect.h) - borderWidth,
-    model.borderRadius
-  );
+    model.borderRadius);
 
   ctx.closePath();
 
@@ -517,7 +491,7 @@ function textGeometry(rect, align, font) {
     h: h,
     w: w,
     x: x,
-    y: y,
+    y: y
   };
 }
 
@@ -586,12 +560,12 @@ function drawText(ctx, lines, rect, model) {
       filled: filled,
       w: rect.w,
       x: rect.x,
-      y: rect.y + rect.h * i,
+      y: rect.y + rect.h * i
     });
   }
 }
 
-var Label = function (config, ctx, el, index) {
+var Label = function(config, ctx, el, index) {
   var me = this;
 
   me._config = config;
@@ -606,7 +580,7 @@ merge(Label.prototype, {
   /**
    * @private
    */
-  _modelize: function (display, lines, config, context) {
+  _modelize: function(display, lines, config, context) {
     var me = this;
     var index = me._index;
     var font = toFont(resolve([config.font, {}], context, index));
@@ -637,11 +611,11 @@ merge(Label.prototype, {
       textShadowBlur: resolve([config.textShadowBlur, 0], context, index),
       textShadowColor: resolve([config.textShadowColor, color], context, index),
       textStrokeColor: resolve([config.textStrokeColor, color], context, index),
-      textStrokeWidth: resolve([config.textStrokeWidth, 0], context, index),
+      textStrokeWidth: resolve([config.textStrokeWidth, 0], context, index)
     };
   },
 
-  update: function (context) {
+  update: function(context) {
     var me = this;
     var model = null;
     var rects = null;
@@ -655,10 +629,7 @@ merge(Label.prototype, {
 
     if (display) {
       value = context.dataset.data[index];
-      label = valueOrDefault(
-        callback(config.formatter, [value, context]),
-        value
-      );
+      label = valueOrDefault(callback(config.formatter, [value, context]), value);
       lines = isNullOrUndef(label) ? [] : utils.toTextLines(label);
 
       if (lines.length) {
@@ -671,23 +642,23 @@ merge(Label.prototype, {
     me._rects = rects;
   },
 
-  geometry: function () {
+  geometry: function() {
     return this._rects ? this._rects.frame : {};
   },
 
-  rotation: function () {
+  rotation: function() {
     return this._model ? this._model.rotation : 0;
   },
 
-  visible: function () {
+  visible: function() {
     return this._model && this._model.opacity;
   },
 
-  model: function () {
+  model: function() {
     return this._model;
   },
 
-  draw: function (chart, center) {
+  draw: function(chart, center) {
     var me = this;
     var ctx = chart.ctx;
     var model = me._model;
@@ -707,8 +678,7 @@ merge(Label.prototype, {
         area.left,
         area.top,
         area.right - area.left,
-        area.bottom - area.top
-      );
+        area.bottom - area.top);
       ctx.clip();
     }
 
@@ -720,11 +690,11 @@ merge(Label.prototype, {
     drawText(ctx, model.lines, rects.text, model);
 
     ctx.restore();
-  },
+  }
 });
 
 var MIN_INTEGER = Number.MIN_SAFE_INTEGER || -9007199254740991; // eslint-disable-line es/no-number-minsafeinteger
-var MAX_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991; // eslint-disable-line es/no-number-maxsafeinteger
+var MAX_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991;  // eslint-disable-line es/no-number-maxsafeinteger
 
 function rotated(point, center, angle) {
   var cos = Math.cos(angle);
@@ -734,7 +704,7 @@ function rotated(point, center, angle) {
 
   return {
     x: cx + cos * (point.x - cx) - sin * (point.y - cy),
-    y: cy + sin * (point.x - cx) + cos * (point.y - cy),
+    y: cy + sin * (point.x - cx) + cos * (point.y - cy)
   };
 }
 
@@ -755,7 +725,7 @@ function projected(points, axis) {
 
   return {
     min: min,
-    max: max,
+    max: max
   };
 }
 
@@ -768,66 +738,70 @@ function toAxis(p0, p1) {
     vx: (p1.x - p0.x) / ln,
     vy: (p1.y - p0.y) / ln,
     origin: p0,
-    ln: ln,
+    ln: ln
   };
 }
 
-var HitBox = function () {
+var HitBox = function() {
   this._rotation = 0;
   this._rect = {
     x: 0,
     y: 0,
     w: 0,
-    h: 0,
+    h: 0
   };
 };
 
 merge(HitBox.prototype, {
-  center: function () {
+  center: function() {
     var r = this._rect;
     return {
       x: r.x + r.w / 2,
-      y: r.y + r.h / 2,
+      y: r.y + r.h / 2
     };
   },
 
-  update: function (center, rect, rotation) {
+  update: function(center, rect, rotation) {
     this._rotation = rotation;
     this._rect = {
       x: rect.x + center.x,
       y: rect.y + center.y,
       w: rect.w,
-      h: rect.h,
+      h: rect.h
     };
   },
 
-  contains: function (point) {
+  contains: function(point) {
     var me = this;
     var margin = 1;
     var rect = me._rect;
 
     point = rotated(point, me.center(), -me._rotation);
 
-    return !(
-      point.x < rect.x - margin ||
-      point.y < rect.y - margin ||
-      point.x > rect.x + rect.w + margin * 2 ||
-      point.y > rect.y + rect.h + margin * 2
-    );
+    return !(point.x < rect.x - margin
+      || point.y < rect.y - margin
+      || point.x > rect.x + rect.w + margin * 2
+      || point.y > rect.y + rect.h + margin * 2);
   },
 
   // Separating Axis Theorem
   // https://gamedevelopment.tutsplus.com/tutorials/collision-detection-using-the-separating-axis-theorem--gamedev-169
-  intersects: function (other) {
+  intersects: function(other) {
     var r0 = this._points();
     var r1 = other._points();
-    var axes = [toAxis(r0[0], r0[1]), toAxis(r0[0], r0[3])];
+    var axes = [
+      toAxis(r0[0], r0[1]),
+      toAxis(r0[0], r0[3])
+    ];
     var i, pr0, pr1;
 
     if (this._rotation !== other._rotation) {
       // Only separate with r1 axis if the rotation is different,
       // else it's enough to separate r0 and r1 with r0 axis only!
-      axes.push(toAxis(r1[0], r1[1]), toAxis(r1[0], r1[3]));
+      axes.push(
+        toAxis(r1[0], r1[1]),
+        toAxis(r1[0], r1[3])
+      );
     }
 
     for (i = 0; i < axes.length; ++i) {
@@ -845,19 +819,19 @@ merge(HitBox.prototype, {
   /**
    * @private
    */
-  _points: function () {
+  _points: function() {
     var me = this;
     var rect = me._rect;
     var angle = me._rotation;
     var center = me.center();
 
     return [
-      rotated({ x: rect.x, y: rect.y }, center, angle),
-      rotated({ x: rect.x + rect.w, y: rect.y }, center, angle),
-      rotated({ x: rect.x + rect.w, y: rect.y + rect.h }, center, angle),
-      rotated({ x: rect.x, y: rect.y + rect.h }, center, angle),
+      rotated({x: rect.x, y: rect.y}, center, angle),
+      rotated({x: rect.x + rect.w, y: rect.y}, center, angle),
+      rotated({x: rect.x + rect.w, y: rect.y + rect.h}, center, angle),
+      rotated({x: rect.x, y: rect.y + rect.h}, center, angle)
     ];
-  },
+  }
 });
 
 function coordinates(el, model, geometry) {
@@ -867,7 +841,7 @@ function coordinates(el, model, geometry) {
 
   if (!vx && !vy) {
     // if aligned center, we don't want to offset the center point
-    return { x: point.x, y: point.y };
+    return {x: point.x, y: point.y};
   }
 
   var w = geometry.w;
@@ -875,12 +849,8 @@ function coordinates(el, model, geometry) {
 
   // take in account the label rotation
   var rotation = model.rotation;
-  var dx =
-    Math.abs((w / 2) * Math.cos(rotation)) +
-    Math.abs((h / 2) * Math.sin(rotation));
-  var dy =
-    Math.abs((w / 2) * Math.sin(rotation)) +
-    Math.abs((h / 2) * Math.cos(rotation));
+  var dx = Math.abs(w / 2 * Math.cos(rotation)) + Math.abs(h / 2 * Math.sin(rotation));
+  var dy = Math.abs(w / 2 * Math.sin(rotation)) + Math.abs(h / 2 * Math.cos(rotation));
 
   // scale the unit vector (vx, vy) to get at least dx or dy equal to
   // w or h respectively (else we would calculate the distance to the
@@ -895,7 +865,7 @@ function coordinates(el, model, geometry) {
 
   return {
     x: point.x + dx,
-    y: point.y + dy,
+    y: point.y + dy
   };
 }
 
@@ -935,9 +905,7 @@ function compute(labels) {
       // read values (i.e. var {a,b,c} = el.getProps(["a","b","c"])) would make
       // positioners inefficient in the normal case (i.e. not the final values)
       // and the code a bit ugly, so let's use a Proxy instead.
-      proxy = new Proxy(label._el, {
-        get: (el, p) => el.getProps([p], true)[p],
-      });
+      proxy = new Proxy(label._el, {get: (el, p) => el.getProps([p], true)[p]});
 
       geometry = label.geometry();
       center = coordinates(proxy, label.model(), geometry);
@@ -946,7 +914,7 @@ function compute(labels) {
   }
 
   // Auto hide overlapping labels
-  return collide(labels, function (s0, s1) {
+  return collide(labels, function(s0, s1) {
     var h0 = s0._hidable;
     var h1 = s1._hidable;
 
@@ -959,7 +927,7 @@ function compute(labels) {
 }
 
 var layout = {
-  prepare: function (datasets) {
+  prepare: function(datasets) {
     var labels = [];
     var i, j, ilen, jlen, label;
 
@@ -972,7 +940,7 @@ var layout = {
           _hidable: false,
           _visible: true,
           _set: i,
-          _idx: j,
+          _idx: j
         };
       }
     }
@@ -980,11 +948,13 @@ var layout = {
     // TODO New `z` option: labels with a higher z-index are drawn
     // of top of the ones with a lower index. Lowest z-index labels
     // are also discarded first when hiding overlapping labels.
-    labels.sort(function (a, b) {
+    labels.sort(function(a, b) {
       var sa = a.$layout;
       var sb = b.$layout;
 
-      return sa._idx === sb._idx ? sb._set - sa._set : sb._idx - sa._idx;
+      return sa._idx === sb._idx
+        ? sb._set - sa._set
+        : sb._idx - sa._idx;
     });
 
     this.update(labels);
@@ -992,7 +962,7 @@ var layout = {
     return labels;
   },
 
-  update: function (labels) {
+  update: function(labels) {
     var dirty = false;
     var i, ilen, label, model, state;
 
@@ -1010,7 +980,7 @@ var layout = {
     }
   },
 
-  lookup: function (labels, point) {
+  lookup: function(labels, point) {
     var i, state;
 
     // IMPORTANT Iterate in the reverse order since items at the end of
@@ -1027,7 +997,7 @@ var layout = {
     return null;
   },
 
-  draw: function (chart, labels) {
+  draw: function(chart, labels) {
     var i, ilen, label, state, geometry, center;
 
     for (i = 0, ilen = labels.length; i < ilen; ++i) {
@@ -1041,10 +1011,10 @@ var layout = {
         label.draw(chart, center);
       }
     }
-  },
+  }
 };
 
-var formatter = function (value) {
+var formatter = function(value) {
   if (isNullOrUndef(value)) {
     return null;
   }
@@ -1089,7 +1059,7 @@ var defaults = {
     lineHeight: 1.2,
     size: undefined,
     style: undefined,
-    weight: null,
+    weight: null
   },
   formatter: formatter,
   labels: undefined,
@@ -1100,14 +1070,14 @@ var defaults = {
     top: 4,
     right: 4,
     bottom: 4,
-    left: 4,
+    left: 4
   },
   rotation: 0,
   textAlign: 'start',
   textStrokeColor: undefined,
   textStrokeWidth: 0,
   textShadowBlur: 0,
-  textShadowColor: undefined,
+  textShadowColor: undefined
 };
 
 /**
@@ -1136,9 +1106,13 @@ function configure(dataset, options) {
   delete options.labels;
 
   if (keys.length) {
-    keys.forEach(function (key) {
+    keys.forEach(function(key) {
       if (labels[key]) {
-        configs.push(merge({}, [options, labels[key], { _key: key }]));
+        configs.push(merge({}, [
+          options,
+          labels[key],
+          {_key: key}
+        ]));
       }
     });
   } else {
@@ -1147,8 +1121,8 @@ function configure(dataset, options) {
   }
 
   // listeners: {<event-type>: {<label-key>: <fn>}}
-  listeners = configs.reduce(function (target, config) {
-    each(config.listeners || {}, function (fn, event) {
+  listeners = configs.reduce(function(target, config) {
+    each(config.listeners || {}, function(fn, event) {
       target[event] = target[event] || {};
       target[event][config._key || DEFAULT_KEY] = fn;
     });
@@ -1159,7 +1133,7 @@ function configure(dataset, options) {
 
   return {
     labels: configs,
-    listeners: listeners,
+    listeners: listeners
   };
 }
 
@@ -1248,24 +1222,24 @@ var plugin = {
 
   defaults: defaults,
 
-  beforeInit: function (chart) {
+  beforeInit: function(chart) {
     chart[EXPANDO_KEY] = {
-      _actives: [],
+      _actives: []
     };
   },
 
-  beforeUpdate: function (chart) {
+  beforeUpdate: function(chart) {
     var expando = chart[EXPANDO_KEY];
     expando._listened = false;
-    expando._listeners = {}; // {<event-type>: {<dataset-index>: {<label-key>: <fn>}}}
-    expando._datasets = []; // per dataset labels: [Label[]]
-    expando._labels = []; // layouted labels: Label[]
+    expando._listeners = {};     // {<event-type>: {<dataset-index>: {<label-key>: <fn>}}}
+    expando._datasets = [];      // per dataset labels: [Label[]]
+    expando._labels = [];        // layouted labels: Label[]
   },
 
-  afterDatasetUpdate: function (chart, args, options) {
+  afterDatasetUpdate: function(chart, args, options) {
     var datasetIndex = args.index;
     var expando = chart[EXPANDO_KEY];
-    var labels = (expando._datasets[datasetIndex] = []);
+    var labels = expando._datasets[datasetIndex] = [];
     var visible = chart.isDatasetVisible(datasetIndex);
     var dataset = chart.data.datasets[datasetIndex];
     var config = configure(dataset, options);
@@ -1287,14 +1261,14 @@ var plugin = {
           label = new Label(cfg, ctx, el, i);
           label.$groups = {
             _set: datasetIndex,
-            _key: key || DEFAULT_KEY,
+            _key: key || DEFAULT_KEY
           };
           label.$context = {
             active: false,
             chart: chart,
             dataIndex: i,
             dataset: dataset,
-            datasetIndex: datasetIndex,
+            datasetIndex: datasetIndex
           };
 
           label.update(label.$context);
@@ -1309,50 +1283,49 @@ var plugin = {
     // Store listeners at the chart level and per event type to optimize
     // cases where no listeners are registered for a specific event.
     merge(expando._listeners, config.listeners, {
-      merger: function (event, target, source) {
+      merger: function(event, target, source) {
         target[event] = target[event] || {};
         target[event][args.index] = source[event];
         expando._listened = true;
-      },
+      }
     });
   },
 
-  afterUpdate: function (chart, options) {
+  afterUpdate: function(chart, options) {
     chart[EXPANDO_KEY]._labels = layout.prepare(
       chart[EXPANDO_KEY]._datasets,
-      options
-    );
+      options);
   },
 
   // Draw labels on top of all dataset elements
   // https://github.com/chartjs/chartjs-plugin-datalabels/issues/29
   // https://github.com/chartjs/chartjs-plugin-datalabels/issues/32
-  afterDatasetsDraw: function (chart) {
+  afterDatasetsDraw: function(chart) {
     layout.draw(chart, chart[EXPANDO_KEY]._labels);
   },
 
-  beforeEvent: function (chart, args) {
+  beforeEvent: function(chart, args) {
     // If there is no listener registered for this chart, `listened` will be false,
     // meaning we can immediately ignore the incoming event and avoid useless extra
     // computation for users who don't implement label interactions.
     if (chart[EXPANDO_KEY]._listened) {
       var event = args.event;
       switch (event.type) {
-        case 'mousemove':
-        case 'mouseout':
-          handleMoveEvents(chart, event);
-          break;
-        case 'click':
-          handleClickEvents(chart, event);
-          break;
+      case 'mousemove':
+      case 'mouseout':
+        handleMoveEvents(chart, event);
+        break;
+      case 'click':
+        handleClickEvents(chart, event);
+        break;
       }
     }
   },
 
-  afterEvent: function (chart) {
+  afterEvent: function(chart) {
     var expando = chart[EXPANDO_KEY];
     var previous = expando._actives;
-    var actives = (expando._actives = chart.getActiveElements());
+    var actives = expando._actives = chart.getActiveElements();
     var updates = utils.arrayDiff(previous, actives);
     var i, ilen, j, jlen, update, label, labels;
 
@@ -1362,7 +1335,7 @@ var plugin = {
         labels = update[0].element[EXPANDO_KEY] || [];
         for (j = 0, jlen = labels.length; j < jlen; ++j) {
           label = labels[j];
-          label.$context.active = update[1] === 1;
+          label.$context.active = (update[1] === 1);
           label.update(label.$context);
         }
       }
@@ -1374,7 +1347,7 @@ var plugin = {
     }
 
     delete expando._dirty;
-  },
+  }
 };
 
 export default plugin;

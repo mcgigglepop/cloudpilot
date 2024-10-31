@@ -1,196 +1,186 @@
-define([
-  '../core',
-  '../core/stripAndCollapse',
-  '../var/isFunction',
-  '../var/rnothtmlwhite',
-  '../data/var/dataPriv',
-  '../core/init',
-], function (jQuery, stripAndCollapse, isFunction, rnothtmlwhite, dataPriv) {
-  'use strict';
+define( [
+	"../core",
+	"../core/stripAndCollapse",
+	"../var/isFunction",
+	"../var/rnothtmlwhite",
+	"../data/var/dataPriv",
+	"../core/init"
+], function( jQuery, stripAndCollapse, isFunction, rnothtmlwhite, dataPriv ) {
 
-  function getClass(elem) {
-    return (elem.getAttribute && elem.getAttribute('class')) || '';
-  }
+"use strict";
 
-  function classesToArray(value) {
-    if (Array.isArray(value)) {
-      return value;
-    }
-    if (typeof value === 'string') {
-      return value.match(rnothtmlwhite) || [];
-    }
-    return [];
-  }
+function getClass( elem ) {
+	return elem.getAttribute && elem.getAttribute( "class" ) || "";
+}
 
-  jQuery.fn.extend({
-    addClass: function (value) {
-      var classes,
-        elem,
-        cur,
-        curValue,
-        clazz,
-        j,
-        finalValue,
-        i = 0;
+function classesToArray( value ) {
+	if ( Array.isArray( value ) ) {
+		return value;
+	}
+	if ( typeof value === "string" ) {
+		return value.match( rnothtmlwhite ) || [];
+	}
+	return [];
+}
 
-      if (isFunction(value)) {
-        return this.each(function (j) {
-          jQuery(this).addClass(value.call(this, j, getClass(this)));
-        });
-      }
+jQuery.fn.extend( {
+	addClass: function( value ) {
+		var classes, elem, cur, curValue, clazz, j, finalValue,
+			i = 0;
 
-      classes = classesToArray(value);
+		if ( isFunction( value ) ) {
+			return this.each( function( j ) {
+				jQuery( this ).addClass( value.call( this, j, getClass( this ) ) );
+			} );
+		}
 
-      if (classes.length) {
-        while ((elem = this[i++])) {
-          curValue = getClass(elem);
-          cur = elem.nodeType === 1 && ' ' + stripAndCollapse(curValue) + ' ';
+		classes = classesToArray( value );
 
-          if (cur) {
-            j = 0;
-            while ((clazz = classes[j++])) {
-              if (cur.indexOf(' ' + clazz + ' ') < 0) {
-                cur += clazz + ' ';
-              }
-            }
+		if ( classes.length ) {
+			while ( ( elem = this[ i++ ] ) ) {
+				curValue = getClass( elem );
+				cur = elem.nodeType === 1 && ( " " + stripAndCollapse( curValue ) + " " );
 
-            // Only assign if different to avoid unneeded rendering.
-            finalValue = stripAndCollapse(cur);
-            if (curValue !== finalValue) {
-              elem.setAttribute('class', finalValue);
-            }
-          }
-        }
-      }
+				if ( cur ) {
+					j = 0;
+					while ( ( clazz = classes[ j++ ] ) ) {
+						if ( cur.indexOf( " " + clazz + " " ) < 0 ) {
+							cur += clazz + " ";
+						}
+					}
 
-      return this;
-    },
+					// Only assign if different to avoid unneeded rendering.
+					finalValue = stripAndCollapse( cur );
+					if ( curValue !== finalValue ) {
+						elem.setAttribute( "class", finalValue );
+					}
+				}
+			}
+		}
 
-    removeClass: function (value) {
-      var classes,
-        elem,
-        cur,
-        curValue,
-        clazz,
-        j,
-        finalValue,
-        i = 0;
+		return this;
+	},
 
-      if (isFunction(value)) {
-        return this.each(function (j) {
-          jQuery(this).removeClass(value.call(this, j, getClass(this)));
-        });
-      }
+	removeClass: function( value ) {
+		var classes, elem, cur, curValue, clazz, j, finalValue,
+			i = 0;
 
-      if (!arguments.length) {
-        return this.attr('class', '');
-      }
+		if ( isFunction( value ) ) {
+			return this.each( function( j ) {
+				jQuery( this ).removeClass( value.call( this, j, getClass( this ) ) );
+			} );
+		}
 
-      classes = classesToArray(value);
+		if ( !arguments.length ) {
+			return this.attr( "class", "" );
+		}
 
-      if (classes.length) {
-        while ((elem = this[i++])) {
-          curValue = getClass(elem);
+		classes = classesToArray( value );
 
-          // This expression is here for better compressibility (see addClass)
-          cur = elem.nodeType === 1 && ' ' + stripAndCollapse(curValue) + ' ';
+		if ( classes.length ) {
+			while ( ( elem = this[ i++ ] ) ) {
+				curValue = getClass( elem );
 
-          if (cur) {
-            j = 0;
-            while ((clazz = classes[j++])) {
-              // Remove *all* instances
-              while (cur.indexOf(' ' + clazz + ' ') > -1) {
-                cur = cur.replace(' ' + clazz + ' ', ' ');
-              }
-            }
+				// This expression is here for better compressibility (see addClass)
+				cur = elem.nodeType === 1 && ( " " + stripAndCollapse( curValue ) + " " );
 
-            // Only assign if different to avoid unneeded rendering.
-            finalValue = stripAndCollapse(cur);
-            if (curValue !== finalValue) {
-              elem.setAttribute('class', finalValue);
-            }
-          }
-        }
-      }
+				if ( cur ) {
+					j = 0;
+					while ( ( clazz = classes[ j++ ] ) ) {
 
-      return this;
-    },
+						// Remove *all* instances
+						while ( cur.indexOf( " " + clazz + " " ) > -1 ) {
+							cur = cur.replace( " " + clazz + " ", " " );
+						}
+					}
 
-    toggleClass: function (value, stateVal) {
-      var type = typeof value,
-        isValidValue = type === 'string' || Array.isArray(value);
+					// Only assign if different to avoid unneeded rendering.
+					finalValue = stripAndCollapse( cur );
+					if ( curValue !== finalValue ) {
+						elem.setAttribute( "class", finalValue );
+					}
+				}
+			}
+		}
 
-      if (typeof stateVal === 'boolean' && isValidValue) {
-        return stateVal ? this.addClass(value) : this.removeClass(value);
-      }
+		return this;
+	},
 
-      if (isFunction(value)) {
-        return this.each(function (i) {
-          jQuery(this).toggleClass(
-            value.call(this, i, getClass(this), stateVal),
-            stateVal
-          );
-        });
-      }
+	toggleClass: function( value, stateVal ) {
+		var type = typeof value,
+			isValidValue = type === "string" || Array.isArray( value );
 
-      return this.each(function () {
-        var className, i, self, classNames;
+		if ( typeof stateVal === "boolean" && isValidValue ) {
+			return stateVal ? this.addClass( value ) : this.removeClass( value );
+		}
 
-        if (isValidValue) {
-          // Toggle individual class names
-          i = 0;
-          self = jQuery(this);
-          classNames = classesToArray(value);
+		if ( isFunction( value ) ) {
+			return this.each( function( i ) {
+				jQuery( this ).toggleClass(
+					value.call( this, i, getClass( this ), stateVal ),
+					stateVal
+				);
+			} );
+		}
 
-          while ((className = classNames[i++])) {
-            // Check each className given, space separated list
-            if (self.hasClass(className)) {
-              self.removeClass(className);
-            } else {
-              self.addClass(className);
-            }
-          }
+		return this.each( function() {
+			var className, i, self, classNames;
 
-          // Toggle whole class name
-        } else if (value === undefined || type === 'boolean') {
-          className = getClass(this);
-          if (className) {
-            // Store className if set
-            dataPriv.set(this, '__className__', className);
-          }
+			if ( isValidValue ) {
 
-          // If the element has a class name or if we're passed `false`,
-          // then remove the whole classname (if there was one, the above saved it).
-          // Otherwise bring back whatever was previously saved (if anything),
-          // falling back to the empty string if nothing was stored.
-          if (this.setAttribute) {
-            this.setAttribute(
-              'class',
-              className || value === false
-                ? ''
-                : dataPriv.get(this, '__className__') || ''
-            );
-          }
-        }
-      });
-    },
+				// Toggle individual class names
+				i = 0;
+				self = jQuery( this );
+				classNames = classesToArray( value );
 
-    hasClass: function (selector) {
-      var className,
-        elem,
-        i = 0;
+				while ( ( className = classNames[ i++ ] ) ) {
 
-      className = ' ' + selector + ' ';
-      while ((elem = this[i++])) {
-        if (
-          elem.nodeType === 1 &&
-          (' ' + stripAndCollapse(getClass(elem)) + ' ').indexOf(className) > -1
-        ) {
-          return true;
-        }
-      }
+					// Check each className given, space separated list
+					if ( self.hasClass( className ) ) {
+						self.removeClass( className );
+					} else {
+						self.addClass( className );
+					}
+				}
 
-      return false;
-    },
-  });
-});
+			// Toggle whole class name
+			} else if ( value === undefined || type === "boolean" ) {
+				className = getClass( this );
+				if ( className ) {
+
+					// Store className if set
+					dataPriv.set( this, "__className__", className );
+				}
+
+				// If the element has a class name or if we're passed `false`,
+				// then remove the whole classname (if there was one, the above saved it).
+				// Otherwise bring back whatever was previously saved (if anything),
+				// falling back to the empty string if nothing was stored.
+				if ( this.setAttribute ) {
+					this.setAttribute( "class",
+						className || value === false ?
+							"" :
+							dataPriv.get( this, "__className__" ) || ""
+					);
+				}
+			}
+		} );
+	},
+
+	hasClass: function( selector ) {
+		var className, elem,
+			i = 0;
+
+		className = " " + selector + " ";
+		while ( ( elem = this[ i++ ] ) ) {
+			if ( elem.nodeType === 1 &&
+				( " " + stripAndCollapse( getClass( elem ) ) + " " ).indexOf( className ) > -1 ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+} );
+
+} );

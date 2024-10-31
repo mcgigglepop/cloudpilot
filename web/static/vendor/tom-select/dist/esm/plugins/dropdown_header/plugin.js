@@ -1,13 +1,13 @@
 /**
- * Tom Select v2.1.0
- * Licensed under the Apache License, Version 2.0 (the "License");
- */
+* Tom Select v2.1.0
+* Licensed under the Apache License, Version 2.0 (the "License");
+*/
 
 // @ts-ignore TS2691 "An import path cannot end with a '.ts' extension"
 const latin_convert = {
-  æ: 'ae',
-  ⱥ: 'a',
-  ø: 'o',
+  'æ': 'ae',
+  'ⱥ': 'a',
+  'ø': 'o'
 };
 new RegExp(Object.keys(latin_convert).join('|'), 'gu');
 
@@ -18,7 +18,7 @@ new RegExp(Object.keys(latin_convert).join('|'), 'gu');
  * param query should be {}
  */
 
-const getDom = (query) => {
+const getDom = query => {
   if (query.jquery) {
     return query[0];
   }
@@ -36,7 +36,7 @@ const getDom = (query) => {
 
   return document.querySelector(query);
 };
-const isHtmlString = (arg) => {
+const isHtmlString = arg => {
   if (typeof arg === 'string' && arg.indexOf('<') > -1) {
     return true;
   }
@@ -87,44 +87,24 @@ const preventDefault = (evt, stop = false) => {
  * governing permissions and limitations under the License.
  *
  */
-function plugin(userOptions) {
+function plugin (userOptions) {
   const self = this;
-  const options = Object.assign(
-    {
-      title: 'Untitled',
-      headerClass: 'dropdown-header',
-      titleRowClass: 'dropdown-header-title',
-      labelClass: 'dropdown-header-label',
-      closeClass: 'dropdown-header-close',
-      html: (data) => {
-        return (
-          '<div class="' +
-          data.headerClass +
-          '">' +
-          '<div class="' +
-          data.titleRowClass +
-          '">' +
-          '<span class="' +
-          data.labelClass +
-          '">' +
-          data.title +
-          '</span>' +
-          '<a class="' +
-          data.closeClass +
-          '">&times;</a>' +
-          '</div>' +
-          '</div>'
-        );
-      },
-    },
-    userOptions
-  );
+  const options = Object.assign({
+    title: 'Untitled',
+    headerClass: 'dropdown-header',
+    titleRowClass: 'dropdown-header-title',
+    labelClass: 'dropdown-header-label',
+    closeClass: 'dropdown-header-close',
+    html: data => {
+      return '<div class="' + data.headerClass + '">' + '<div class="' + data.titleRowClass + '">' + '<span class="' + data.labelClass + '">' + data.title + '</span>' + '<a class="' + data.closeClass + '">&times;</a>' + '</div>' + '</div>';
+    }
+  }, userOptions);
   self.on('initialize', () => {
     var header = getDom(options.html(options));
     var close_link = header.querySelector('.' + options.closeClass);
 
     if (close_link) {
-      close_link.addEventListener('click', (evt) => {
+      close_link.addEventListener('click', evt => {
         preventDefault(evt, true);
         self.close();
       });

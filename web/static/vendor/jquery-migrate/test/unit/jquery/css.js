@@ -1,180 +1,169 @@
-QUnit.module('css');
 
-QUnit.test('jQuery.swap()', function (assert) {
-  assert.expect(6);
+QUnit.module( "css" );
 
-  var div = document.createElement('div');
-  div.style.borderWidth = '4px';
+QUnit.test( "jQuery.swap()", function( assert ) {
+	assert.expect( 6 );
 
-  expectWarning(assert, 'External swap() call', function () {
-    jQuery.swap(
-      div,
-      { borderRightWidth: '5px' },
-      function (arg) {
-        assert.equal(this.style.borderRightWidth, '5px', 'style was changed');
-        assert.equal(arg, 42, 'arg was passed');
-      },
-      [42]
-    );
-  });
-  assert.equal(div.style.borderRightWidth, '4px', 'style was restored');
+	var div = document.createElement( "div" );
+	div.style.borderWidth = "4px";
 
-  expectNoWarning(assert, 'Internal swap() call', function () {
-    var $fp = jQuery('#firstp').width('10em'),
-      width = $fp.width();
+	expectWarning( assert, "External swap() call", function() {
+		jQuery.swap( div, { borderRightWidth: "5px" }, function( arg ) {
 
-    assert.equal($fp.hide().width(), width, 'correct width');
-  });
-});
+			assert.equal( this.style.borderRightWidth, "5px", "style was changed" );
+			assert.equal( arg, 42, "arg was passed" );
 
-QUnit[
-  jQueryVersionSince('3.4.0') && typeof Proxy !== 'undefined' ? 'test' : 'skip'
-]('jQuery.cssProps', function (assert) {
-  assert.expect(2);
+		}, [ 42 ] );
+	} );
+	assert.equal( div.style.borderRightWidth, "4px", "style was restored" );
 
-  expectWarning(assert, 'Write to cssProps', function () {
-    jQuery.cssProps.devoHat = 'awesomeHat';
-  });
+	expectNoWarning( assert, "Internal swap() call", function() {
+		var $fp = jQuery( "#firstp" ).width( "10em" ),
+			width = $fp.width();
 
-  expectNoWarning(assert, 'Read from cssProps', function () {
-    // eslint-disable-next-line no-unused-expressions
-    jQuery.cssProps.devoHat;
-    // eslint-disable-next-line no-unused-expressions
-    jQuery.cssProps.unknownProp;
-  });
+		assert.equal( $fp.hide().width(), width, "correct width" );
+	} );
 
-  delete jQuery.cssProps.devoHat;
-});
+} );
 
-QUnit.test('jQuery.css with arrays', function (assert) {
-  assert.expect(2);
+QUnit[ ( jQueryVersionSince( "3.4.0" ) && typeof Proxy !== "undefined" ) ? "test" : "skip"
+	]( "jQuery.cssProps", function( assert ) {
+	assert.expect( 2 );
 
-  expectNoWarning(assert, 'String value direct', function () {
-    var cssValues = jQuery('<div />')
-      .css({
-        'z-index': '2',
-        fontSize: '16px',
-      })
-      .css(['font-size', 'zIndex']);
+	expectWarning( assert, "Write to cssProps", function() {
+		jQuery.cssProps.devoHat = "awesomeHat";
+	} );
 
-    assert.deepEqual(
-      cssValues,
-      { 'font-size': '16px', zIndex: '2' },
-      '.css( array ) works'
-    );
-  });
-});
+	expectNoWarning( assert, "Read from cssProps", function() {
+		// eslint-disable-next-line no-unused-expressions
+		jQuery.cssProps.devoHat;
+		// eslint-disable-next-line no-unused-expressions
+		jQuery.cssProps.unknownProp;
+	} );
 
-QUnit.test('jQuery.css with numbers', function (assert) {
-  var jQuery3OrOlder = compareVersions(jQuery.fn.jquery, '4.0.0') < 0,
-    allowlist = [
-      'margin',
-      'marginTop',
-      'marginRight',
-      'marginBottom',
-      'marginLeft',
-      'padding',
-      'paddingTop',
-      'paddingRight',
-      'paddingBottom',
-      'paddingLeft',
-      'top',
-      'right',
-      'bottom',
-      'left',
-      'width',
-      'height',
-      'minWidth',
-      'minHeight',
-      'maxWidth',
-      'maxHeight',
-      'border',
-      'borderWidth',
-      'borderTop',
-      'borderTopWidth',
-      'borderRight',
-      'borderRightWidth',
-      'borderBottom',
-      'borderBottomWidth',
-      'borderLeft',
-      'borderLeftWidth',
-    ];
+	delete jQuery.cssProps.devoHat;
+} );
 
-  assert.expect(jQuery3OrOlder ? 8 : 7);
+QUnit.test( "jQuery.css with arrays", function( assert ) {
+	assert.expect( 2 );
 
-  function kebabCase(string) {
-    return string.replace(/[A-Z]/g, function (match) {
-      return '-' + match.toLowerCase();
-    });
-  }
+	expectNoWarning( assert, "String value direct", function() {
+		var cssValues = jQuery( "<div />" )
+			.css( {
+				"z-index": "2",
+				fontSize: "16px"
+			} )
+			.css( [ "font-size", "zIndex" ] );
 
-  expectWarning(assert, 'Number value direct', function () {
-    jQuery('<div />').css('fake-property', 10);
-  });
+		assert.deepEqual( cssValues, { "font-size": "16px", zIndex: "2" },
+			".css( array ) works" );
+	} );
+} );
 
-  expectWarning(assert, 'Number in an object', 1, function () {
-    jQuery('<div />').css({
-      width: 14,
-      height: '10px',
-      'fake-property': 2,
-    });
-  });
+QUnit.test( "jQuery.css with numbers", function( assert ) {
+	var jQuery3OrOlder = compareVersions( jQuery.fn.jquery, "4.0.0" ) < 0,
+		allowlist = [
+			"margin",
+			"marginTop",
+			"marginRight",
+			"marginBottom",
+			"marginLeft",
+			"padding",
+			"paddingTop",
+			"paddingRight",
+			"paddingBottom",
+			"paddingLeft",
+			"top",
+			"right",
+			"bottom",
+			"left",
+			"width",
+			"height",
+			"minWidth",
+			"minHeight",
+			"maxWidth",
+			"maxHeight",
+			"border",
+			"borderWidth",
+			"borderTop",
+			"borderTopWidth",
+			"borderRight",
+			"borderRightWidth",
+			"borderBottom",
+			"borderBottomWidth",
+			"borderLeft",
+			"borderLeftWidth"
+		];
 
-  expectNoWarning(assert, 'String value direct', function () {
-    jQuery('<div />').css('fake-property', '10px');
-  });
+	assert.expect( jQuery3OrOlder ?  8 : 7 );
 
-  expectNoWarning(assert, 'String in an object', function () {
-    jQuery('<div />').css({
-      width: '14em',
-      height: '10px',
-      'fake-property': '2',
-    });
-  });
+	function kebabCase( string ) {
+		return string.replace( /[A-Z]/g, function( match ) {
+			return "-" + match.toLowerCase();
+		} );
+	}
 
-  expectNoWarning(assert, 'Number value (allowlisted props)', function () {
-    allowlist.forEach(function (prop) {
-      jQuery('<div />').css(prop, 1);
-      jQuery('<div />').css(kebabCase(prop), 1);
-    });
-  });
+	expectWarning( assert, "Number value direct", function() {
+		jQuery( "<div />" ).css( "fake-property", 10 );
+	} );
 
-  expectNoWarning(assert, 'Props from jQuery.cssNumber', function () {
-    var prop,
-      assertionFired = false;
-    for (prop in jQuery.cssNumber) {
-      assertionFired = true;
-      jQuery('<div />').css(prop, 1);
-      jQuery('<div />').css(kebabCase(prop), 1);
-    }
-    if (jQuery3OrOlder) {
-      assert.strictEqual(
-        assertionFired,
-        true,
-        'jQuery.cssNumber property was accessed'
-      );
-    }
-  });
+	expectWarning( assert, "Number in an object", 1, function() {
+		jQuery( "<div />" ).css( {
+			"width": 14,
+			"height": "10px",
+			"fake-property": 2
+		} );
+	} );
 
-  // z-index is tested explicitly as raw jQuery 4.0 will not have `jQuery.cssNumber`
-  // so iterating over it won't find anything and we'd like to ensure number values
-  // are not warned against for safe CSS props like z-index (gh-438).
-  expectNoWarning(assert, 'z-index', function () {
-    jQuery('<div />').css('z-index', 1);
-    jQuery('<div />').css(kebabCase('zIndex'), 1);
-  });
-});
+	expectNoWarning( assert, "String value direct", function() {
+		jQuery( "<div />" ).css( "fake-property", "10px" );
+	} );
 
-QUnit.test('jQuery.cssNumber', function (assert) {
-  assert.expect(1);
+	expectNoWarning( assert, "String in an object", function() {
+		jQuery( "<div />" ).css( {
+			"width": "14em",
+			"height": "10px",
+			"fake-property": "2"
+		} );
+	} );
 
-  assert.ok(jQuery.cssNumber, 'jQuery.cssNumber exists');
-});
+	expectNoWarning( assert, "Number value (allowlisted props)", function() {
+		allowlist.forEach( function( prop ) {
+			jQuery( "<div />" ).css( prop, 1 );
+			jQuery( "<div />" ).css( kebabCase( prop ), 1 );
+		} );
+	} );
 
-QUnit.test(
-  'An unsupported jQuery.fn.css(Object,Number) signature',
-  function (assert) {
-    assert.expect(1);
-    assert.ok((jQuery('<div/>').css({ left: '100%' }, 300), 'No crash'));
-  }
-);
+	expectNoWarning( assert, "Props from jQuery.cssNumber", function() {
+		var prop,
+			assertionFired = false;
+		for ( prop in jQuery.cssNumber ) {
+			assertionFired = true;
+			jQuery( "<div />" ).css( prop, 1 );
+			jQuery( "<div />" ).css( kebabCase( prop ), 1 );
+		}
+		if ( jQuery3OrOlder ) {
+			assert.strictEqual( assertionFired, true, "jQuery.cssNumber property was accessed" );
+		}
+	} );
+
+	// z-index is tested explicitly as raw jQuery 4.0 will not have `jQuery.cssNumber`
+	// so iterating over it won't find anything and we'd like to ensure number values
+	// are not warned against for safe CSS props like z-index (gh-438).
+	expectNoWarning( assert, "z-index", function() {
+		jQuery( "<div />" ).css( "z-index", 1 );
+		jQuery( "<div />" ).css( kebabCase( "zIndex" ), 1 );
+	} );
+
+} );
+
+QUnit.test( "jQuery.cssNumber", function( assert ) {
+	assert.expect( 1 );
+
+	assert.ok( jQuery.cssNumber, "jQuery.cssNumber exists" );
+} );
+
+QUnit.test( "An unsupported jQuery.fn.css(Object,Number) signature", function( assert ) {
+	assert.expect( 1 );
+	assert.ok( ( jQuery( "<div/>" ).css( { left: "100%" }, 300 ), "No crash" ) );
+} );

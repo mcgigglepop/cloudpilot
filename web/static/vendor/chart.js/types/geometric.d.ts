@@ -17,7 +17,7 @@ export type TRBL = {
   right: number;
   bottom: number;
   left: number;
-};
+}
 
 export type TRBLCorners = {
   topLeft: number;
@@ -33,5 +33,5 @@ export type RoundedRect = {
   y: number;
   w: number;
   h: number;
-  radius?: CornerRadius;
-};
+  radius?: CornerRadius
+}

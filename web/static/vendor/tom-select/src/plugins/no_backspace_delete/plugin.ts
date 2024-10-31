@@ -14,15 +14,17 @@
 
 import TomSelect from '../../tom-select';
 
-export default function (this: TomSelect) {
-  var self = this;
-  var orig_deleteSelection = self.deleteSelection;
+export default function(this:TomSelect) {
+	var self = this;
+	var orig_deleteSelection = self.deleteSelection;
 
-  this.hook('instead', 'deleteSelection', (evt: KeyboardEvent) => {
-    if (self.activeItems.length) {
-      return orig_deleteSelection.call(self, evt);
-    }
+	this.hook('instead','deleteSelection',(evt:KeyboardEvent) => {
 
-    return false;
-  });
-}
+		if( self.activeItems.length ){
+			return orig_deleteSelection.call(self, evt);
+		}
+
+		return false;
+	});
+
+};

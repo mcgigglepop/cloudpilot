@@ -1,7 +1,7 @@
-import { DivOverlay } from './DivOverlay';
-import { toPoint } from '../geometry/Point';
-import { Map } from '../map/Map';
-import { Layer } from './Layer';
+import {DivOverlay} from './DivOverlay';
+import {toPoint} from '../geometry/Point';
+import {Map} from '../map/Map';
+import {Layer} from './Layer';
 import * as DomUtil from '../dom/DomUtil';
 
 /*
@@ -24,212 +24,205 @@ import * as DomUtil from '../dom/DomUtil';
  *   should adapt this value if you use a custom icon.
  */
 
+
 // @namespace Tooltip
 export var Tooltip = DivOverlay.extend({
-  // @section
-  // @aka Tooltip options
-  options: {
-    // @option pane: String = 'tooltipPane'
-    // `Map pane` where the tooltip will be added.
-    pane: 'tooltipPane',
 
-    // @option offset: Point = Point(0, 0)
-    // Optional offset of the tooltip position.
-    offset: [0, 0],
+	// @section
+	// @aka Tooltip options
+	options: {
+		// @option pane: String = 'tooltipPane'
+		// `Map pane` where the tooltip will be added.
+		pane: 'tooltipPane',
 
-    // @option direction: String = 'auto'
-    // Direction where to open the tooltip. Possible values are: `right`, `left`,
-    // `top`, `bottom`, `center`, `auto`.
-    // `auto` will dynamically switch between `right` and `left` according to the tooltip
-    // position on the map.
-    direction: 'auto',
+		// @option offset: Point = Point(0, 0)
+		// Optional offset of the tooltip position.
+		offset: [0, 0],
 
-    // @option permanent: Boolean = false
-    // Whether to open the tooltip permanently or only on mouseover.
-    permanent: false,
+		// @option direction: String = 'auto'
+		// Direction where to open the tooltip. Possible values are: `right`, `left`,
+		// `top`, `bottom`, `center`, `auto`.
+		// `auto` will dynamically switch between `right` and `left` according to the tooltip
+		// position on the map.
+		direction: 'auto',
 
-    // @option sticky: Boolean = false
-    // If true, the tooltip will follow the mouse instead of being fixed at the feature center.
-    sticky: false,
+		// @option permanent: Boolean = false
+		// Whether to open the tooltip permanently or only on mouseover.
+		permanent: false,
 
-    // @option opacity: Number = 0.9
-    // Tooltip container opacity.
-    opacity: 0.9,
-  },
+		// @option sticky: Boolean = false
+		// If true, the tooltip will follow the mouse instead of being fixed at the feature center.
+		sticky: false,
 
-  onAdd: function (map) {
-    DivOverlay.prototype.onAdd.call(this, map);
-    this.setOpacity(this.options.opacity);
+		// @option opacity: Number = 0.9
+		// Tooltip container opacity.
+		opacity: 0.9
+	},
 
-    // @namespace Map
-    // @section Tooltip events
-    // @event tooltipopen: TooltipEvent
-    // Fired when a tooltip is opened in the map.
-    map.fire('tooltipopen', { tooltip: this });
+	onAdd: function (map) {
+		DivOverlay.prototype.onAdd.call(this, map);
+		this.setOpacity(this.options.opacity);
 
-    if (this._source) {
-      this.addEventParent(this._source);
+		// @namespace Map
+		// @section Tooltip events
+		// @event tooltipopen: TooltipEvent
+		// Fired when a tooltip is opened in the map.
+		map.fire('tooltipopen', {tooltip: this});
 
-      // @namespace Layer
-      // @section Tooltip events
-      // @event tooltipopen: TooltipEvent
-      // Fired when a tooltip bound to this layer is opened.
-      this._source.fire('tooltipopen', { tooltip: this }, true);
-    }
-  },
+		if (this._source) {
+			this.addEventParent(this._source);
 
-  onRemove: function (map) {
-    DivOverlay.prototype.onRemove.call(this, map);
+			// @namespace Layer
+			// @section Tooltip events
+			// @event tooltipopen: TooltipEvent
+			// Fired when a tooltip bound to this layer is opened.
+			this._source.fire('tooltipopen', {tooltip: this}, true);
+		}
+	},
 
-    // @namespace Map
-    // @section Tooltip events
-    // @event tooltipclose: TooltipEvent
-    // Fired when a tooltip in the map is closed.
-    map.fire('tooltipclose', { tooltip: this });
+	onRemove: function (map) {
+		DivOverlay.prototype.onRemove.call(this, map);
 
-    if (this._source) {
-      this.removeEventParent(this._source);
+		// @namespace Map
+		// @section Tooltip events
+		// @event tooltipclose: TooltipEvent
+		// Fired when a tooltip in the map is closed.
+		map.fire('tooltipclose', {tooltip: this});
 
-      // @namespace Layer
-      // @section Tooltip events
-      // @event tooltipclose: TooltipEvent
-      // Fired when a tooltip bound to this layer is closed.
-      this._source.fire('tooltipclose', { tooltip: this }, true);
-    }
-  },
+		if (this._source) {
+			this.removeEventParent(this._source);
 
-  getEvents: function () {
-    var events = DivOverlay.prototype.getEvents.call(this);
+			// @namespace Layer
+			// @section Tooltip events
+			// @event tooltipclose: TooltipEvent
+			// Fired when a tooltip bound to this layer is closed.
+			this._source.fire('tooltipclose', {tooltip: this}, true);
+		}
+	},
 
-    if (!this.options.permanent) {
-      events.preclick = this.close;
-    }
+	getEvents: function () {
+		var events = DivOverlay.prototype.getEvents.call(this);
 
-    return events;
-  },
+		if (!this.options.permanent) {
+			events.preclick = this.close;
+		}
 
-  _initLayout: function () {
-    var prefix = 'leaflet-tooltip',
-      className =
-        prefix +
-        ' ' +
-        (this.options.className || '') +
-        ' leaflet-zoom-' +
-        (this._zoomAnimated ? 'animated' : 'hide');
+		return events;
+	},
 
-    this._contentNode = this._container = DomUtil.create('div', className);
-  },
+	_initLayout: function () {
+		var prefix = 'leaflet-tooltip',
+		    className = prefix + ' ' + (this.options.className || '') + ' leaflet-zoom-' + (this._zoomAnimated ? 'animated' : 'hide');
 
-  _updateLayout: function () {},
+		this._contentNode = this._container = DomUtil.create('div', className);
+	},
 
-  _adjustPan: function () {},
+	_updateLayout: function () {},
 
-  _setPosition: function (pos) {
-    var subX,
-      subY,
-      map = this._map,
-      container = this._container,
-      centerPoint = map.latLngToContainerPoint(map.getCenter()),
-      tooltipPoint = map.layerPointToContainerPoint(pos),
-      direction = this.options.direction,
-      tooltipWidth = container.offsetWidth,
-      tooltipHeight = container.offsetHeight,
-      offset = toPoint(this.options.offset),
-      anchor = this._getAnchor();
+	_adjustPan: function () {},
 
-    if (direction === 'top') {
-      subX = tooltipWidth / 2;
-      subY = tooltipHeight;
-    } else if (direction === 'bottom') {
-      subX = tooltipWidth / 2;
-      subY = 0;
-    } else if (direction === 'center') {
-      subX = tooltipWidth / 2;
-      subY = tooltipHeight / 2;
-    } else if (direction === 'right') {
-      subX = 0;
-      subY = tooltipHeight / 2;
-    } else if (direction === 'left') {
-      subX = tooltipWidth;
-      subY = tooltipHeight / 2;
-    } else if (tooltipPoint.x < centerPoint.x) {
-      direction = 'right';
-      subX = 0;
-      subY = tooltipHeight / 2;
-    } else {
-      direction = 'left';
-      subX = tooltipWidth + (offset.x + anchor.x) * 2;
-      subY = tooltipHeight / 2;
-    }
+	_setPosition: function (pos) {
+		var subX, subY,
+		    map = this._map,
+		    container = this._container,
+		    centerPoint = map.latLngToContainerPoint(map.getCenter()),
+		    tooltipPoint = map.layerPointToContainerPoint(pos),
+		    direction = this.options.direction,
+		    tooltipWidth = container.offsetWidth,
+		    tooltipHeight = container.offsetHeight,
+		    offset = toPoint(this.options.offset),
+		    anchor = this._getAnchor();
 
-    pos = pos
-      .subtract(toPoint(subX, subY, true))
-      .add(offset)
-      .add(anchor);
+		if (direction === 'top') {
+			subX = tooltipWidth / 2;
+			subY = tooltipHeight;
+		} else if (direction === 'bottom') {
+			subX = tooltipWidth / 2;
+			subY = 0;
+		} else if (direction === 'center') {
+			subX = tooltipWidth / 2;
+			subY = tooltipHeight / 2;
+		} else if (direction === 'right') {
+			subX = 0;
+			subY = tooltipHeight / 2;
+		} else if (direction === 'left') {
+			subX = tooltipWidth;
+			subY = tooltipHeight / 2;
+		} else if (tooltipPoint.x < centerPoint.x) {
+			direction = 'right';
+			subX = 0;
+			subY = tooltipHeight / 2;
+		} else {
+			direction = 'left';
+			subX = tooltipWidth + (offset.x + anchor.x) * 2;
+			subY = tooltipHeight / 2;
+		}
 
-    DomUtil.removeClass(container, 'leaflet-tooltip-right');
-    DomUtil.removeClass(container, 'leaflet-tooltip-left');
-    DomUtil.removeClass(container, 'leaflet-tooltip-top');
-    DomUtil.removeClass(container, 'leaflet-tooltip-bottom');
-    DomUtil.addClass(container, 'leaflet-tooltip-' + direction);
-    DomUtil.setPosition(container, pos);
-  },
+		pos = pos.subtract(toPoint(subX, subY, true)).add(offset).add(anchor);
 
-  _updatePosition: function () {
-    var pos = this._map.latLngToLayerPoint(this._latlng);
-    this._setPosition(pos);
-  },
+		DomUtil.removeClass(container, 'leaflet-tooltip-right');
+		DomUtil.removeClass(container, 'leaflet-tooltip-left');
+		DomUtil.removeClass(container, 'leaflet-tooltip-top');
+		DomUtil.removeClass(container, 'leaflet-tooltip-bottom');
+		DomUtil.addClass(container, 'leaflet-tooltip-' + direction);
+		DomUtil.setPosition(container, pos);
+	},
 
-  setOpacity: function (opacity) {
-    this.options.opacity = opacity;
+	_updatePosition: function () {
+		var pos = this._map.latLngToLayerPoint(this._latlng);
+		this._setPosition(pos);
+	},
 
-    if (this._container) {
-      DomUtil.setOpacity(this._container, opacity);
-    }
-  },
+	setOpacity: function (opacity) {
+		this.options.opacity = opacity;
 
-  _animateZoom: function (e) {
-    var pos = this._map._latLngToNewLayerPoint(this._latlng, e.zoom, e.center);
-    this._setPosition(pos);
-  },
+		if (this._container) {
+			DomUtil.setOpacity(this._container, opacity);
+		}
+	},
 
-  _getAnchor: function () {
-    // Where should we anchor the tooltip on the source layer?
-    return toPoint(
-      this._source && this._source._getTooltipAnchor && !this.options.sticky
-        ? this._source._getTooltipAnchor()
-        : [0, 0]
-    );
-  },
+	_animateZoom: function (e) {
+		var pos = this._map._latLngToNewLayerPoint(this._latlng, e.zoom, e.center);
+		this._setPosition(pos);
+	},
+
+	_getAnchor: function () {
+		// Where should we anchor the tooltip on the source layer?
+		return toPoint(this._source && this._source._getTooltipAnchor && !this.options.sticky ? this._source._getTooltipAnchor() : [0, 0]);
+	}
+
 });
 
 // @namespace Tooltip
 // @factory L.tooltip(options?: Tooltip options, source?: Layer)
 // Instantiates a Tooltip object given an optional `options` object that describes its appearance and location and an optional `source` object that is used to tag the tooltip with a reference to the Layer to which it refers.
 export var tooltip = function (options, source) {
-  return new Tooltip(options, source);
+	return new Tooltip(options, source);
 };
 
 // @namespace Map
 // @section Methods for Layers and Controls
 Map.include({
-  // @method openTooltip(tooltip: Tooltip): this
-  // Opens the specified tooltip.
-  // @alternative
-  // @method openTooltip(content: String|HTMLElement, latlng: LatLng, options?: Tooltip options): this
-  // Creates a tooltip with the specified content and options and open it.
-  openTooltip: function (tooltip, latlng, options) {
-    this._initOverlay(Tooltip, tooltip, latlng, options).openOn(this);
 
-    return this;
-  },
+	// @method openTooltip(tooltip: Tooltip): this
+	// Opens the specified tooltip.
+	// @alternative
+	// @method openTooltip(content: String|HTMLElement, latlng: LatLng, options?: Tooltip options): this
+	// Creates a tooltip with the specified content and options and open it.
+	openTooltip: function (tooltip, latlng, options) {
+		this._initOverlay(Tooltip, tooltip, latlng, options)
+		  .openOn(this);
 
-  // @method closeTooltip(tooltip: Tooltip): this
-  // Closes the tooltip given as parameter.
-  closeTooltip: function (tooltip) {
-    tooltip.close();
-    return this;
-  },
+		return this;
+	},
+
+	// @method closeTooltip(tooltip: Tooltip): this
+	// Closes the tooltip given as parameter.
+	closeTooltip: function (tooltip) {
+		tooltip.close();
+		return this;
+	}
+
 });
 
 /*
@@ -247,133 +240,123 @@ Map.include({
 
 // @section Tooltip methods
 Layer.include({
-  // @method bindTooltip(content: String|HTMLElement|Function|Tooltip, options?: Tooltip options): this
-  // Binds a tooltip to the layer with the passed `content` and sets up the
-  // necessary event listeners. If a `Function` is passed it will receive
-  // the layer as the first argument and should return a `String` or `HTMLElement`.
-  bindTooltip: function (content, options) {
-    if (this._tooltip && this.isTooltipOpen()) {
-      this.unbindTooltip();
-    }
 
-    this._tooltip = this._initOverlay(Tooltip, this._tooltip, content, options);
-    this._initTooltipInteractions();
+	// @method bindTooltip(content: String|HTMLElement|Function|Tooltip, options?: Tooltip options): this
+	// Binds a tooltip to the layer with the passed `content` and sets up the
+	// necessary event listeners. If a `Function` is passed it will receive
+	// the layer as the first argument and should return a `String` or `HTMLElement`.
+	bindTooltip: function (content, options) {
 
-    if (
-      this._tooltip.options.permanent &&
-      this._map &&
-      this._map.hasLayer(this)
-    ) {
-      this.openTooltip();
-    }
+		if (this._tooltip && this.isTooltipOpen()) {
+			this.unbindTooltip();
+		}
 
-    return this;
-  },
+		this._tooltip = this._initOverlay(Tooltip, this._tooltip, content, options);
+		this._initTooltipInteractions();
 
-  // @method unbindTooltip(): this
-  // Removes the tooltip previously bound with `bindTooltip`.
-  unbindTooltip: function () {
-    if (this._tooltip) {
-      this._initTooltipInteractions(true);
-      this.closeTooltip();
-      this._tooltip = null;
-    }
-    return this;
-  },
+		if (this._tooltip.options.permanent && this._map && this._map.hasLayer(this)) {
+			this.openTooltip();
+		}
 
-  _initTooltipInteractions: function (remove) {
-    if (!remove && this._tooltipHandlersAdded) {
-      return;
-    }
-    var onOff = remove ? 'off' : 'on',
-      events = {
-        remove: this.closeTooltip,
-        move: this._moveTooltip,
-      };
-    if (!this._tooltip.options.permanent) {
-      events.mouseover = this._openTooltip;
-      events.mouseout = this.closeTooltip;
-      events.click = this._openTooltip;
-    } else {
-      events.add = this._openTooltip;
-    }
-    if (this._tooltip.options.sticky) {
-      events.mousemove = this._moveTooltip;
-    }
-    this[onOff](events);
-    this._tooltipHandlersAdded = !remove;
-  },
+		return this;
+	},
 
-  // @method openTooltip(latlng?: LatLng): this
-  // Opens the bound tooltip at the specified `latlng` or at the default tooltip anchor if no `latlng` is passed.
-  openTooltip: function (latlng) {
-    if (this._tooltip && this._tooltip._prepareOpen(latlng)) {
-      // open the tooltip on the map
-      this._tooltip.openOn(this._map);
-    }
-    return this;
-  },
+	// @method unbindTooltip(): this
+	// Removes the tooltip previously bound with `bindTooltip`.
+	unbindTooltip: function () {
+		if (this._tooltip) {
+			this._initTooltipInteractions(true);
+			this.closeTooltip();
+			this._tooltip = null;
+		}
+		return this;
+	},
 
-  // @method closeTooltip(): this
-  // Closes the tooltip bound to this layer if it is open.
-  closeTooltip: function () {
-    if (this._tooltip) {
-      return this._tooltip.close();
-    }
-  },
+	_initTooltipInteractions: function (remove) {
+		if (!remove && this._tooltipHandlersAdded) { return; }
+		var onOff = remove ? 'off' : 'on',
+		    events = {
+			remove: this.closeTooltip,
+			move: this._moveTooltip
+		    };
+		if (!this._tooltip.options.permanent) {
+			events.mouseover = this._openTooltip;
+			events.mouseout = this.closeTooltip;
+			events.click = this._openTooltip;
+		} else {
+			events.add = this._openTooltip;
+		}
+		if (this._tooltip.options.sticky) {
+			events.mousemove = this._moveTooltip;
+		}
+		this[onOff](events);
+		this._tooltipHandlersAdded = !remove;
+	},
 
-  // @method toggleTooltip(): this
-  // Opens or closes the tooltip bound to this layer depending on its current state.
-  toggleTooltip: function () {
-    if (this._tooltip) {
-      this._tooltip.toggle(this);
-    }
-    return this;
-  },
+	// @method openTooltip(latlng?: LatLng): this
+	// Opens the bound tooltip at the specified `latlng` or at the default tooltip anchor if no `latlng` is passed.
+	openTooltip: function (latlng) {
+		if (this._tooltip && this._tooltip._prepareOpen(latlng)) {
+			// open the tooltip on the map
+			this._tooltip.openOn(this._map);
+		}
+		return this;
+	},
 
-  // @method isTooltipOpen(): boolean
-  // Returns `true` if the tooltip bound to this layer is currently open.
-  isTooltipOpen: function () {
-    return this._tooltip.isOpen();
-  },
+	// @method closeTooltip(): this
+	// Closes the tooltip bound to this layer if it is open.
+	closeTooltip: function () {
+		if (this._tooltip) {
+			return this._tooltip.close();
+		}
+	},
 
-  // @method setTooltipContent(content: String|HTMLElement|Tooltip): this
-  // Sets the content of the tooltip bound to this layer.
-  setTooltipContent: function (content) {
-    if (this._tooltip) {
-      this._tooltip.setContent(content);
-    }
-    return this;
-  },
+	// @method toggleTooltip(): this
+	// Opens or closes the tooltip bound to this layer depending on its current state.
+	toggleTooltip: function () {
+		if (this._tooltip) {
+			this._tooltip.toggle(this);
+		}
+		return this;
+	},
 
-  // @method getTooltip(): Tooltip
-  // Returns the tooltip bound to this layer.
-  getTooltip: function () {
-    return this._tooltip;
-  },
+	// @method isTooltipOpen(): boolean
+	// Returns `true` if the tooltip bound to this layer is currently open.
+	isTooltipOpen: function () {
+		return this._tooltip.isOpen();
+	},
 
-  _openTooltip: function (e) {
-    if (
-      !this._tooltip ||
-      !this._map ||
-      (this._map.dragging && this._map.dragging.moving())
-    ) {
-      return;
-    }
-    this._tooltip._source = e.layer || e.target;
+	// @method setTooltipContent(content: String|HTMLElement|Tooltip): this
+	// Sets the content of the tooltip bound to this layer.
+	setTooltipContent: function (content) {
+		if (this._tooltip) {
+			this._tooltip.setContent(content);
+		}
+		return this;
+	},
 
-    this.openTooltip(this._tooltip.options.sticky ? e.latlng : undefined);
-  },
+	// @method getTooltip(): Tooltip
+	// Returns the tooltip bound to this layer.
+	getTooltip: function () {
+		return this._tooltip;
+	},
 
-  _moveTooltip: function (e) {
-    var latlng = e.latlng,
-      containerPoint,
-      layerPoint;
-    if (this._tooltip.options.sticky && e.originalEvent) {
-      containerPoint = this._map.mouseEventToContainerPoint(e.originalEvent);
-      layerPoint = this._map.containerPointToLayerPoint(containerPoint);
-      latlng = this._map.layerPointToLatLng(layerPoint);
-    }
-    this._tooltip.setLatLng(latlng);
-  },
+	_openTooltip: function (e) {
+		if (!this._tooltip || !this._map || (this._map.dragging && this._map.dragging.moving())) {
+			return;
+		}
+		this._tooltip._source = e.layer || e.target;
+
+		this.openTooltip(this._tooltip.options.sticky ? e.latlng : undefined);
+	},
+
+	_moveTooltip: function (e) {
+		var latlng = e.latlng, containerPoint, layerPoint;
+		if (this._tooltip.options.sticky && e.originalEvent) {
+			containerPoint = this._map.mouseEventToContainerPoint(e.originalEvent);
+			layerPoint = this._map.containerPointToLayerPoint(containerPoint);
+			latlng = this._map.layerPointToLatLng(layerPoint);
+		}
+		this._tooltip.setLatLng(latlng);
+	}
 });

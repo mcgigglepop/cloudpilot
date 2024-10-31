@@ -15,9 +15,10 @@ Tom Select is a dynamic, framework agnostic, and lightweight (~16kb gzipped) &lt
 With autocomplete and native-feeling keyboard navigation, it's useful for tagging, contact lists, country selectors, and so on.
 Tom Select was forked from [selectize.js](https://tom-select.js.org/docs/selectize.js/) with the goal of modernizing the code base, decoupling from jQuery, and expanding functionality.
 
+
 ### Features
 
-- **Smart Option Searching / Ranking**<br>Options are efficiently scored and sorted on-the-fly (using [sifter](https://github.com/orchidjs/sifter.js)). Want to search an item's title _and_ description? No problem.
+- **Smart Option Searching / Ranking**<br>Options are efficiently scored and sorted on-the-fly (using [sifter](https://github.com/orchidjs/sifter.js)). Want to search an item's title *and* description? No problem.
 - **Caret between items**<br>Order matters sometimes. With the <a href="https://tom-select.js.org/plugins/caret-position">Caret Position Plugin</a>, you can use the <kbd>&larr;</kbd> and <kbd>&rarr;</kbd> arrow keys to move between selected items</li>
 - **Select &amp; delete multiple items at once**<br>Hold down <kbd>command</kbd> on Mac or <kbd>ctrl</kbd> on Windows to select more than one item to delete.
 - **Díåcritîçs supported**<br>Great for international environments.
@@ -30,15 +31,16 @@ Tom Select was forked from [selectize.js](https://tom-select.js.org/docs/selecti
 
 ```html
 <input id="tom-select-it" />
-<link rel="stylesheet" href="/css/tom-select.default.css" />
+<link rel="stylesheet" href="/css/tom-select.default.css">
 <script src="/js/tom-select.complete.js"></script>
 <script>
-  var config = {};
-  new TomSelect('#tom-select-it', config);
+var config = {};
+new TomSelect('#tom-select-it',config);
 </script>
 ```
 
 Available configuration settings are [documented here](https://tom-select.js.org/docs)
+
 
 ## Installation
 
@@ -73,15 +75,15 @@ All pre-built files needed to use Tom Select can be found in the "dist" folder v
 	</tr>
 </table>
 
-## Files
 
+## Files
 - [tom-select.complete.js](https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.js) — Includes dependencies and plugins
 - [tom-select.base.js](https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.base.js) — Does not include any plugins
 - [CSS](https://www.jsdelivr.com/package/npm/tom-select?path=dist%2Fcss) — Compiled themes
 - [SCSS](https://www.jsdelivr.com/package/npm/tom-select?path=dist%2Fscss) — Uncompiled theme sources
 
-## Sponsors
 
+## Sponsors
 <p>
 Many thanks to all our sponsors who help make development possible. <a href="https://opencollective.com/tom-select">Become a sponsor</a>.
 </p>
@@ -89,6 +91,8 @@ Many thanks to all our sponsors who help make development possible. <a href="htt
 <a href="https://opencollective.com/tom-select/sponsor/0/website"><img src="https://opencollective.com/tom-select/sponsor/0/avatar.svg" alt="Trust My Paper Logo"></a>
 </p>
 <br>
+
+
 
 ## License
 

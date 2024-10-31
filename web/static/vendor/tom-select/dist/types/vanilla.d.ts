@@ -11,36 +11,24 @@ export declare const escapeQuery: (query: string) => string;
  * Dispatch an event
  *
  */
-export declare const triggerEvent: (
-  dom_el: HTMLElement,
-  event_name: string
-) => void;
+export declare const triggerEvent: (dom_el: HTMLElement, event_name: string) => void;
 /**
  * Apply CSS rules to a dom element
  *
  */
-export declare const applyCSS: (
-  dom_el: HTMLElement,
-  css: {
+export declare const applyCSS: (dom_el: HTMLElement, css: {
     [key: string]: string | number;
-  }
-) => void;
+}) => void;
 /**
  * Add css classes
  *
  */
-export declare const addClasses: (
-  elmts: HTMLElement | HTMLElement[],
-  ...classes: string[] | string[][]
-) => void;
+export declare const addClasses: (elmts: HTMLElement | HTMLElement[], ...classes: string[] | string[][]) => void;
 /**
  * Remove css classes
  *
  */
-export declare const removeClasses: (
-  elmts: HTMLElement | HTMLElement[],
-  ...classes: string[] | string[][]
-) => void;
+export declare const removeClasses: (elmts: HTMLElement | HTMLElement[], ...classes: string[] | string[][]) => void;
 /**
  * Return arguments
  *
@@ -56,11 +44,7 @@ export declare const castAsArray: (arg: any) => Array<any>;
  * Stops at wrapper
  *
  */
-export declare const parentMatch: (
-  target: null | HTMLElement,
-  selector: string,
-  wrapper?: HTMLElement | undefined
-) => HTMLElement | void;
+export declare const parentMatch: (target: null | HTMLElement, selector: string, wrapper?: HTMLElement | undefined) => HTMLElement | void;
 /**
  * Get the first or last item from an array
  *
@@ -68,10 +52,7 @@ export declare const parentMatch: (
  * <= 0 - left (first)
  *
  */
-export declare const getTail: (
-  list: Array<any> | NodeList,
-  direction?: number
-) => any;
+export declare const getTail: (list: Array<any> | NodeList, direction?: number) => any;
 /**
  * Return true if an object is empty
  *
@@ -81,20 +62,14 @@ export declare const isEmptyObject: (obj: object) => boolean;
  * Get the index of an element amongst sibling nodes of the same type
  *
  */
-export declare const nodeIndex: (
-  el: null | Element,
-  amongst?: string | undefined
-) => number;
+export declare const nodeIndex: (el: null | Element, amongst?: string | undefined) => number;
 /**
  * Set attributes of an element
  *
  */
-export declare const setAttr: (
-  el: Element,
-  attrs: {
+export declare const setAttr: (el: Element, attrs: {
     [key: string]: string | number | null;
-  }
-) => void;
+}) => void;
 /**
  * Replace a node
  */

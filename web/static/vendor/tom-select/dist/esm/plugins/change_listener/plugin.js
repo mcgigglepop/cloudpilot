@@ -1,7 +1,7 @@
 /**
- * Tom Select v2.1.0
- * Licensed under the Apache License, Version 2.0 (the "License");
- */
+* Tom Select v2.1.0
+* Licensed under the Apache License, Version 2.0 (the "License");
+*/
 
 /**
  * Converts a scalar to its best string representation
@@ -40,7 +40,7 @@ const addEvent = (target, type, callback, options) => {
  * governing permissions and limitations under the License.
  *
  */
-function plugin() {
+function plugin () {
   addEvent(this.input, 'change', () => {
     this.sync();
   });

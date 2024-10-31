@@ -20,7 +20,7 @@ var DIRECTION = {
   LEFT: 'LEFT',
   FORCE_LEFT: 'FORCE_LEFT',
   RIGHT: 'RIGHT',
-  FORCE_RIGHT: 'FORCE_RIGHT',
+  FORCE_RIGHT: 'FORCE_RIGHT'
 };
 /**
   Direction
@@ -74,8 +74,8 @@ function normalizePrepare(prep) {
 function objectIncludes(b, a) {
   if (a === b) return true;
   var arrA = Array.isArray(a),
-    arrB = Array.isArray(b),
-    i;
+      arrB = Array.isArray(b),
+      i;
 
   if (arrA && arrB) {
     if (a.length != b.length) return false;
@@ -91,11 +91,11 @@ function objectIncludes(b, a) {
 
   if (a && b && _typeof(a) === 'object' && _typeof(b) === 'object') {
     var dateA = a instanceof Date,
-      dateB = b instanceof Date;
+        dateB = b instanceof Date;
     if (dateA && dateB) return a.getTime() == b.getTime();
     if (dateA != dateB) return false;
     var regexpA = a instanceof RegExp,
-      regexpB = b instanceof RegExp;
+        regexpB = b instanceof RegExp;
     if (regexpA && regexpB) return a.toString() == b.toString();
     if (regexpA != regexpB) return false;
     var keys = Object.keys(a); // if (keys.length !== Object.keys(b).length) return false;
@@ -118,13 +118,4 @@ function objectIncludes(b, a) {
 }
 /** Selection range */
 
-export {
-  DIRECTION,
-  escapeRegExp,
-  forceDirection,
-  indexInDirection,
-  isString,
-  normalizePrepare,
-  objectIncludes,
-  posInDirection,
-};
+export { DIRECTION, escapeRegExp, forceDirection, indexInDirection, isString, normalizePrepare, objectIncludes, posInDirection };

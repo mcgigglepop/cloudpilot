@@ -1,59 +1,45 @@
-appear = (function () {
+appear = (function(){
   'use strict';
-  var scrollLastPos = null,
-    scrollTimer = 0,
-    scroll = {};
+  var scrollLastPos = null, scrollTimer = 0, scroll = {};
 
-  function track() {
-    var newPos = window.scrollY || window.pageYOffset; // pageYOffset for IE9
-    if (scrollLastPos != null) {
+  function track(){
+    var newPos = window.scrollY || window.pageYOffset;  // pageYOffset for IE9
+    if ( scrollLastPos != null ){
       scroll.velocity = newPos - scrollLastPos;
-      scroll.delta =
-        scroll.velocity >= 0 ? scroll.velocity : -1 * scroll.velocity;
+      scroll.delta = (scroll.velocity >= 0) ? scroll.velocity : (-1 * scroll.velocity);
       console.log('velocity:', scroll.velocity, 'delta:', scroll.delta);
     }
     scrollLastPos = newPos;
-    if (scrollTimer) {
+    if(scrollTimer){
       clearTimeout(scrollTimer);
     }
-    scrollTimer = setTimeout(function () {
+    scrollTimer = setTimeout(function(){
       scrollLastPos = null;
     }, 30);
   }
   addEventListener('scroll', track, false);
 
   // determine if a given element (plus an additional "bounds" area around it) is in the viewport
-  function viewable(el, bounds) {
+  function viewable(el, bounds){
     var rect = el.getBoundingClientRect();
     return (
-      rect.top + rect.height >= 0 &&
-      rect.left + rect.width >= 0 &&
-      rect.bottom - rect.height <=
-        (window.innerHeight || document.documentElement.clientHeight) +
-          bounds &&
-      rect.right - rect.width <=
-        (window.innerWidth || document.documentElement.clientWidth) + bounds
+      (rect.top + rect.height) >= 0 &&
+      (rect.left + rect.width) >= 0 &&
+      (rect.bottom - rect.height) <= ( (window.innerHeight || document.documentElement.clientHeight) + bounds) &&
+      (rect.right - rect.width) <= ( (window.innerWidth || document.documentElement.clientWidth) + bounds)
     );
   }
 
-  return function (obj) {
-    return (function (obj) {
-      var initd = false,
-        elements = [],
-        elementsLength,
-        reappear = [],
-        appeared = 0,
-        disappeared = 0,
-        timer,
-        deltaSet,
-        opts = {},
-        done;
+  return function(obj){
+
+    return (function(obj){
+      var initd = false, elements = [], elementsLength, reappear = [],
+        appeared = 0, disappeared = 0, timer, deltaSet, opts = {}, done;
 
       // handle debouncing a function for better performance on scroll
       function debounce(fn, delay) {
         return function () {
-          var self = this,
-            args = arguments;
+          var self = this, args = arguments;
           clearTimeout(timer);
           console.log('debounce()');
           timer = setTimeout(function () {
@@ -65,18 +51,18 @@ appear = (function () {
       // called on scroll and resize event, so debounce the actual function that does
       // the heavy work of determining if an item is viewable and then "appearing" it
       function checkAppear() {
-        if (scroll.delta < opts.delta.speed) {
-          if (!deltaSet) {
+        if(scroll.delta < opts.delta.speed) {
+          if(!deltaSet) {
             deltaSet = true;
             doCheckAppear();
-            setTimeout(function () {
+            setTimeout(function(){
               deltaSet = false;
             }, opts.delta.timeout);
           }
         }
-        debounce(function () {
+        (debounce(function() {
           doCheckAppear();
-        }, opts.debounce)();
+        }, opts.debounce)());
       }
 
       function begin() {
@@ -90,7 +76,7 @@ appear = (function () {
 
       function end() {
         elements = [];
-        if (timer) {
+        if(timer) {
           clearTimeout(timer);
         }
         removeListeners();
@@ -103,39 +89,39 @@ appear = (function () {
       }
 
       function doCheckAppear() {
-        if (done) {
+        if(done) {
           return;
         }
         console.log('doCheckReappear()');
-        elements.forEach(function (n, i) {
-          if (n && viewable(n, opts.bounds)) {
+        elements.forEach(function(n, i){
+          if(n && viewable(n, opts.bounds)) {
             // only act if the element is eligible to reappear
-            if (reappear[i]) {
+            if(reappear[i]) {
               // mark this element as not eligible to appear
               reappear[i] = false;
               // increment the count of appeared items
               appeared++;
               console.log('appears:', appeared);
               // call the appear fn
-              if (opts.appear) {
+              if(opts.appear) {
                 opts.appear(n);
               }
               // if not tracking reappears or disappears, need to remove node here
-              if (!opts.disappear && !opts.reappear) {
+              if(!opts.disappear && !opts.reappear) {
                 // stop tracking this node, which is now viewable
                 elements[i] = null;
               }
             }
           } else {
-            if (reappear[i] === false) {
-              if (opts.disappear) {
+            if(reappear[i] === false) {
+              if(opts.disappear) {
                 opts.disappear(n);
               }
               // increment the dissappeared count
               disappeared++;
               console.log('disappears:', disappeared);
               // if not tracking reappears, need to remove node here
-              if (!opts.reappear) {
+              if(!opts.reappear) {
                 // stop tracking this node, which is now viewable
                 elements[i] = null;
               }
@@ -146,17 +132,12 @@ appear = (function () {
         });
 
         // remove listeners if all items have (re)appeared
-        if (
-          !opts.reappear &&
-          (!opts.appear || (opts.appear && appeared === elementsLength)) &&
-          (!opts.disappear ||
-            (opts.disappear && disappeared === elementsLength))
-        ) {
+        if(!opts.reappear && (!opts.appear || opts.appear && appeared === elementsLength) && (!opts.disappear || opts.disappear && disappeared === elementsLength)) {
           // ensure done is only called once (could be called from a trailing debounce/throttle)
           done = true;
           removeListeners();
           // all items have appeared, so call the done fn
-          if (opts.done) {
+          if(opts.done){
             opts.done();
           }
         }
@@ -164,26 +145,26 @@ appear = (function () {
 
       function init() {
         // make sure we only init once
-        if (initd) {
+        if(initd) {
           return;
         }
         initd = true;
 
         // call the obj init fn
-        if (opts.init) {
+        if(opts.init) {
           opts.init();
         }
         // get the elements to work with
         var els;
-        if (typeof opts.elements === 'function') {
+        if(typeof opts.elements === 'function') {
           els = opts.elements();
         } else {
           els = opts.elements;
         }
-        if (els) {
+        if(els) {
           //  put elements into an array object to work with
           elementsLength = els.length;
-          for (var i = 0; i < elementsLength; i += 1) {
+          for(var i = 0; i < elementsLength; i += 1) {
             elements.push(els[i]);
             reappear.push(true);
           }
@@ -191,7 +172,7 @@ appear = (function () {
         }
       }
 
-      return function (obj) {
+      return function(obj) {
         obj = obj || {};
 
         // assign the fn to execute when a node is visible
@@ -217,40 +198,37 @@ appear = (function () {
           // and when it will check again (deltaTimeout) after it has inspected the dom/viewport;
           delta: {
             speed: obj.deltaSpeed || 50,
-            timeout: obj.deltaTimeout || 500,
-          },
+            timeout: obj.deltaTimeout || 500
+          }
         };
 
         // add an event listener to init when dom is ready
         addEventListener('DOMContentLoaded', init, false);
         // call init if document is ready to be worked with and we missed the event
-        if (
-          document.readyState === 'complete' ||
-          document.readyState === 'loaded' ||
-          document.readyState === 'interactive'
-        ) {
+        if (document.readyState === 'complete' || document.readyState === 'loaded' || document.readyState === 'interactive') {
           init();
         }
 
         return {
           // manually fire check for visibility of tracked elements
-          trigger: function trigger() {
+          trigger: function trigger(){
             doCheckAppear();
           },
           // pause tracking of elements
-          pause: function pause() {
+          pause: function pause(){
             removeListeners();
           },
           // resume tracking of elements after a pause
-          resume: function resume() {
+          resume: function resume(){
             begin();
           },
           // provide a means to stop monitoring all elements
           destroy: function destroy() {
             end();
-          },
+          }
         };
+
       };
-    })()(obj);
+    }()(obj));
   };
-})();
+}());

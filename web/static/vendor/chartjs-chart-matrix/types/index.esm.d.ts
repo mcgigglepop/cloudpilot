@@ -10,18 +10,19 @@ import {
   Element,
   ScriptableAndArrayOptions,
   ScriptableContext,
-  VisualElement,
+  VisualElement
 } from 'chart.js';
 import { AnyObject } from 'chart.js/types/basic';
 
 export interface MatrixControllerDatasetOptions<TType extends ChartType>
   extends ControllerDatasetOptions,
-    ScriptableAndArrayOptions<MatrixOptions, ScriptableContext<TType>>,
-    ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext<TType>> {}
+  ScriptableAndArrayOptions<MatrixOptions, ScriptableContext<TType>>,
+  ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext<TType>> {
+}
 
 export interface MatrixDataPoint {
-  x: number;
-  y: number;
+  x: number,
+  y: number,
 }
 
 declare module 'chart.js' {
@@ -33,7 +34,7 @@ declare module 'chart.js' {
       parsedDataType: MatrixDataPoint;
       metaExtensions: AnyObject;
       scales: keyof CartesianScaleTypeRegistry;
-    };
+    }
   }
 }
 
@@ -62,9 +63,8 @@ export const MatrixController: ChartComponent & {
 
 export interface MatrixElement<
   T extends MatrixProps = MatrixProps,
-  O extends MatrixOptions = MatrixOptions,
-> extends Element<T, O>,
-    VisualElement {}
+  O extends MatrixOptions = MatrixOptions
+> extends Element<T, O>, VisualElement {}
 
 export const MatrixElement: ChartComponent & {
   prototype: MatrixElement;

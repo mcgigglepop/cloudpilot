@@ -147,3 +147,8 @@ func (m *Repository) PostRegister(w http.ResponseWriter, r *http.Request) {
 	m.App.Session.Put(r.Context(), "email", email)
 	http.Redirect(w, r, "/confirm-email", http.StatusSeeOther)
 }
+
+// Dashboard is the dashboard page handler
+func (m *Repository) Dashboard(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "dashboard.page.tmpl", &models.TemplateData{})
+}

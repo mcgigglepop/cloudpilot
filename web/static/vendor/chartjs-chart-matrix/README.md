@@ -16,7 +16,7 @@ To create a matrix chart, include `chartjs-chart-matrix.js` after `chart.js` and
 ```js
 const chart = new Chart(ctx, {
   type: 'matrix',
-  data: dataObject,
+  data: dataObject
 });
 ```
 
@@ -28,29 +28,27 @@ Matrix chart allows configuration of `width` and `height` of the data points in 
 const chart = new Chart(ctx, {
   type: 'matrix',
   data: {
-    datasets: [
-      {
-        label: 'My Matrix',
-        data: [
-          { x: 1, y: 1, v: 11 },
-          { x: 2, y: 2, v: 22 },
-          { x: 3, y: 3, v: 33 },
-        ],
-        backgroundColor: function (ctx) {
-          var value = ctx.dataset.data[ctx.dataIndex].v;
-          var alpha = (value - 5) / 40;
-          return Color('green').alpha(alpha).rgbString();
-        },
-        width: function (ctx) {
-          var a = ctx.chart.chartArea;
-          return (a.right - a.left) / 3.5;
-        },
-        height: function (ctx) {
-          var a = ctx.chart.chartArea;
-          return (a.bottom - a.top) / 3.5;
-        },
+    datasets: [{
+      label: 'My Matrix',
+      data: [
+        {x: 1, y: 1, v: 11},
+        {x: 2, y: 2, v: 22},
+        {x: 3, y: 3, v: 33}
+      ],
+      backgroundColor: function(ctx) {
+        var value = ctx.dataset.data[ctx.dataIndex].v;
+        var alpha = (value - 5) / 40;
+        return Color('green').alpha(alpha).rgbString();
       },
-    ],
+      width: function(ctx) {
+        var a = ctx.chart.chartArea;
+        return (a.right - a.left) / 3.5;
+      },
+      height: function(ctx) {
+        var a = ctx.chart.chartArea;
+        return (a.bottom - a.top) / 3.5;
+      }
+    }]
   },
 });
 ```
@@ -61,7 +59,7 @@ const chart = new Chart(ctx, {
 
 ## Development
 
-You first need to install node dependencies (requires [Node.js](https://nodejs.org/)):
+You first need to install node dependencies  (requires [Node.js](https://nodejs.org/)):
 
 ```bash
 > npm install

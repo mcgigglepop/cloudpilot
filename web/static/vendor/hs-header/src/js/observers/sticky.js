@@ -1,4 +1,4 @@
-import HSAbstractObserver from './abstract';
+import HSAbstractObserver from "./abstract";
 
 export default class HSHeaderStickObserver extends HSAbstractObserver {
   constructor(element) {
@@ -7,7 +7,7 @@ export default class HSHeaderStickObserver extends HSAbstractObserver {
 
   init() {
     this.defaultState = true;
-    this.offset = this.element.offsetTop;
+    this.offset = this.element.offsetTop
 
     return this;
   }

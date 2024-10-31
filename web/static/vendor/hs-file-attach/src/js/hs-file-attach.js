@@ -1,154 +1,148 @@
 /*
- * HSFileAttach Plugin
- * @version: 3.0.0 (Mon, 22 Feb 2021)
- * @author: HtmlStream
- * @event-namespace: .HSFileAttach
- * @license: Htmlstream Libraries (https://htmlstream.com/)
- * Copyright 2019 Htmlstream
- */
+* HSFileAttach Plugin
+* @version: 3.0.0 (Mon, 22 Feb 2021)
+* @author: HtmlStream
+* @event-namespace: .HSFileAttach
+* @license: Htmlstream Libraries (https://htmlstream.com/)
+* Copyright 2019 Htmlstream
+*/
 
-const dataAttributeName = 'data-hs-file-attach-options';
+const dataAttributeName = 'data-hs-file-attach-options'
 const defaults = {
-  textTarget: null,
-  maxFileSize: 1024, // Infinity - off file size detection
-  errorMessage: 'File is too big!',
-  typeErrorMessage: 'Unsupported file type',
-  mode: 'simple',
-  targetAttr: null,
-  resetTarget: null,
-  allowTypes: [],
-};
+	textTarget: null,
+	maxFileSize: 1024, // Infinity - off file size detection
+	errorMessage: 'File is too big!',
+	typeErrorMessage: 'Unsupported file type',
+	mode: 'simple',
+	targetAttr: null,
+	resetTarget: null,
+	allowTypes: []
+}
 
 export default class HSFileAttach {
-  constructor(el, options, id) {
-    this.collection = [];
-    const that = this;
-    let elems;
+	constructor(el, options, id) {
+		this.collection = []
+		const that = this
+		let elems
 
-    if (el instanceof HTMLElement) {
-      elems = [el];
-    } else if (el instanceof Object) {
-      elems = el;
-    } else {
-      elems = document.querySelectorAll(el);
-    }
+		if (el instanceof HTMLElement) {
+			elems = [el]
+		} else if (el instanceof Object) {
+			elems = el
+		} else {
+			elems = document.querySelectorAll(el)
+		}
 
-    for (let i = 0; i < elems.length; i += 1) {
-      that.addToCollection(elems[i], options, id || elems[i].id);
-    }
+		for (let i = 0; i < elems.length; i += 1) {
+			that.addToCollection(elems[i], options, id || elems[i].id)
+		}
 
-    if (!that.collection.length) {
-      return false;
-    }
+		if (!that.collection.length) {
+			return false
+		}
 
-    // initialization calls
-    that._init();
+		// initialization calls
+		that._init()
 
-    return this;
-  }
+		return this
+	}
 
-  _init() {
-    const that = this;
+	_init() {
 
-    for (let i = 0; i < that.collection.length; i += 1) {
-      let _$el;
-      let _options;
+		const that = this;
 
-      if (that.collection[i].hasOwnProperty('$initializedEl')) {
-        continue;
-      }
+		for (let i = 0; i < that.collection.length; i += 1) {
+			let _$el
+			let _options
 
-      _$el = that.collection[i].$el;
-      _options = that.collection[i].options;
+			if (that.collection[i].hasOwnProperty('$initializedEl')) {
+				continue
+			}
 
-      _options.$target = document.querySelector(_options.textTarget);
+			_$el = that.collection[i].$el;
+			_options = that.collection[i].options
 
-      function getFileExtension(filename) {
-        return /[.]/.exec(filename) ? /[^.]+$/.exec(filename)[0] : null;
-      }
+			_options.$target = document.querySelector(_options.textTarget)
 
-      _$el.addEventListener('change', (e) => {
-        if (_$el.value === '') {
-          return;
-        }
+			function getFileExtension(filename) {
+				return (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename)[0] : null
+			}
 
-        if (e.target.files[0].size > _options.maxFileSize * 1024) {
-          alert(_options.errorMessage);
+			_$el.addEventListener('change', (e) => {
+				if (_$el.value === '') {
+					return
+				}
 
-          return (e.target.value = '');
-        }
+				if (e.target.files[0].size > (_options.maxFileSize * 1024)) {
+					alert(_options.errorMessage)
 
-        if (_options.allowTypes.length > 0) {
-          const type = '.' + getFileExtension(e.target.files[0].name);
+					return e.target.value = ''
+				}
 
-          if (!type || !_options.allowTypes.includes(type.toLowerCase())) {
-            alert(_options.typeErrorMessage);
+				if (_options.allowTypes.length > 0) {
+					const type = '.' + getFileExtension(e.target.files[0].name)
 
-            return (e.target.value = '');
-          }
-        }
+					if (!type || !_options.allowTypes.includes(type.toLowerCase())) {
+						alert(_options.typeErrorMessage)
 
-        if (_options.mode === 'image') {
-          this.image(_$el, _options);
-        } else {
-          this.simple(_$el, _options);
-        }
-      });
+						return e.target.value = ''
+					}
+				}
 
-      _options.resetTarget
-        ? document
-            .querySelector(_options.resetTarget)
-            .addEventListener('click', () => {
-              _$el.value = '';
-              _options.$target.setAttribute(
-                _options.targetAttr,
-                _options.resetImg
-              );
-            })
-        : null;
-    }
-  }
+				if (_options.mode === 'image') {
+					this.image(_$el, _options)
+				} else {
+					this.simple(_$el, _options)
+				}
+			})
 
-  simple($el, settings) {
-    settings.textContent = $el.value.replace(/.+[\\\/]/, '');
-  }
+			_options.resetTarget ? document.querySelector(_options.resetTarget).addEventListener('click', () => {
+				_$el.value = ''
+				_options.$target.setAttribute(_options.targetAttr, _options.resetImg)
+			}) : null
+		}
+	}
 
-  image($el, settings) {
-    let reader;
+	simple($el, settings) {
+		settings.textContent = $el.value.replace(/.+[\\\/]/, '')
+	}
 
-    if ($el.files && $el.files[0]) {
-      reader = new FileReader();
+	image($el, settings) {
+		let reader
 
-      reader.onload = (e) => {
-        settings.$target.setAttribute(settings.targetAttr, e.target.result);
-      };
+		if ($el.files && $el.files[0]) {
+			reader = new FileReader()
 
-      reader.readAsDataURL($el.files[0]);
-    }
-  }
+			reader.onload = (e) => {
+				settings.$target.setAttribute(settings.targetAttr, e.target.result)
+			}
 
-  addToCollection(item, options, id) {
-    this.collection.push({
-      $el: item,
-      id: id || null,
-      options: Object.assign(
-        {},
-        defaults,
-        item.hasAttribute(dataAttributeName)
-          ? JSON.parse(item.getAttribute(dataAttributeName))
-          : {},
-        options
-      ),
-    });
-  }
+			reader.readAsDataURL($el.files[0])
+		}
+	}
 
-  getItem(item) {
-    if (typeof item === 'number') {
-      return this.collection[item].$initializedEl;
-    } else {
-      return this.collection.find((el) => {
-        return el.id === item;
-      }).$initializedEl;
-    }
-  }
+	addToCollection (item, options, id) {
+		this.collection.push({
+			$el: item,
+			id: id || null,
+			options: Object.assign(
+				{},
+				defaults,
+				item.hasAttribute(dataAttributeName)
+					? JSON.parse(item.getAttribute(dataAttributeName))
+					: {},
+				options,
+			),
+		})
+	}
+
+	getItem (item) {
+		if (typeof item === 'number') {
+			return this.collection[item].$initializedEl;
+		} else {
+			return this.collection.find(el => {
+				return el.id === item;
+			}).$initializedEl;
+		}
+	}
 }

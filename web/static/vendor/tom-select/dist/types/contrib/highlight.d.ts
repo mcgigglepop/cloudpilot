@@ -5,10 +5,7 @@
  * - Modified by Marshal <beatgates@gmail.com> 2011-6-24 (added regex)
  * - Modified by Brian Reavis <brian@thirdroute.com> 2012-8-27 (cleanup)
  */
-export declare const highlight: (
-  element: HTMLElement,
-  regex: string | RegExp
-) => void;
+export declare const highlight: (element: HTMLElement, regex: string | RegExp) => void;
 /**
  * removeHighlight fn copied from highlight v5 and
  * edited to remove with(), pass js strict mode, and use without jquery

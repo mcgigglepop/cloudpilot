@@ -9,10 +9,7 @@ export interface Element<T = AnyObject, O = AnyObject> {
 
   tooltipPosition(useFinalPosition?: boolean): Point;
   hasValue(): boolean;
-  getProps<P extends (keyof T)[]>(
-    props: P,
-    final?: boolean
-  ): Pick<T, P[number]>;
+  getProps<P extends (keyof T)[]>(props: P, final?: boolean): Pick<T, P[number]>;
 }
 export const Element: {
   prototype: Element;

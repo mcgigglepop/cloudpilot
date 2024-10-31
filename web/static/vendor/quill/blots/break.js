@@ -1,5 +1,6 @@
 import Parchment from 'parchment';
 
+
 class Break extends Parchment.Embed {
   static value() {
     return undefined;
@@ -23,5 +24,6 @@ class Break extends Parchment.Embed {
 }
 Break.blotName = 'break';
 Break.tagName = 'BR';
+
 
 export default Break;

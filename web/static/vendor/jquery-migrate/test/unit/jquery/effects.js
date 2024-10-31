@@ -1,100 +1,90 @@
 // Support jQuery slim which excludes the effects module
-if (jQuery.fx) {
-  QUnit.module('effects');
+if ( jQuery.fx ) {
 
-  QUnit.test('jQuery.easing', function (assert) {
-    var lastP = -0.1,
-      easingCallCount = 0,
-      animComplete = assert.async();
+QUnit.module( "effects" );
 
-    assert.expect(4);
+QUnit.test( "jQuery.easing", function( assert ) {
+	var lastP = -0.1,
+		easingCallCount = 0,
+		animComplete = assert.async();
 
-    jQuery.easing.testOld = function (p, n, firstNum, diff) {
-      assert.ok(false, 'should not have been called');
-    };
+	assert.expect( 4 );
 
-    jQuery.easing.testNew = function (p) {
-      if (++easingCallCount < 3) {
-        if (p === 0 && p === lastP) {
-          assert.ok(true, 'p===0 called twice before jQuery 3.2.0');
-        } else {
-          assert.ok(p > lastP, 'called, percentage is increasing');
-          lastP = p;
-        }
-      }
+	jQuery.easing.testOld = function( p, n, firstNum, diff ) {
+		assert.ok( false, "should not have been called" );
+	};
 
-      // Linear
-      return p;
-    };
+	jQuery.easing.testNew = function( p ) {
+		if ( ++easingCallCount < 3 ) {
+			if ( p === 0 && p === lastP ) {
+				assert.ok( true, "p===0 called twice before jQuery 3.2.0" );
+			} else {
+				assert.ok( p > lastP, "called, percentage is increasing" );
+				lastP = p;
+			}
+		}
 
-    var div = jQuery('<div>test</div>')
-      .css('width', '30px')
-      .appendTo('#qunit-fixture');
+		// Linear
+		return p;
+	};
 
-    // Can't use expectWarning since this is async
-    jQuery.migrateReset();
-    div.animate(
-      { width: '20px' },
-      {
-        duration: 50,
-        easing: 'testOld',
-        complete: function () {
-          assert.equal(jQuery.migrateWarnings.length, 1, 'warned');
-          jQuery.migrateWarnings.length = 0;
-          div.animate(
-            { width: '10px' },
-            {
-              duration: 50,
-              easing: 'testNew',
-              complete: function () {
-                assert.equal(jQuery.migrateWarnings.length, 0, 'did not warn');
-                animComplete();
-              },
-            }
-          );
-        },
-      }
-    );
-  });
+	var div = jQuery( "<div>test</div>" )
+			.css( "width", "30px" )
+			.appendTo( "#qunit-fixture" );
 
-  // If the browser has requestAnimationFrame, jQuery won't touch fx.interval
-  QUnit.test(
-    'jQuery.fx.interval - no warning on animations',
-    function (assert) {
-      assert.expect(1);
+	// Can't use expectWarning since this is async
+	jQuery.migrateReset();
+	div.animate( { width: "20px" }, {
+		duration: 50,
+		easing: "testOld",
+		complete: function() {
+			assert.equal( jQuery.migrateWarnings.length, 1, "warned" );
+			jQuery.migrateWarnings.length = 0;
+			div.animate( { width: "10px" }, {
+				duration: 50,
+				easing: "testNew",
+				complete: function() {
+					assert.equal( jQuery.migrateWarnings.length, 0, "did not warn" );
+					animComplete();
+				}
+			} );
+		}
+	} );
+} );
 
-      var start = assert.async();
+// If the browser has requestAnimationFrame, jQuery won't touch fx.interval
+QUnit.test( "jQuery.fx.interval - no warning on animations", function( assert ) {
+	assert.expect( 1 );
 
-      // Can't use expectNoWarning since this is async
-      jQuery.migrateReset();
-      jQuery('<div />')
-        .appendTo('#qunit-fixture')
-        .animate({ opacity: 0.5 }, 50, function () {
-          assert.equal(jQuery.migrateWarnings.length, 0, 'no warning');
-          start();
-        });
-    }
-  );
+	var start = assert.async();
 
-  // Only rAF browsers implement the interval warning
-  QUnit.test('jQuery.fx.interval - user change', function (assert) {
-    assert.expect(3);
+	// Can't use expectNoWarning since this is async
+	jQuery.migrateReset();
+	jQuery( "<div />" )
+		.appendTo( "#qunit-fixture" )
+		.animate( { opacity: 0.5 }, 50, function() {
+			assert.equal( jQuery.migrateWarnings.length, 0, "no warning" );
+			start();
+		} );
+} );
 
-    var oldInterval,
-      warner = window.requestAnimationFrame ? expectWarning : expectNoWarning;
+// Only rAF browsers implement the interval warning
+QUnit.test( "jQuery.fx.interval - user change", function( assert ) {
+	assert.expect( 3 );
 
-    assert.ok(
-      true,
-      'requestAnimationFrame is ' +
-        (window.requestAnimationFrame ? 'present' : 'absent')
-    );
-    warner(assert, 'read fx.interval', function () {
-      oldInterval = jQuery.fx.interval;
-    });
-    warner(assert, 'write fx.interval', function () {
-      jQuery.fx.interval = 13;
-    });
+	var oldInterval,
+		warner = window.requestAnimationFrame ? expectWarning : expectNoWarning;
 
-    jQuery.fx.interval = oldInterval;
-  });
+	assert.ok( true, "requestAnimationFrame is " +
+		( window.requestAnimationFrame ? "present" : "absent" ) );
+	warner( assert, "read fx.interval", function() {
+		oldInterval = jQuery.fx.interval;
+	} );
+	warner( assert, "write fx.interval", function() {
+		jQuery.fx.interval = 13;
+	} );
+
+	jQuery.fx.interval = oldInterval;
+} );
+
 }

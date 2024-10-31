@@ -1,7 +1,7 @@
 /**
- * Tom Select v2.1.0
- * Licensed under the Apache License, Version 2.0 (the "License");
- */
+* Tom Select v2.1.0
+* Licensed under the Apache License, Version 2.0 (the "License");
+*/
 
 /**
  * Plugin: "no_active_items" (Tom Select)
@@ -16,7 +16,7 @@
  * governing permissions and limitations under the License.
  *
  */
-function plugin() {
+function plugin () {
   this.hook('instead', 'setActiveItem', () => {});
   this.hook('instead', 'selectAll', () => {});
 }

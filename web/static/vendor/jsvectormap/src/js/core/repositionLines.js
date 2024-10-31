@@ -1,18 +1,17 @@
 export default function repositionLines() {
-  let point1 = false,
-    point2 = false;
+  let point1 = false, point2 = false
 
   for (let index in this.lines) {
     for (let mindex in this.markers) {
-      const marker = this.markers[mindex];
+      const marker = this.markers[mindex]
       // console.log(this.lines[index], index);
 
       if (marker.config.name === this.lines[index].config.from) {
-        point1 = this.getMarkerPosition(marker.config);
+        point1 = this.getMarkerPosition(marker.config)
       }
 
       if (marker.config.name === this.lines[index].config.to) {
-        point2 = this.getMarkerPosition(marker.config);
+        point2 = this.getMarkerPosition(marker.config)
       }
     }
 
@@ -22,7 +21,7 @@ export default function repositionLines() {
         y1: point1.y,
         x2: point2.x,
         y2: point2.y,
-      });
+      })
     }
   }
 }

@@ -1,46 +1,19 @@
 /*!
- * Bootstrap tab.js v5.2.2 (https://getbootstrap.com/)
- * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- */
+  * Bootstrap tab.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined'
-    ? (module.exports = factory(
-        require('./util/index'),
-        require('./dom/event-handler'),
-        require('./dom/selector-engine'),
-        require('./base-component')
-      ))
-    : typeof define === 'function' && define.amd
-      ? define(
-          [
-            './util/index',
-            './dom/event-handler',
-            './dom/selector-engine',
-            './base-component',
-          ],
-          factory
-        )
-      : ((global =
-          typeof globalThis !== 'undefined' ? globalThis : global || self),
-        (global.Tab = factory(
-          global.Index,
-          global.EventHandler,
-          global.SelectorEngine,
-          global.BaseComponent
-        )));
-})(this, function (index, EventHandler, SelectorEngine, BaseComponent) {
-  'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('./util/index'), require('./dom/event-handler'), require('./dom/selector-engine'), require('./base-component')) :
+  typeof define === 'function' && define.amd ? define(['./util/index', './dom/event-handler', './dom/selector-engine', './base-component'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Tab = factory(global.Index, global.EventHandler, global.SelectorEngine, global.BaseComponent));
+})(this, (function (index, EventHandler, SelectorEngine, BaseComponent) { 'use strict';
 
-  const _interopDefaultLegacy = (e) =>
-    e && typeof e === 'object' && 'default' in e ? e : { default: e };
+  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
 
-  const EventHandler__default =
-    /*#__PURE__*/ _interopDefaultLegacy(EventHandler);
-  const SelectorEngine__default =
-    /*#__PURE__*/ _interopDefaultLegacy(SelectorEngine);
-  const BaseComponent__default =
-    /*#__PURE__*/ _interopDefaultLegacy(BaseComponent);
+  const EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
+  const SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
+  const BaseComponent__default = /*#__PURE__*/_interopDefaultLegacy(BaseComponent);
 
   /**
    * --------------------------------------------------------------------------
@@ -76,8 +49,7 @@
   const SELECTOR_TAB_PANEL = '.list-group, .nav, [role="tablist"]';
   const SELECTOR_OUTER = '.nav-item, .list-group-item';
   const SELECTOR_INNER = `.nav-link${NOT_SELECTOR_DROPDOWN_TOGGLE}, .list-group-item${NOT_SELECTOR_DROPDOWN_TOGGLE}, [role="tab"]${NOT_SELECTOR_DROPDOWN_TOGGLE}`;
-  const SELECTOR_DATA_TOGGLE =
-    '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]'; // todo:v6: could be only `tab`
+  const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]'; // todo:v6: could be only `tab`
 
   const SELECTOR_INNER_ELEM = `${SELECTOR_INNER}, ${SELECTOR_DATA_TOGGLE}`;
   const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-bs-toggle="tab"], .${CLASS_NAME_ACTIVE}[data-bs-toggle="pill"], .${CLASS_NAME_ACTIVE}[data-bs-toggle="list"]`;
@@ -95,16 +67,17 @@
         // throw new TypeError(`${element.outerHTML} has not a valid parent ${SELECTOR_INNER_ELEM}`)
       } // Set up initial aria attributes
 
+
       this._setInitialAttributes(this._parent, this._getChildren());
 
-      EventHandler__default.default.on(this._element, EVENT_KEYDOWN, (event) =>
-        this._keydown(event)
-      );
+      EventHandler__default.default.on(this._element, EVENT_KEYDOWN, event => this._keydown(event));
     } // Getters
+
 
     static get NAME() {
       return NAME;
     } // Public
+
 
     show() {
       // Shows this elem and deactivate the active sibling if exists
@@ -114,25 +87,17 @@
         return;
       } // Search for active tab on same parent to deactivate it
 
+
       const active = this._getActiveElem();
 
-      const hideEvent = active
-        ? EventHandler__default.default.trigger(active, EVENT_HIDE, {
-            relatedTarget: innerElem,
-          })
-        : null;
-      const showEvent = EventHandler__default.default.trigger(
-        innerElem,
-        EVENT_SHOW,
-        {
-          relatedTarget: active,
-        }
-      );
+      const hideEvent = active ? EventHandler__default.default.trigger(active, EVENT_HIDE, {
+        relatedTarget: innerElem
+      }) : null;
+      const showEvent = EventHandler__default.default.trigger(innerElem, EVENT_SHOW, {
+        relatedTarget: active
+      });
 
-      if (
-        showEvent.defaultPrevented ||
-        (hideEvent && hideEvent.defaultPrevented)
-      ) {
+      if (showEvent.defaultPrevented || hideEvent && hideEvent.defaultPrevented) {
         return;
       }
 
@@ -140,6 +105,7 @@
 
       this._activate(innerElem, active);
     } // Private
+
 
     _activate(element, relatedElem) {
       if (!element) {
@@ -149,6 +115,7 @@
       element.classList.add(CLASS_NAME_ACTIVE);
 
       this._activate(index.getElementFromSelector(element)); // Search and activate/show the proper section
+
 
       const complete = () => {
         if (element.getAttribute('role') !== 'tab') {
@@ -162,15 +129,11 @@
         this._toggleDropDown(element, true);
 
         EventHandler__default.default.trigger(element, EVENT_SHOWN, {
-          relatedTarget: relatedElem,
+          relatedTarget: relatedElem
         });
       };
 
-      this._queueCallback(
-        complete,
-        element,
-        element.classList.contains(CLASS_NAME_FADE)
-      );
+      this._queueCallback(complete, element, element.classList.contains(CLASS_NAME_FADE));
     }
 
     _deactivate(element, relatedElem) {
@@ -182,6 +145,7 @@
       element.blur();
 
       this._deactivate(index.getElementFromSelector(element)); // Search and deactivate the shown section too
+
 
       const complete = () => {
         if (element.getAttribute('role') !== 'tab') {
@@ -195,26 +159,15 @@
         this._toggleDropDown(element, false);
 
         EventHandler__default.default.trigger(element, EVENT_HIDDEN, {
-          relatedTarget: relatedElem,
+          relatedTarget: relatedElem
         });
       };
 
-      this._queueCallback(
-        complete,
-        element,
-        element.classList.contains(CLASS_NAME_FADE)
-      );
+      this._queueCallback(complete, element, element.classList.contains(CLASS_NAME_FADE));
     }
 
     _keydown(event) {
-      if (
-        ![
-          ARROW_LEFT_KEY,
-          ARROW_RIGHT_KEY,
-          ARROW_UP_KEY,
-          ARROW_DOWN_KEY,
-        ].includes(event.key)
-      ) {
+      if (![ARROW_LEFT_KEY, ARROW_RIGHT_KEY, ARROW_UP_KEY, ARROW_DOWN_KEY].includes(event.key)) {
         return;
       }
 
@@ -222,16 +175,11 @@
 
       event.preventDefault();
       const isNext = [ARROW_RIGHT_KEY, ARROW_DOWN_KEY].includes(event.key);
-      const nextActiveElement = index.getNextActiveElement(
-        this._getChildren().filter((element) => !index.isDisabled(element)),
-        event.target,
-        isNext,
-        true
-      );
+      const nextActiveElement = index.getNextActiveElement(this._getChildren().filter(element => !index.isDisabled(element)), event.target, isNext, true);
 
       if (nextActiveElement) {
         nextActiveElement.focus({
-          preventScroll: true,
+          preventScroll: true
         });
         Tab.getOrCreateInstance(nextActiveElement).show();
       }
@@ -239,16 +187,11 @@
 
     _getChildren() {
       // collection of inner elements
-      return SelectorEngine__default.default.find(
-        SELECTOR_INNER_ELEM,
-        this._parent
-      );
+      return SelectorEngine__default.default.find(SELECTOR_INNER_ELEM, this._parent);
     }
 
     _getActiveElem() {
-      return (
-        this._getChildren().find((child) => this._elemIsActive(child)) || null
-      );
+      return this._getChildren().find(child => this._elemIsActive(child)) || null;
     }
 
     _setInitialAttributes(parent, children) {
@@ -278,6 +221,7 @@
 
       this._setAttributeIfNotExists(child, 'role', 'tab'); // set attributes to the related panel too
 
+
       this._setInitialAttributesOnTargetPanel(child);
     }
 
@@ -291,11 +235,7 @@
       this._setAttributeIfNotExists(target, 'role', 'tabpanel');
 
       if (child.id) {
-        this._setAttributeIfNotExists(
-          target,
-          'aria-labelledby',
-          `#${child.id}`
-        );
+        this._setAttributeIfNotExists(target, 'aria-labelledby', `#${child.id}`);
       }
     }
 
@@ -307,10 +247,7 @@
       }
 
       const toggle = (selector, className) => {
-        const element = SelectorEngine__default.default.findOne(
-          selector,
-          outerElem
-        );
+        const element = SelectorEngine__default.default.findOne(selector, outerElem);
 
         if (element) {
           element.classList.toggle(className, open);
@@ -332,15 +269,16 @@
       return elem.classList.contains(CLASS_NAME_ACTIVE);
     } // Try to get the inner element (usually the .nav-link)
 
+
     _getInnerElement(elem) {
-      return elem.matches(SELECTOR_INNER_ELEM)
-        ? elem
-        : SelectorEngine__default.default.findOne(SELECTOR_INNER_ELEM, elem);
+      return elem.matches(SELECTOR_INNER_ELEM) ? elem : SelectorEngine__default.default.findOne(SELECTOR_INNER_ELEM, elem);
     } // Try to get the outer element (usually the .nav-item)
+
 
     _getOuterElement(elem) {
       return elem.closest(SELECTOR_OUTER) || elem;
     } // Static
+
 
     static jQueryInterface(config) {
       return this.each(function () {
@@ -350,46 +288,37 @@
           return;
         }
 
-        if (
-          data[config] === undefined ||
-          config.startsWith('_') ||
-          config === 'constructor'
-        ) {
+        if (data[config] === undefined || config.startsWith('_') || config === 'constructor') {
           throw new TypeError(`No method named "${config}"`);
         }
 
         data[config]();
       });
     }
+
   }
   /**
    * Data API implementation
    */
 
-  EventHandler__default.default.on(
-    document,
-    EVENT_CLICK_DATA_API,
-    SELECTOR_DATA_TOGGLE,
-    function (event) {
-      if (['A', 'AREA'].includes(this.tagName)) {
-        event.preventDefault();
-      }
 
-      if (index.isDisabled(this)) {
-        return;
-      }
-
-      Tab.getOrCreateInstance(this).show();
+  EventHandler__default.default.on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
+    if (['A', 'AREA'].includes(this.tagName)) {
+      event.preventDefault();
     }
-  );
+
+    if (index.isDisabled(this)) {
+      return;
+    }
+
+    Tab.getOrCreateInstance(this).show();
+  });
   /**
    * Initialize on focus
    */
 
   EventHandler__default.default.on(window, EVENT_LOAD_DATA_API, () => {
-    for (const element of SelectorEngine__default.default.find(
-      SELECTOR_DATA_TOGGLE_ACTIVE
-    )) {
+    for (const element of SelectorEngine__default.default.find(SELECTOR_DATA_TOGGLE_ACTIVE)) {
       Tab.getOrCreateInstance(element);
     }
   });
@@ -400,5 +329,6 @@
   index.defineJQueryPlugin(Tab);
 
   return Tab;
-});
+
+}));
 //# sourceMappingURL=tab.js.map

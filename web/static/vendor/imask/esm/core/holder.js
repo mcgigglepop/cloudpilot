@@ -6,8 +6,7 @@
  * @return {InputMask}
  */
 function IMask(el) {
-  var opts =
-    arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   // currently available only for input-like elements
   return new IMask.InputMask(el, opts);
 }

@@ -6,6 +6,8 @@
 4. [Core Style Guide](#jquery-core-style-guide)
 5. [Tips For Bug Patching](#tips-for-jquery-bug-patching)
 
+
+
 ## Getting Involved
 
 There are a number of ways to get involved with the development of jQuery core. Even if you've never contributed code to an Open Source project before, we're always looking for help identifying bugs, writing and reducing test cases and documentation.
@@ -28,17 +30,20 @@ The meeting is held in the [#jquery-meeting](http://webchat.freenode.net/?channe
 
 [Past Meeting Notes](https://docs.google.com/document/d/1MrLFvoxW7GMlH9KK-bwypn77cC98jUnz7sMW1rg_TP4/edit?hl=en)
 
+
 ## How to Report Bugs
 
 ### Make sure it is a jQuery bug
 
-Many bugs reported to our bug tracker are actually bugs in user code, not in jQuery code. Keep in mind that just because your code throws an error and the console points to a line number inside of jQuery, this does _not_ mean the bug is a jQuery bug; more often than not, these errors result from providing incorrect arguments when calling a jQuery function.
+Many bugs reported to our bug tracker are actually bugs in user code, not in jQuery code. Keep in mind that just because your code throws an error and the console points to a line number inside of jQuery, this does *not* mean the bug is a jQuery bug; more often than not, these errors result from providing incorrect arguments when calling a jQuery function.
 
 If you are new to jQuery, it is usually a much better idea to ask for help first in the [Using jQuery Forum](http://forum.jquery.com/using-jquery) or the [jQuery IRC channel](http://webchat.freenode.net/?channels=%23jquery). You will get much quicker support, and you will help avoid tying up the jQuery team with invalid bug reports. These same resources can also be useful if you want to confirm that your bug is indeed a bug in jQuery before filing any tickets.
+
 
 ### Disable any browser extensions
 
 Make sure you have reproduced the bug with all browser extensions and add-ons disabled, as these can sometimes cause things to break in interesting and unpredictable ways. Try using incognito, stealth or anonymous browsing modes.
+
 
 ### Try the latest version of jQuery
 
@@ -50,7 +55,7 @@ Sometimes, bugs are introduced in newer versions of jQuery that do not exist in 
 
 ### Reduce, reduce, reduce!
 
-When you are experiencing a problem, the most useful thing you can possibly do is to [reduce your code](https://webkit.org/test-case-reduction/) to the bare minimum required to reproduce the issue. This makes it _much_ easier to isolate and fix the offending code. Bugs that are reported without reduced test cases take on average 9001% longer to fix than bugs that are submitted with them, so you really should try to do this if at all possible.
+When you are experiencing a problem, the most useful thing you can possibly do is to [reduce your code](https://webkit.org/test-case-reduction/) to the bare minimum required to reproduce the issue. This makes it *much* easier to isolate and fix the offending code. Bugs that are reported without reduced test cases take on average 9001% longer to fix than bugs that are submitted with them, so you really should try to do this if at all possible.
 
 ## jQuery Core Style Guide
 
@@ -58,14 +63,16 @@ See: [jQuery Core Style Guide](http://docs.jquery.com/JQuery_Core_Style_Guidelin
 
 ## Tips For Bug Patching
 
+
 ### Environment: localhost
 
 To test the plugin you will need:
 
-- Some kind of localhost server(any will do)
-- Node.js
-- NPM (comes with the latest version of Node.js)
-- Grunt (install with: `npm install grunt -g`)
+* Some kind of localhost server(any will do)
+* Node.js
+* NPM (comes with the latest version of Node.js)
+* Grunt (install with: `npm install grunt -g`)
+
 
 ### Build a Local Copy of the plugin
 
@@ -111,6 +118,7 @@ Now open the jQuery test suite in a browser at http://localhost/test. If there i
 
 Success! You just built and tested jQuery!
 
+
 ### Fix a bug from a ticket filed at bugs.jquery.com:
 
 **NEVER write your patches to the `main` branch**
@@ -133,7 +141,7 @@ $ git checkout -b bug_####
 # or create it if it doesn't exist )
 ```
 
-Now you're on branch: bug\_####
+Now you're on branch: bug_####
 
 Determine the module/file you'll be working in...
 
@@ -151,6 +159,7 @@ Stage the files to be tracked:
 $ git add filename
 # (you can use "git status" to list the files you've changed)
 ```
+
 
 ( I recommend NEVER, EVER using "git add . " )
 
@@ -176,6 +185,7 @@ Before you tackle your next bug patch, return to the `main` branch:
 $ git checkout main
 ```
 
+
 ### Test Suite Tips...
 
 By default the plugin runs against the current (jquery-3.x-git WIP) version of jQuery. You can select a different version by specifying it in the URL. Files are always retrieved from code.jquery.com or releases.jquery.com (the latter for development versions).
@@ -187,3 +197,4 @@ http://localhost/jquery-migrate/test/?jquery=1.7.2
 This will run the plugin with version 1.7.2 of jQuery, taken from http://code.jquery.com/jquery-1.7.2.js.
 
 **ALWAYS RUN THE FULL TEST SUITE BEFORE COMMITTING AND PUSHING A PATCH!**
+

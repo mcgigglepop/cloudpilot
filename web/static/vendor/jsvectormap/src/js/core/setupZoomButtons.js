@@ -1,18 +1,13 @@
-import { createElement } from '../util';
-import EventHandler from '../eventHandler';
+import { createElement } from '../util'
+import EventHandler from '../eventHandler'
 
 export default function setupZoomButtons() {
-  const map = this;
-  const zoomin = createElement('div', 'jvm-zoom-btn jvm-zoomin', '&#43;', true);
-  const zoomout = createElement(
-    'div',
-    'jvm-zoom-btn jvm-zoomout',
-    '&#x2212',
-    true
-  );
+  const map = this
+  const zoomin = createElement('div', 'jvm-zoom-btn jvm-zoomin', '&#43;', true)
+  const zoomout = createElement('div', 'jvm-zoom-btn jvm-zoomout', '&#x2212', true)
 
-  this.container.appendChild(zoomin);
-  this.container.appendChild(zoomout);
+  this.container.appendChild(zoomin)
+  this.container.appendChild(zoomout)
 
   EventHandler.on(zoomin, 'click', () => {
     this._setScale(
@@ -21,8 +16,8 @@ export default function setupZoomButtons() {
       map.height / 2,
       false,
       map.params.zoomAnimate
-    );
-  });
+    )
+  })
 
   EventHandler.on(zoomout, 'click', () => {
     this._setScale(
@@ -31,6 +26,6 @@ export default function setupZoomButtons() {
       map.height / 2,
       false,
       map.params.zoomAnimate
-    );
-  });
+    )
+  })
 }

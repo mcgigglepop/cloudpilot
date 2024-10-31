@@ -1,7 +1,8 @@
 import Parchment from 'parchment';
 import TextBlot from './text';
 
-const GUARD_TEXT = '\uFEFF';
+const GUARD_TEXT = "\uFEFF";
+
 
 class Embed extends Parchment.Embed {
   constructor(node) {
@@ -33,14 +34,14 @@ class Embed extends Parchment.Embed {
         this.prev.insertAt(prevLength, text);
         range = {
           startNode: this.prev.domNode,
-          startOffset: prevLength + text.length,
+          startOffset: prevLength + text.length
         };
       } else {
         textNode = document.createTextNode(text);
         this.parent.insertBefore(Parchment.create(textNode), this);
         range = {
           startNode: textNode,
-          startOffset: text.length,
+          startOffset: text.length
         };
       }
     } else if (node === this.rightGuard) {
@@ -48,14 +49,14 @@ class Embed extends Parchment.Embed {
         this.next.insertAt(0, text);
         range = {
           startNode: this.next.domNode,
-          startOffset: text.length,
-        };
+          startOffset: text.length
+        }
       } else {
         textNode = document.createTextNode(text);
         this.parent.insertBefore(Parchment.create(textNode), this.next);
         range = {
           startNode: textNode,
-          startOffset: text.length,
+          startOffset: text.length
         };
       }
     }
@@ -65,16 +66,14 @@ class Embed extends Parchment.Embed {
 
   update(mutations, context) {
     mutations.forEach((mutation) => {
-      if (
-        mutation.type === 'characterData' &&
-        (mutation.target === this.leftGuard ||
-          mutation.target === this.rightGuard)
-      ) {
+      if (mutation.type === 'characterData' &&
+          (mutation.target === this.leftGuard || mutation.target === this.rightGuard)) {
         let range = this.restore(mutation.target);
         if (range) context.range = range;
       }
     });
   }
 }
+
 
 export default Embed;

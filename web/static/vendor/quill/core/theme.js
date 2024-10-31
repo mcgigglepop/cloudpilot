@@ -15,18 +15,16 @@ class Theme {
 
   addModule(name) {
     let moduleClass = this.quill.constructor.import(`modules/${name}`);
-    this.modules[name] = new moduleClass(
-      this.quill,
-      this.options.modules[name] || {}
-    );
+    this.modules[name] = new moduleClass(this.quill, this.options.modules[name] || {});
     return this.modules[name];
   }
 }
 Theme.DEFAULTS = {
-  modules: {},
+  modules: {}
 };
 Theme.themes = {
-  default: Theme,
+  'default': Theme
 };
+
 
 export default Theme;

@@ -1,4 +1,7 @@
-import { createElement, isImageUrl } from './util';
+import {
+  createElement,
+  isImageUrl
+} from './util'
 
 /**
  * ------------------------------------------------------------------------
@@ -7,22 +10,22 @@ import { createElement, isImageUrl } from './util';
  */
 class Legend {
   constructor(options = {}) {
-    this._options = options;
-    this._map = this._options.map;
-    this._series = this._options.series;
-    this._body = createElement('div', 'jvm-legend');
+    this._options = options
+    this._map = this._options.map
+    this._series = this._options.series
+    this._body = createElement('div', 'jvm-legend')
 
     if (this._options.cssClass) {
-      this._body.setAttribute('class', this._options.cssClass);
+      this._body.setAttribute('class', this._options.cssClass)
     }
 
     if (options.vertical) {
-      this._map.legendVertical.appendChild(this._body);
+      this._map.legendVertical.appendChild(this._body)
     } else {
-      this._map.legendHorizontal.appendChild(this._body);
+      this._map.legendHorizontal.appendChild(this._body)
     }
 
-    this.render();
+    this.render()
   }
 
   render() {
@@ -30,55 +33,51 @@ class Legend {
       inner = createElement('div', 'jvm-legend-inner'),
       tick,
       sample,
-      label;
+      label
 
-    this._body.innderHTML = '';
+    this._body.innderHTML = ''
 
     if (this._options.title) {
-      let legendTitle = createElement(
-        'div',
-        'jvm-legend-title',
-        this._options.title
-      );
-      this._body.appendChild(legendTitle);
+      let legendTitle = createElement('div', 'jvm-legend-title', this._options.title)
+      this._body.appendChild(legendTitle)
     }
 
-    this._body.appendChild(inner);
+    this._body.appendChild(inner)
 
     for (let i = 0; i < ticks.length; i++) {
-      tick = createElement('div', 'jvm-legend-tick');
-      sample = createElement('div', 'jvm-legend-tick-sample');
+      tick = createElement('div', 'jvm-legend-tick',)
+      sample = createElement('div', 'jvm-legend-tick-sample')
 
       switch (this._series.config.attribute) {
         case 'fill':
           if (isImageUrl(ticks[i].value)) {
-            sample.style.background = `url(${ticks[i].value})`;
+            sample.style.background = `url(${ticks[i].value})`
           } else {
-            sample.style.background = ticks[i].value;
+            sample.style.background = ticks[i].value
           }
-          break;
+          break
         case 'stroke':
-          sample.style.background = ticks[i].value;
-          break;
+          sample.style.background = ticks[i].value
+          break
         case 'image':
-          sample.style.background = `url(${typeof ticks[i].value === 'object' ? ticks[i].value.url : ticks[i].value}) no-repeat center center`;
-          sample.style.backgroundSize = 'cover';
-          break;
+          sample.style.background = `url(${typeof ticks[i].value === 'object' ? ticks[i].value.url : ticks[i].value}) no-repeat center center`
+          sample.style.backgroundSize = 'cover'
+          break
       }
 
-      tick.appendChild(sample);
-      label = ticks[i].label;
+      tick.appendChild(sample)
+      label = ticks[i].label
 
       if (this._options.labelRender) {
-        label = this._options.labelRender(label);
+        label = this._options.labelRender(label)
       }
 
-      const tickText = createElement('div', 'jvm-legend-tick-text', label);
+      const tickText = createElement('div', 'jvm-legend-tick-text', label)
 
-      tick.appendChild(tickText);
-      inner.appendChild(tick);
+      tick.appendChild(tickText)
+      inner.appendChild(tick)
     }
   }
 }
 
-export default Legend;
+export default Legend

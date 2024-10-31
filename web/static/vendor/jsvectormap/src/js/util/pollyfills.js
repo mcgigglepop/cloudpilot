@@ -2,17 +2,17 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
 if (!Element.prototype.matches) {
   Element.prototype.matches =
-    Element.prototype.matchesSelector ||
-    Element.prototype.mozMatchesSelector ||
-    Element.prototype.msMatchesSelector ||
-    Element.prototype.oMatchesSelector ||
-    Element.prototype.webkitMatchesSelector ||
-    function (s) {
-      var matches = (this.document || this.ownerDocument).querySelectorAll(s),
-        i = matches.length;
-      while (--i >= 0 && matches.item(i) !== this) {}
-      return i > -1;
-    };
+      Element.prototype.matchesSelector || 
+      Element.prototype.mozMatchesSelector ||
+      Element.prototype.msMatchesSelector ||
+      Element.prototype.oMatchesSelector ||
+      Element.prototype.webkitMatchesSelector ||
+      function(s) {
+        var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+            i = matches.length
+        while (--i >= 0 && matches.item(i) !== this) {}
+        return i > -1
+      }
 }
 
 // Object.assign polyfill
@@ -22,7 +22,7 @@ if (!Object.assign) {
     enumerable: false,
     configurable: true,
     writable: true,
-    value: function (target) {
+    value: function(target) {
       'use strict';
       if (target === undefined || target === null) {
         throw new TypeError('Cannot convert first argument to object');
@@ -37,11 +37,7 @@ if (!Object.assign) {
         nextSource = Object(nextSource);
 
         var keysArray = Object.keys(Object(nextSource));
-        for (
-          var nextIndex = 0, len = keysArray.length;
-          nextIndex < len;
-          nextIndex++
-        ) {
+        for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
           var nextKey = keysArray[nextIndex];
           var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
           if (desc !== undefined && desc.enumerable) {
@@ -50,6 +46,6 @@ if (!Object.assign) {
         }
       }
       return to;
-    },
+    }
   });
 }

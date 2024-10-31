@@ -1,5 +1,4 @@
-.dropzone,
-.dropzone * {
+.dropzone, .dropzone * {
   box-sizing: border-box;
 }
 
@@ -27,15 +26,13 @@
   color: red;
   display: none;
 }
-.dropzone .dz-preview.dz-error .dz-error-message,
-.dropzone .dz-preview.dz-error .dz-error-mark {
+.dropzone .dz-preview.dz-error .dz-error-message, .dropzone .dz-preview.dz-error .dz-error-mark {
   display: block;
 }
 .dropzone .dz-preview.dz-success .dz-success-mark {
   display: block;
 }
-.dropzone .dz-preview .dz-error-mark,
-.dropzone .dz-preview .dz-success-mark {
+.dropzone .dz-preview .dz-error-mark, .dropzone .dz-preview .dz-success-mark {
   position: absolute;
   display: none;
   left: 30px;

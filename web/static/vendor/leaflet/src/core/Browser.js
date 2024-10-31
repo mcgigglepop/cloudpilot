@@ -1,5 +1,5 @@
 import * as Util from './Util';
-import { svgCreate } from '../layer/vector/SVG.Util';
+import {svgCreate} from '../layer/vector/SVG.Util';
 
 /*
  * @namespace Browser
@@ -36,17 +36,12 @@ var webkit = userAgentContains('webkit');
 var android = userAgentContains('android');
 
 // @property android23: Boolean; **Deprecated.** `true` for browsers running on Android 2 or Android 3.
-var android23 =
-  userAgentContains('android 2') || userAgentContains('android 3');
+var android23 = userAgentContains('android 2') || userAgentContains('android 3');
 
 /* See https://stackoverflow.com/a/17961266 for details on detecting stock Android */
 var webkitVer = parseInt(/WebKit\/([0-9]+)|$/.exec(navigator.userAgent)[1], 10); // also matches AppleWebKit
 // @property androidStock: Boolean; **Deprecated.** `true` for the Android stock browser (i.e. not Chrome)
-var androidStock =
-  android &&
-  userAgentContains('Google') &&
-  webkitVer < 537 &&
-  !('AudioNode' in window);
+var androidStock = android && userAgentContains('Google') && webkitVer < 537 && !('AudioNode' in window);
 
 // @property opera: Boolean; `true` for the Opera browser
 var opera = !!window.opera;
@@ -70,21 +65,17 @@ var opera12 = 'OTransition' in style;
 var win = navigator.platform.indexOf('Win') === 0;
 
 // @property ie3d: Boolean; `true` for all Internet Explorer versions supporting CSS transforms.
-var ie3d = ie && 'transition' in style;
+var ie3d = ie && ('transition' in style);
 
 // @property webkit3d: Boolean; `true` for webkit-based browsers supporting CSS transforms.
-var webkit3d =
-  'WebKitCSSMatrix' in window &&
-  'm11' in new window.WebKitCSSMatrix() &&
-  !android23;
+var webkit3d = ('WebKitCSSMatrix' in window) && ('m11' in new window.WebKitCSSMatrix()) && !android23;
 
 // @property gecko3d: Boolean; `true` for gecko-based browsers supporting CSS transforms.
 var gecko3d = 'MozPerspective' in style;
 
 // @property any3d: Boolean
 // `true` for all browsers supporting CSS transforms.
-var any3d =
-  !window.L_DISABLE_3D && (ie3d || webkit3d || gecko3d) && !opera12 && !phantom;
+var any3d = !window.L_DISABLE_3D && (ie3d || webkit3d || gecko3d) && !opera12 && !phantom;
 
 // @property mobile: Boolean; `true` for all browsers running in a mobile device.
 var mobile = typeof orientation !== 'undefined' || userAgentContains('mobile');
@@ -125,104 +116,96 @@ var mobileGecko = mobile && gecko;
 
 // @property retina: Boolean
 // `true` for browsers on a high-resolution "retina" screen or on any screen when browser's display zoom is more than 100%.
-var retina =
-  (window.devicePixelRatio ||
-    window.screen.deviceXDPI / window.screen.logicalXDPI) > 1;
+var retina = (window.devicePixelRatio || (window.screen.deviceXDPI / window.screen.logicalXDPI)) > 1;
 
 // @property passiveEvents: Boolean
 // `true` for browsers that support passive events.
 var passiveEvents = (function () {
-  var supportsPassiveOption = false;
-  try {
-    var opts = Object.defineProperty({}, 'passive', {
-      get: function () {
-        // eslint-disable-line getter-return
-        supportsPassiveOption = true;
-      },
-    });
-    window.addEventListener('testPassiveEventSupport', Util.falseFn, opts);
-    window.removeEventListener('testPassiveEventSupport', Util.falseFn, opts);
-  } catch (e) {
-    // Errors can safely be ignored since this is only a browser support test.
-  }
-  return supportsPassiveOption;
-})();
+	var supportsPassiveOption = false;
+	try {
+		var opts = Object.defineProperty({}, 'passive', {
+			get: function () { // eslint-disable-line getter-return
+				supportsPassiveOption = true;
+			}
+		});
+		window.addEventListener('testPassiveEventSupport', Util.falseFn, opts);
+		window.removeEventListener('testPassiveEventSupport', Util.falseFn, opts);
+	} catch (e) {
+		// Errors can safely be ignored since this is only a browser support test.
+	}
+	return supportsPassiveOption;
+}());
 
 // @property canvas: Boolean
 // `true` when the browser supports [`<canvas>`](https://developer.mozilla.org/docs/Web/API/Canvas_API).
 var canvas = (function () {
-  return !!document.createElement('canvas').getContext;
-})();
+	return !!document.createElement('canvas').getContext;
+}());
 
 // @property svg: Boolean
 // `true` when the browser supports [SVG](https://developer.mozilla.org/docs/Web/SVG).
 var svg = !!(document.createElementNS && svgCreate('svg').createSVGRect);
 
-var inlineSvg =
-  !!svg &&
-  (function () {
-    var div = document.createElement('div');
-    div.innerHTML = '<svg/>';
-    return (
-      (div.firstChild && div.firstChild.namespaceURI) ===
-      'http://www.w3.org/2000/svg'
-    );
-  })();
+var inlineSvg = !!svg && (function () {
+	var div = document.createElement('div');
+	div.innerHTML = '<svg/>';
+	return (div.firstChild && div.firstChild.namespaceURI) === 'http://www.w3.org/2000/svg';
+})();
 
 // @property vml: Boolean
 // `true` if the browser supports [VML](https://en.wikipedia.org/wiki/Vector_Markup_Language).
-var vml =
-  !svg &&
-  (function () {
-    try {
-      var div = document.createElement('div');
-      div.innerHTML = '<v:shape adj="1"/>';
+var vml = !svg && (function () {
+	try {
+		var div = document.createElement('div');
+		div.innerHTML = '<v:shape adj="1"/>';
 
-      var shape = div.firstChild;
-      shape.style.behavior = 'url(#default#VML)';
+		var shape = div.firstChild;
+		shape.style.behavior = 'url(#default#VML)';
 
-      return shape && typeof shape.adj === 'object';
-    } catch (e) {
-      return false;
-    }
-  })();
+		return shape && (typeof shape.adj === 'object');
+
+	} catch (e) {
+		return false;
+	}
+}());
 
 function userAgentContains(str) {
-  return navigator.userAgent.toLowerCase().indexOf(str) >= 0;
+	return navigator.userAgent.toLowerCase().indexOf(str) >= 0;
 }
 
+
 export default {
-  ie: ie,
-  ielt9: ielt9,
-  edge: edge,
-  webkit: webkit,
-  android: android,
-  android23: android23,
-  androidStock: androidStock,
-  opera: opera,
-  chrome: chrome,
-  gecko: gecko,
-  safari: safari,
-  phantom: phantom,
-  opera12: opera12,
-  win: win,
-  ie3d: ie3d,
-  webkit3d: webkit3d,
-  gecko3d: gecko3d,
-  any3d: any3d,
-  mobile: mobile,
-  mobileWebkit: mobileWebkit,
-  mobileWebkit3d: mobileWebkit3d,
-  msPointer: msPointer,
-  pointer: pointer,
-  touch: touch,
-  touchNative: touchNative,
-  mobileOpera: mobileOpera,
-  mobileGecko: mobileGecko,
-  retina: retina,
-  passiveEvents: passiveEvents,
-  canvas: canvas,
-  svg: svg,
-  vml: vml,
-  inlineSvg: inlineSvg,
+	ie: ie,
+	ielt9: ielt9,
+	edge: edge,
+	webkit: webkit,
+	android: android,
+	android23: android23,
+	androidStock: androidStock,
+	opera: opera,
+	chrome: chrome,
+	gecko: gecko,
+	safari: safari,
+	phantom: phantom,
+	opera12: opera12,
+	win: win,
+	ie3d: ie3d,
+	webkit3d: webkit3d,
+	gecko3d: gecko3d,
+	any3d: any3d,
+	mobile: mobile,
+	mobileWebkit: mobileWebkit,
+	mobileWebkit3d: mobileWebkit3d,
+	msPointer: msPointer,
+	pointer: pointer,
+	touch: touch,
+	touchNative: touchNative,
+	mobileOpera: mobileOpera,
+	mobileGecko: mobileGecko,
+	retina: retina,
+	passiveEvents: passiveEvents,
+	canvas: canvas,
+	svg: svg,
+	vml: vml,
+	inlineSvg: inlineSvg
 };

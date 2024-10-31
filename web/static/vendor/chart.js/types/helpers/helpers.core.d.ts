@@ -110,12 +110,7 @@ export function each<T, TA>(
 export function clone<T>(source: T): T;
 
 export interface MergeOptions {
-  merger?: (
-    key: string,
-    target: AnyObject,
-    source: AnyObject,
-    options: AnyObject
-  ) => AnyObject;
+  merger?: (key: string, target: AnyObject, source: AnyObject, options: AnyObject) => AnyObject;
 }
 /**
  * Recursively deep copies `source` properties into `target` with the given `options`.
@@ -127,36 +122,16 @@ export interface MergeOptions {
  * @returns {object} The `target` object.
  */
 export function merge<T>(target: T, source: [], options?: MergeOptions): T;
-export function merge<T, S1>(
-  target: T,
-  source: S1,
-  options?: MergeOptions
-): T & S1;
-export function merge<T, S1>(
-  target: T,
-  source: [S1],
-  options?: MergeOptions
-): T & S1;
-export function merge<T, S1, S2>(
-  target: T,
-  source: [S1, S2],
-  options?: MergeOptions
-): T & S1 & S2;
-export function merge<T, S1, S2, S3>(
-  target: T,
-  source: [S1, S2, S3],
-  options?: MergeOptions
-): T & S1 & S2 & S3;
+export function merge<T, S1>(target: T, source: S1, options?: MergeOptions): T & S1;
+export function merge<T, S1>(target: T, source: [S1], options?: MergeOptions): T & S1;
+export function merge<T, S1, S2>(target: T, source: [S1, S2], options?: MergeOptions): T & S1 & S2;
+export function merge<T, S1, S2, S3>(target: T, source: [S1, S2, S3], options?: MergeOptions): T & S1 & S2 & S3;
 export function merge<T, S1, S2, S3, S4>(
   target: T,
   source: [S1, S2, S3, S4],
   options?: MergeOptions
 ): T & S1 & S2 & S3 & S4;
-export function merge<T>(
-  target: T,
-  source: AnyObject[],
-  options?: MergeOptions
-): AnyObject;
+export function merge<T>(target: T, source: AnyObject[], options?: MergeOptions): AnyObject;
 
 /**
  * Recursively deep copies `source` properties into `target` *only* if not defined in target.
@@ -169,14 +144,8 @@ export function mergeIf<T>(target: T, source: []): T;
 export function mergeIf<T, S1>(target: T, source: S1): T & S1;
 export function mergeIf<T, S1>(target: T, source: [S1]): T & S1;
 export function mergeIf<T, S1, S2>(target: T, source: [S1, S2]): T & S1 & S2;
-export function mergeIf<T, S1, S2, S3>(
-  target: T,
-  source: [S1, S2, S3]
-): T & S1 & S2 & S3;
-export function mergeIf<T, S1, S2, S3, S4>(
-  target: T,
-  source: [S1, S2, S3, S4]
-): T & S1 & S2 & S3 & S4;
+export function mergeIf<T, S1, S2, S3>(target: T, source: [S1, S2, S3]): T & S1 & S2 & S3;
+export function mergeIf<T, S1, S2, S3, S4>(target: T, source: [S1, S2, S3, S4]): T & S1 & S2 & S3 & S4;
 export function mergeIf<T>(target: T, source: AnyObject[]): AnyObject;
 
 export function resolveObjectKey(obj: AnyObject, key: string): AnyObject;

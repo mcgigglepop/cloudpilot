@@ -1,8 +1,4 @@
-export function fontString(
-  pixelSize: number,
-  fontStyle: string,
-  fontFamily: string
-): string;
+export function fontString(pixelSize: number, fontStyle: string, fontFamily: string): string;
 
 /**
  * Request animation polyfill
@@ -16,11 +12,7 @@ export function requestAnimFrame(cb: () => void): void;
  * @param {*} thisArg
  * @param {function} [updateFn]
  */
-export function throttled(
-  fn: (...args: unknown[]) => void,
-  thisArg: unknown,
-  updateFn?: (...args: unknown[]) => unknown[]
-): (...args: unknown[]) => void;
+export function throttled(fn: (...args: unknown[]) => void, thisArg: unknown, updateFn?: (...args: unknown[]) => unknown[]): (...args: unknown[]) => void;
 
 /**
  * Debounces calling `fn` for `delay` ms

@@ -1,11 +1,9 @@
-import HSAbstractObserver from './abstract';
+import HSAbstractObserver from "./abstract";
 
 export default class HSHeaderFloatingObserver extends HSAbstractObserver {
   constructor(element) {
     super(element);
-    this.dataSettings = this.element.hasAttribute('data-hs-header-options')
-      ? JSON.parse(this.element.getAttribute('data-hs-header-options'))
-      : {};
+    this.dataSettings = this.element.hasAttribute('data-hs-header-options') ? JSON.parse(this.element.getAttribute('data-hs-header-options')) : {};
   }
 
   init() {
@@ -35,20 +33,16 @@ export default class HSHeaderFloatingObserver extends HSAbstractObserver {
   }
 
   changeState() {
-    this.element.classList.add('navbar-scrolled');
-    this.element.classList.add(this.dataSettings.fixMomentClasses);
+    this.element.classList.add('navbar-scrolled')
+    this.element.classList.add(this.dataSettings.fixMomentClasses)
     this.element.classList.remove(this.dataSettings.fixMomentExclude);
 
     if (this.sections.length) {
-      this.sections.forEach(($section) => {
-        const dataSettings = $section.hasAttribute(
-          'data-hs-navbar-item-options'
-        )
-          ? JSON.parse($section.getAttribute('data-hs-navbar-item-options'))
-          : {};
+      this.sections.forEach($section => {
+        const dataSettings = $section.hasAttribute('data-hs-navbar-item-options') ? JSON.parse($section.getAttribute('data-hs-navbar-item-options')) : {};
 
-        $section.classList.add(dataSettings.fixMomentClasses);
-        $section.classList.remove(dataSettings.fixMomentExclude);
+        $section.classList.add(dataSettings.fixMomentClasses)
+        $section.classList.remove(dataSettings.fixMomentExclude)
       });
     }
 
@@ -58,20 +52,16 @@ export default class HSHeaderFloatingObserver extends HSAbstractObserver {
   }
 
   toDefaultState() {
-    this.element.classList.remove('navbar-scrolled');
-    this.element.classList.remove(this.dataSettings.fixMomentClasses);
+    this.element.classList.remove('navbar-scrolled')
+    this.element.classList.remove(this.dataSettings.fixMomentClasses)
     this.element.classList.add(this.dataSettings.fixMomentExclude);
 
     if (this.sections.length) {
-      this.sections.forEach(($section) => {
-        const dataSettings = $section.hasAttribute(
-          'data-hs-navbar-item-options'
-        )
-          ? JSON.parse($section.getAttribute('data-hs-navbar-item-options'))
-          : {};
+      this.sections.forEach($section => {
+        const dataSettings = $section.hasAttribute('data-hs-navbar-item-options') ? JSON.parse($section.getAttribute('data-hs-navbar-item-options')) : {};
 
-        $section.classList.add(dataSettings.fixMomentClasses);
-        $section.classList.remove(dataSettings.fixMomentExclude);
+        $section.classList.add(dataSettings.fixMomentClasses)
+        $section.classList.remove(dataSettings.fixMomentExclude)
       });
     }
 

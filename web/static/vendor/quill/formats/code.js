@@ -4,9 +4,11 @@ import Block from '../blots/block';
 import Inline from '../blots/inline';
 import TextBlot from '../blots/text';
 
+
 class Code extends Inline {}
 Code.blotName = 'code';
 Code.tagName = 'CODE';
+
 
 class CodeBlock extends Block {
   static create(value) {
@@ -21,8 +23,7 @@ class CodeBlock extends Block {
 
   delta() {
     let text = this.domNode.textContent;
-    if (text.endsWith('\n')) {
-      // Should always be true
+    if (text.endsWith('\n')) {      // Should always be true
       text = text.slice(0, -1);
     }
     return text.split('\n').reduce((delta, frag) => {
@@ -32,7 +33,7 @@ class CodeBlock extends Block {
 
   format(name, value) {
     if (name === this.statics.blotName && value) return;
-    let [text] = this.descendant(TextBlot, this.length() - 1);
+    let [text, ] = this.descendant(TextBlot, this.length() - 1);
     if (text != null) {
       text.deleteAt(text.length() - 1, 1);
     }
@@ -41,11 +42,8 @@ class CodeBlock extends Block {
 
   formatAt(index, length, name, value) {
     if (length === 0) return;
-    if (
-      Parchment.query(name, Parchment.Scope.BLOCK) == null ||
-      (name === this.statics.blotName &&
-        value === this.statics.formats(this.domNode))
-    ) {
+    if (Parchment.query(name, Parchment.Scope.BLOCK) == null ||
+        (name === this.statics.blotName && value === this.statics.formats(this.domNode))) {
       return;
     }
     let nextNewline = this.newlineIndex(index);
@@ -56,12 +54,7 @@ class CodeBlock extends Block {
     let next = blot.next;
     blot.format(name, value);
     if (next instanceof CodeBlock) {
-      next.formatAt(
-        0,
-        index - prevNewline + length - isolateLength,
-        name,
-        value
-      );
+      next.formatAt(0, index - prevNewline + length - isolateLength, name, value);
     }
   }
 
@@ -94,12 +87,9 @@ class CodeBlock extends Block {
     }
     super.optimize(context);
     let next = this.next;
-    if (
-      next != null &&
-      next.prev === this &&
-      next.statics.blotName === this.statics.blotName &&
-      this.statics.formats(this.domNode) === next.statics.formats(next.domNode)
-    ) {
+    if (next != null && next.prev === this &&
+        next.statics.blotName === this.statics.blotName &&
+        this.statics.formats(this.domNode) === next.statics.formats(next.domNode)) {
       next.optimize(context);
       next.moveChildren(this);
       next.remove();
@@ -108,7 +98,7 @@ class CodeBlock extends Block {
 
   replace(target) {
     super.replace(target);
-    [].slice.call(this.domNode.querySelectorAll('*')).forEach(function (node) {
+    [].slice.call(this.domNode.querySelectorAll('*')).forEach(function(node) {
       let blot = Parchment.find(node);
       if (blot == null) {
         node.parentNode.removeChild(node);
@@ -123,5 +113,6 @@ class CodeBlock extends Block {
 CodeBlock.blotName = 'code-block';
 CodeBlock.tagName = 'PRE';
 CodeBlock.TAB = '  ';
+
 
 export { Code, CodeBlock as default };

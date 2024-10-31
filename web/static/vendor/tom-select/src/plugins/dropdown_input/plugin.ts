@@ -18,69 +18,75 @@ import * as constants from '../../constants';
 import { getDom, addClasses } from '../../vanilla';
 import { addEvent, preventDefault } from '../../utils';
 
-export default function (this: TomSelect) {
-  const self = this;
 
-  self.settings.shouldOpen = true; // make sure the input is shown even if there are no options to display in the dropdown
+export default function(this:TomSelect) {
+	const self = this;
 
-  self.hook('before', 'setup', () => {
-    self.focus_node = self.control;
+	self.settings.shouldOpen = true; // make sure the input is shown even if there are no options to display in the dropdown
 
-    addClasses(self.control_input, 'dropdown-input');
+	self.hook('before','setup',()=>{
+		self.focus_node		= self.control;
 
-    const div = getDom('<div class="dropdown-input-wrap">');
-    div.append(self.control_input);
-    self.dropdown.insertBefore(div, self.dropdown.firstChild);
+		addClasses( self.control_input, 'dropdown-input');
 
-    // set a placeholder in the select control
-    const placeholder = getDom(
-      '<input class="items-placeholder" tabindex="-1" />'
-    ) as HTMLInputElement;
-    placeholder.placeholder = self.settings.placeholder || '';
-    self.control.append(placeholder);
-  });
+	 	const div = getDom('<div class="dropdown-input-wrap">');
+		div.append(self.control_input);
+		self.dropdown.insertBefore(div, self.dropdown.firstChild);
 
-  self.on('initialize', () => {
-    // set tabIndex on control to -1, otherwise [shift+tab] will put focus right back on control_input
-    self.control_input.addEventListener('keydown', (evt: KeyboardEvent) => {
-      //addEvent(self.control_input,'keydown' as const,(evt:KeyboardEvent) =>{
-      switch (evt.keyCode) {
-        case constants.KEY_ESC:
-          if (self.isOpen) {
-            preventDefault(evt, true);
-            self.close();
-          }
-          self.clearActiveItems();
-          return;
-        case constants.KEY_TAB:
-          self.focus_node.tabIndex = -1;
-          break;
-      }
-      return self.onKeyDown.call(self, evt);
-    });
+		// set a placeholder in the select control
+		const placeholder = getDom('<input class="items-placeholder" tabindex="-1" />') as HTMLInputElement;
+		placeholder.placeholder = self.settings.placeholder ||'';
+		self.control.append(placeholder);
 
-    self.on('blur', () => {
-      self.focus_node.tabIndex = self.isDisabled ? -1 : self.tabIndex;
-    });
+	});
 
-    // give the control_input focus when the dropdown is open
-    self.on('dropdown_open', () => {
-      self.control_input.focus();
-    });
 
-    // prevent onBlur from closing when focus is on the control_input
-    const orig_onBlur = self.onBlur;
-    self.hook('instead', 'onBlur', (evt?: FocusEvent) => {
-      if (evt && evt.relatedTarget == self.control_input) return;
-      return orig_onBlur.call(self);
-    });
+	self.on('initialize',()=>{
 
-    addEvent(self.control_input, 'blur', () => self.onBlur());
+		// set tabIndex on control to -1, otherwise [shift+tab] will put focus right back on control_input
+		self.control_input.addEventListener('keydown',(evt:KeyboardEvent) =>{
+		//addEvent(self.control_input,'keydown' as const,(evt:KeyboardEvent) =>{
+			switch( evt.keyCode ){
+				case constants.KEY_ESC:
+					if (self.isOpen) {
+						preventDefault(evt,true);
+						self.close();
+					}
+					self.clearActiveItems();
+				return;
+				case constants.KEY_TAB:
+					self.focus_node.tabIndex = -1;
+				break;
+			}
+			return self.onKeyDown.call(self,evt);
+		});
 
-    // return focus to control to allow further keyboard input
-    self.hook('before', 'close', () => {
-      if (!self.isOpen) return;
-      self.focus_node.focus({ preventScroll: true });
-    });
-  });
-}
+		self.on('blur',()=>{
+			self.focus_node.tabIndex = self.isDisabled ? -1 : self.tabIndex;
+		});
+
+
+		// give the control_input focus when the dropdown is open
+		self.on('dropdown_open',() =>{
+			self.control_input.focus();
+		});
+
+		// prevent onBlur from closing when focus is on the control_input
+		const orig_onBlur = self.onBlur;
+		self.hook('instead','onBlur',(evt?:FocusEvent)=>{
+			if( evt && evt.relatedTarget == self.control_input ) return;
+			return orig_onBlur.call(self);
+		});
+
+		addEvent(self.control_input,'blur', () => self.onBlur() );
+
+		// return focus to control to allow further keyboard input
+		self.hook('before','close',() =>{
+
+			if( !self.isOpen ) return;
+			self.focus_node.focus({preventScroll: true});
+		});
+
+	});
+
+};

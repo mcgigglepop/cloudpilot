@@ -1,46 +1,19 @@
 /*!
- * Bootstrap scrollspy.js v5.2.2 (https://getbootstrap.com/)
- * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- */
+  * Bootstrap scrollspy.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined'
-    ? (module.exports = factory(
-        require('./util/index'),
-        require('./dom/event-handler'),
-        require('./dom/selector-engine'),
-        require('./base-component')
-      ))
-    : typeof define === 'function' && define.amd
-      ? define(
-          [
-            './util/index',
-            './dom/event-handler',
-            './dom/selector-engine',
-            './base-component',
-          ],
-          factory
-        )
-      : ((global =
-          typeof globalThis !== 'undefined' ? globalThis : global || self),
-        (global.Scrollspy = factory(
-          global.Index,
-          global.EventHandler,
-          global.SelectorEngine,
-          global.BaseComponent
-        )));
-})(this, function (index, EventHandler, SelectorEngine, BaseComponent) {
-  'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('./util/index'), require('./dom/event-handler'), require('./dom/selector-engine'), require('./base-component')) :
+  typeof define === 'function' && define.amd ? define(['./util/index', './dom/event-handler', './dom/selector-engine', './base-component'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Scrollspy = factory(global.Index, global.EventHandler, global.SelectorEngine, global.BaseComponent));
+})(this, (function (index, EventHandler, SelectorEngine, BaseComponent) { 'use strict';
 
-  const _interopDefaultLegacy = (e) =>
-    e && typeof e === 'object' && 'default' in e ? e : { default: e };
+  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
 
-  const EventHandler__default =
-    /*#__PURE__*/ _interopDefaultLegacy(EventHandler);
-  const SelectorEngine__default =
-    /*#__PURE__*/ _interopDefaultLegacy(SelectorEngine);
-  const BaseComponent__default =
-    /*#__PURE__*/ _interopDefaultLegacy(BaseComponent);
+  const EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
+  const SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
+  const BaseComponent__default = /*#__PURE__*/_interopDefaultLegacy(BaseComponent);
 
   /**
    * --------------------------------------------------------------------------
@@ -76,7 +49,7 @@
     rootMargin: '0px 0px -25%',
     smoothScroll: false,
     target: null,
-    threshold: [0.1, 0.5, 1],
+    threshold: [0.1, 0.5, 1]
   };
   const DefaultType = {
     offset: '(number|null)',
@@ -84,7 +57,7 @@
     rootMargin: 'string',
     smoothScroll: 'boolean',
     target: 'element',
-    threshold: 'array',
+    threshold: 'array'
   };
   /**
    * Class definition
@@ -96,18 +69,16 @@
 
       this._targetLinks = new Map();
       this._observableSections = new Map();
-      this._rootElement =
-        getComputedStyle(this._element).overflowY === 'visible'
-          ? null
-          : this._element;
+      this._rootElement = getComputedStyle(this._element).overflowY === 'visible' ? null : this._element;
       this._activeTarget = null;
       this._observer = null;
       this._previousScrollData = {
         visibleEntryTop: 0,
-        parentScrollTop: 0,
+        parentScrollTop: 0
       };
       this.refresh(); // initialize
     } // Getters
+
 
     static get Default() {
       return Default;
@@ -120,6 +91,7 @@
     static get NAME() {
       return NAME;
     } // Public
+
 
     refresh() {
       this._initializeTargetsAndObservables();
@@ -143,18 +115,15 @@
       super.dispose();
     } // Private
 
+
     _configAfterMerge(config) {
       // TODO: on v6 target should be given explicitly & remove the {target: 'ss-target'} case
       config.target = index.getElement(config.target) || document.body; // TODO: v6 Only for backwards compatibility reasons. Use rootMargin only
 
-      config.rootMargin = config.offset
-        ? `${config.offset}px 0px -30%`
-        : config.rootMargin;
+      config.rootMargin = config.offset ? `${config.offset}px 0px -30%` : config.rootMargin;
 
       if (typeof config.threshold === 'string') {
-        config.threshold = config.threshold
-          .split(',')
-          .map((value) => Number.parseFloat(value));
+        config.threshold = config.threshold.split(',').map(value => Number.parseFloat(value));
       }
 
       return config;
@@ -165,62 +134,51 @@
         return;
       } // unregister any previous listeners
 
+
       EventHandler__default.default.off(this._config.target, EVENT_CLICK);
-      EventHandler__default.default.on(
-        this._config.target,
-        EVENT_CLICK,
-        SELECTOR_TARGET_LINKS,
-        (event) => {
-          const observableSection = this._observableSections.get(
-            event.target.hash
-          );
+      EventHandler__default.default.on(this._config.target, EVENT_CLICK, SELECTOR_TARGET_LINKS, event => {
+        const observableSection = this._observableSections.get(event.target.hash);
 
-          if (observableSection) {
-            event.preventDefault();
-            const root = this._rootElement || window;
-            const height =
-              observableSection.offsetTop - this._element.offsetTop;
+        if (observableSection) {
+          event.preventDefault();
+          const root = this._rootElement || window;
+          const height = observableSection.offsetTop - this._element.offsetTop;
 
-            if (root.scrollTo) {
-              root.scrollTo({
-                top: height,
-                behavior: 'smooth',
-              });
-              return;
-            } // Chrome 60 doesn't support `scrollTo`
+          if (root.scrollTo) {
+            root.scrollTo({
+              top: height,
+              behavior: 'smooth'
+            });
+            return;
+          } // Chrome 60 doesn't support `scrollTo`
 
-            root.scrollTop = height;
-          }
+
+          root.scrollTop = height;
         }
-      );
+      });
     }
 
     _getNewObserver() {
       const options = {
         root: this._rootElement,
         threshold: this._config.threshold,
-        rootMargin: this._config.rootMargin,
+        rootMargin: this._config.rootMargin
       };
-      return new IntersectionObserver(
-        (entries) => this._observerCallback(entries),
-        options
-      );
+      return new IntersectionObserver(entries => this._observerCallback(entries), options);
     } // The logic of selection
 
-    _observerCallback(entries) {
-      const targetElement = (entry) =>
-        this._targetLinks.get(`#${entry.target.id}`);
 
-      const activate = (entry) => {
+    _observerCallback(entries) {
+      const targetElement = entry => this._targetLinks.get(`#${entry.target.id}`);
+
+      const activate = entry => {
         this._previousScrollData.visibleEntryTop = entry.target.offsetTop;
 
         this._process(targetElement(entry));
       };
 
-      const parentScrollTop = (this._rootElement || document.documentElement)
-        .scrollTop;
-      const userScrollsDown =
-        parentScrollTop >= this._previousScrollData.parentScrollTop;
+      const parentScrollTop = (this._rootElement || document.documentElement).scrollTop;
+      const userScrollsDown = parentScrollTop >= this._previousScrollData.parentScrollTop;
       this._previousScrollData.parentScrollTop = parentScrollTop;
 
       for (const entry of entries) {
@@ -232,8 +190,7 @@
           continue;
         }
 
-        const entryIsLowerThanPrevious =
-          entry.target.offsetTop >= this._previousScrollData.visibleEntryTop; // if we are scrolling down, pick the bigger offsetTop
+        const entryIsLowerThanPrevious = entry.target.offsetTop >= this._previousScrollData.visibleEntryTop; // if we are scrolling down, pick the bigger offsetTop
 
         if (userScrollsDown && entryIsLowerThanPrevious) {
           activate(entry); // if parent isn't scrolled, let's keep the first visible item, breaking the iteration
@@ -245,6 +202,7 @@
           continue;
         } // if we are scrolling up, pick the smallest offsetTop
 
+
         if (!userScrollsDown && !entryIsLowerThanPrevious) {
           activate(entry);
         }
@@ -254,10 +212,7 @@
     _initializeTargetsAndObservables() {
       this._targetLinks = new Map();
       this._observableSections = new Map();
-      const targetLinks = SelectorEngine__default.default.find(
-        SELECTOR_TARGET_LINKS,
-        this._config.target
-      );
+      const targetLinks = SelectorEngine__default.default.find(SELECTOR_TARGET_LINKS, this._config.target);
 
       for (const anchor of targetLinks) {
         // ensure that the anchor has an id and is not disabled
@@ -265,10 +220,7 @@
           continue;
         }
 
-        const observableSection = SelectorEngine__default.default.findOne(
-          anchor.hash,
-          this._element
-        ); // ensure that the observableSection exists & is visible
+        const observableSection = SelectorEngine__default.default.findOne(anchor.hash, this._element); // ensure that the observableSection exists & is visible
 
         if (index.isVisible(observableSection)) {
           this._targetLinks.set(anchor.hash, anchor);
@@ -291,29 +243,21 @@
       this._activateParents(target);
 
       EventHandler__default.default.trigger(this._element, EVENT_ACTIVATE, {
-        relatedTarget: target,
+        relatedTarget: target
       });
     }
 
     _activateParents(target) {
       // Activate dropdown parents
       if (target.classList.contains(CLASS_NAME_DROPDOWN_ITEM)) {
-        SelectorEngine__default.default
-          .findOne(SELECTOR_DROPDOWN_TOGGLE, target.closest(SELECTOR_DROPDOWN))
-          .classList.add(CLASS_NAME_ACTIVE);
+        SelectorEngine__default.default.findOne(SELECTOR_DROPDOWN_TOGGLE, target.closest(SELECTOR_DROPDOWN)).classList.add(CLASS_NAME_ACTIVE);
         return;
       }
 
-      for (const listGroup of SelectorEngine__default.default.parents(
-        target,
-        SELECTOR_NAV_LIST_GROUP
-      )) {
+      for (const listGroup of SelectorEngine__default.default.parents(target, SELECTOR_NAV_LIST_GROUP)) {
         // Set triggered links parents as active
         // With both <ul> and <nav> markup a parent is the previous sibling of any nav ancestor
-        for (const item of SelectorEngine__default.default.prev(
-          listGroup,
-          SELECTOR_LINK_ITEMS
-        )) {
+        for (const item of SelectorEngine__default.default.prev(listGroup, SELECTOR_LINK_ITEMS)) {
           item.classList.add(CLASS_NAME_ACTIVE);
         }
       }
@@ -321,15 +265,13 @@
 
     _clearActiveClass(parent) {
       parent.classList.remove(CLASS_NAME_ACTIVE);
-      const activeNodes = SelectorEngine__default.default.find(
-        `${SELECTOR_TARGET_LINKS}.${CLASS_NAME_ACTIVE}`,
-        parent
-      );
+      const activeNodes = SelectorEngine__default.default.find(`${SELECTOR_TARGET_LINKS}.${CLASS_NAME_ACTIVE}`, parent);
 
       for (const node of activeNodes) {
         node.classList.remove(CLASS_NAME_ACTIVE);
       }
     } // Static
+
 
     static jQueryInterface(config) {
       return this.each(function () {
@@ -339,21 +281,19 @@
           return;
         }
 
-        if (
-          data[config] === undefined ||
-          config.startsWith('_') ||
-          config === 'constructor'
-        ) {
+        if (data[config] === undefined || config.startsWith('_') || config === 'constructor') {
           throw new TypeError(`No method named "${config}"`);
         }
 
         data[config]();
       });
     }
+
   }
   /**
    * Data API implementation
    */
+
 
   EventHandler__default.default.on(window, EVENT_LOAD_DATA_API, () => {
     for (const spy of SelectorEngine__default.default.find(SELECTOR_DATA_SPY)) {
@@ -367,5 +307,6 @@
   index.defineJQueryPlugin(ScrollSpy);
 
   return ScrollSpy;
-});
+
+}));
 //# sourceMappingURL=scrollspy.js.map

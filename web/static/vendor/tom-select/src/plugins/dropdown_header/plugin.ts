@@ -18,52 +18,40 @@ import { getDom } from '../../vanilla';
 import { preventDefault } from '../../utils';
 import { DHOptions } from './types';
 
-export default function (this: TomSelect, userOptions: DHOptions) {
-  const self = this;
+export default function(this:TomSelect, userOptions:DHOptions) {
+	const self = this;
 
-  const options = Object.assign(
-    {
-      title: 'Untitled',
-      headerClass: 'dropdown-header',
-      titleRowClass: 'dropdown-header-title',
-      labelClass: 'dropdown-header-label',
-      closeClass: 'dropdown-header-close',
+	const options = Object.assign({
+		title         : 'Untitled',
+		headerClass   : 'dropdown-header',
+		titleRowClass : 'dropdown-header-title',
+		labelClass    : 'dropdown-header-label',
+		closeClass    : 'dropdown-header-close',
 
-      html: (data: DHOptions) => {
-        return (
-          '<div class="' +
-          data.headerClass +
-          '">' +
-          '<div class="' +
-          data.titleRowClass +
-          '">' +
-          '<span class="' +
-          data.labelClass +
-          '">' +
-          data.title +
-          '</span>' +
-          '<a class="' +
-          data.closeClass +
-          '">&times;</a>' +
-          '</div>' +
-          '</div>'
-        );
-      },
-    },
-    userOptions
-  );
+		html: (data:DHOptions) => {
+			return (
+				'<div class="' + data.headerClass + '">' +
+					'<div class="' + data.titleRowClass + '">' +
+						'<span class="' + data.labelClass + '">' + data.title + '</span>' +
+						'<a class="' + data.closeClass + '">&times;</a>' +
+					'</div>' +
+				'</div>'
+			);
+		}
+	}, userOptions);
 
-  self.on('initialize', () => {
-    var header = getDom(options.html(options));
+	self.on('initialize',()=>{
+		var header = getDom(options.html(options));
 
-    var close_link = header.querySelector('.' + options.closeClass);
-    if (close_link) {
-      close_link.addEventListener('click', (evt) => {
-        preventDefault(evt, true);
-        self.close();
-      });
-    }
+		var close_link = header.querySelector('.'+options.closeClass);
+		if( close_link ){
+			close_link.addEventListener('click',(evt)=>{
+				preventDefault(evt,true);
+				self.close();
+			});
+		}
 
-    self.dropdown.insertBefore(header, self.dropdown.firstChild);
-  });
-}
+		self.dropdown.insertBefore(header, self.dropdown.firstChild);
+	});
+
+};

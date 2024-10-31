@@ -4,10 +4,7 @@ import DropdownIcon from '../assets/icons/dropdown.svg';
 let optionsCounter = 0;
 
 function toggleAriaAttribute(element, attribute) {
-  element.setAttribute(
-    attribute,
-    !(element.getAttribute(attribute) === 'true')
-  );
+  element.setAttribute(attribute, !(element.getAttribute(attribute) === 'true'));
 }
 
 class Picker {
@@ -22,7 +19,7 @@ class Picker {
       this.togglePicker();
     });
     this.label.addEventListener('keydown', (event) => {
-      switch (event.keyCode) {
+      switch(event.keyCode) {
         // Allows the "Enter" key to open the picker
         case Keyboard.keys.ENTER:
           this.togglePicker();
@@ -62,7 +59,7 @@ class Picker {
       this.selectItem(item, true);
     });
     item.addEventListener('keydown', (event) => {
-      switch (event.keyCode) {
+      switch(event.keyCode) {
         // Allows the "Enter" key to select an item
         case Keyboard.keys.ENTER:
           this.selectItem(item, true);
@@ -162,8 +159,7 @@ class Picker {
     if (trigger) {
       if (typeof Event === 'function') {
         this.select.dispatchEvent(new Event('change'));
-      } else if (typeof Event === 'object') {
-        // IE11
+      } else if (typeof Event === 'object') {     // IE11
         let event = document.createEvent('Event');
         event.initEvent('change', true, true);
         this.select.dispatchEvent(event);
@@ -175,20 +171,16 @@ class Picker {
   update() {
     let option;
     if (this.select.selectedIndex > -1) {
-      let item =
-        this.container.querySelector('.ql-picker-options').children[
-          this.select.selectedIndex
-        ];
+      let item = this.container.querySelector('.ql-picker-options').children[this.select.selectedIndex];
       option = this.select.options[this.select.selectedIndex];
       this.selectItem(item);
     } else {
       this.selectItem(null);
     }
-    let isActive =
-      option != null &&
-      option !== this.select.querySelector('option[selected]');
+    let isActive = option != null && option !== this.select.querySelector('option[selected]');
     this.label.classList.toggle('ql-active', isActive);
   }
 }
+
 
 export default Picker;

@@ -1,133 +1,101 @@
-QUnit.module('migrate');
 
-QUnit.test('jQuery.migrateVersion', function (assert) {
-  assert.expect(1);
+QUnit.module( "migrate" );
 
-  assert.ok(
-    /^\d+\.\d+\.[\w\-]+/.test(jQuery.migrateVersion),
-    'Version property'
-  );
-});
+QUnit.test( "jQuery.migrateVersion", function( assert ) {
+	assert.expect( 1 );
 
-QUnit.test('compareVersions and jQueryVersionSince', function (assert) {
-  assert.expect(9);
+	assert.ok( /^\d+\.\d+\.[\w\-]+/.test( jQuery.migrateVersion ), "Version property" );
+} );
 
-  assert.equal(compareVersions('3.0.1', '3.0.0'), 1, 'greater than 1');
-  assert.equal(compareVersions('3.0.1', '2.10.0'), 1, 'greater than 2');
-  assert.equal(compareVersions('3.2.1', '3.3.0'), -1, 'less than 1');
-  assert.equal(compareVersions('3.2.1', '4.1.3'), -1, 'less than 2');
-  assert.equal(compareVersions('3.2.2', '3.11.1'), -1, 'less than 3');
-  assert.equal(compareVersions('3.4.1', '3.4.1'), 0, 'equal');
+QUnit.test( "compareVersions and jQueryVersionSince", function( assert ) {
+	assert.expect( 9 );
 
-  // Test against live jQuery version with suitably generous comparisons
-  assert.equal(jQueryVersionSince('1.4.2'), true, 'since - past version');
-  assert.equal(jQueryVersionSince('8.0.3'), false, 'since - future version');
-  assert.equal(jQueryVersionSince(jQuery.fn.jquery), true, 'since - equal');
-});
+	assert.equal( compareVersions( "3.0.1", "3.0.0" ), 1, "greater than 1" );
+	assert.equal( compareVersions( "3.0.1", "2.10.0" ), 1, "greater than 2" );
+	assert.equal( compareVersions( "3.2.1", "3.3.0" ), -1, "less than 1" );
+	assert.equal( compareVersions( "3.2.1", "4.1.3" ), -1, "less than 2" );
+	assert.equal( compareVersions( "3.2.2", "3.11.1" ), -1, "less than 3" );
+	assert.equal( compareVersions( "3.4.1", "3.4.1" ), 0, "equal" );
 
-QUnit.test('jQuery.migrateDeduplicateWarnings', function (assert) {
-  assert.expect(3);
 
-  var origValue = jQuery.migrateDeduplicateWarnings;
-  assert.strictEqual(origValue, true, 'true by default');
+	// Test against live jQuery version with suitably generous comparisons
+	assert.equal( jQueryVersionSince( "1.4.2" ), true, "since - past version" );
+	assert.equal( jQueryVersionSince( "8.0.3" ), false, "since - future version" );
+	assert.equal( jQueryVersionSince( jQuery.fn.jquery ), true, "since - equal" );
+} );
 
-  jQuery.migrateDeduplicateWarnings = true;
-  expectWarning(
-    assert,
-    'jQuery.migrateDeduplicateWarnings === true',
-    1,
-    function () {
-      jQuery('#');
-      jQuery('#');
-    }
-  );
+QUnit.test( "jQuery.migrateDeduplicateWarnings", function( assert ) {
+	assert.expect( 3 );
 
-  jQuery.migrateDeduplicateWarnings = false;
-  expectWarning(
-    assert,
-    'jQuery.migrateDeduplicateWarnings === false',
-    2,
-    function () {
-      jQuery('#');
-      jQuery('#');
-    }
-  );
+	var origValue = jQuery.migrateDeduplicateWarnings;
+	assert.strictEqual( origValue, true, "true by default" );
 
-  jQuery.migrateDeduplicateWarnings = origValue;
-});
+	jQuery.migrateDeduplicateWarnings = true;
+	expectWarning( assert, "jQuery.migrateDeduplicateWarnings === true", 1, function() {
+		jQuery( "#" );
+		jQuery( "#" );
+	} );
 
-QUnit.test('disabling/enabling patches', function (assert) {
-  assert.expect(14);
+	jQuery.migrateDeduplicateWarnings = false;
+	expectWarning( assert, "jQuery.migrateDeduplicateWarnings === false", 2, function() {
+		jQuery( "#" );
+		jQuery( "#" );
+	} );
 
-  var elem = jQuery('<div></div>');
+	jQuery.migrateDeduplicateWarnings = origValue;
+} );
 
-  elem.appendTo('#qunit-fixture');
+QUnit.test( "disabling/enabling patches", function( assert ) {
+	assert.expect( 14 );
 
-  // We can't register new warnings in tests so we need to use
-  // existing warnings. If the ones we rely on here get removed,
-  // replace them with ones that still exist.
+	var elem = jQuery( "<div></div>" );
 
-  assert.strictEqual(
-    jQuery.migrateIsPatchEnabled('size'),
-    true,
-    'patch enabled by default (size)'
-  );
-  assert.strictEqual(
-    jQuery.migrateIsPatchEnabled('parseJSON'),
-    true,
-    'patch enabled by default (parseJSON)'
-  );
-  assert.strictEqual(
-    jQuery.migrateIsPatchEnabled('toggleClass-bool'),
-    true,
-    'patch enabled by default (toggleClass-bool)'
-  );
+	elem.appendTo( "#qunit-fixture" );
 
-  expectWarning(assert, 'size (default)', function () {
-    jQuery().size();
-  });
-  expectWarning(assert, 'parseJSON (default)', function () {
-    jQuery.parseJSON('{}');
-  });
-  expectWarning(assert, 'toggleClass-bool (default)', function () {
-    elem.toggleClass();
-  });
+	// We can't register new warnings in tests so we need to use
+	// existing warnings. If the ones we rely on here get removed,
+	// replace them with ones that still exist.
 
-  jQuery.migrateDisablePatches('size', 'parseJSON');
-  assert.strictEqual(
-    jQuery.migrateIsPatchEnabled('size'),
-    false,
-    'patch disabled (size)'
-  );
-  assert.strictEqual(
-    jQuery.migrateIsPatchEnabled('parseJSON'),
-    false,
-    'patch disabled (parseJSON)'
-  );
-  assert.strictEqual(
-    jQuery.migrateIsPatchEnabled('toggleClass-bool'),
-    true,
-    'patch still enabled (toggleClass)'
-  );
+	assert.strictEqual( jQuery.migrateIsPatchEnabled( "size" ),
+		true, "patch enabled by default (size)" );
+	assert.strictEqual( jQuery.migrateIsPatchEnabled( "parseJSON" ),
+		true, "patch enabled by default (parseJSON)" );
+	assert.strictEqual( jQuery.migrateIsPatchEnabled( "toggleClass-bool" ),
+		true, "patch enabled by default (toggleClass-bool)" );
 
-  expectNoWarning(assert, 'size (disabled)', function () {
-    jQuery().size();
-  });
-  expectNoWarning(assert, 'parseJSON (disabled)', function () {
-    jQuery.parseJSON('{}');
-  });
-  expectWarning(assert, 'toggleClass-bool (still enabled)', function () {
-    elem.toggleClass();
-  });
+	expectWarning( assert, "size (default)", function() {
+		jQuery().size();
+	} );
+	expectWarning( assert, "parseJSON (default)", function() {
+		jQuery.parseJSON( "{}" );
+	} );
+	expectWarning( assert, "toggleClass-bool (default)", function() {
+		elem.toggleClass();
+	} );
 
-  jQuery.migrateDisablePatches('toggleClass-bool');
-  assert.strictEqual(
-    jQuery.migrateIsPatchEnabled('toggleClass-bool'),
-    false,
-    'patch disabled (toggleClass)'
-  );
+	jQuery.migrateDisablePatches( "size", "parseJSON" );
+	assert.strictEqual( jQuery.migrateIsPatchEnabled( "size" ),
+		false, "patch disabled (size)" );
+	assert.strictEqual( jQuery.migrateIsPatchEnabled( "parseJSON" ),
+		false, "patch disabled (parseJSON)" );
+	assert.strictEqual( jQuery.migrateIsPatchEnabled( "toggleClass-bool" ),
+		true, "patch still enabled (toggleClass)" );
 
-  expectNoWarning(assert, 'toggleClass-bool (disabled)', function () {
-    elem.toggleClass();
-  });
-});
+	expectNoWarning( assert, "size (disabled)", function() {
+		jQuery().size();
+	} );
+	expectNoWarning( assert, "parseJSON (disabled)", function() {
+		jQuery.parseJSON( "{}" );
+	} );
+	expectWarning( assert, "toggleClass-bool (still enabled)", function() {
+		elem.toggleClass();
+	} );
+
+	jQuery.migrateDisablePatches( "toggleClass-bool" );
+	assert.strictEqual( jQuery.migrateIsPatchEnabled( "toggleClass-bool" ),
+		false, "patch disabled (toggleClass)" );
+
+	expectNoWarning( assert, "toggleClass-bool (disabled)", function() {
+		elem.toggleClass();
+	} );
+} );

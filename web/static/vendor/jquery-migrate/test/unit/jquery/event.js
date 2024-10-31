@@ -1,222 +1,192 @@
-QUnit.module('event');
 
-QUnit.test('error() event method', function (assert) {
-  assert.expect(2);
+QUnit.module( "event" );
 
-  expectWarning(assert, 'jQuery.fn.error()', function () {
-    jQuery('<img />')
-      .error(function () {
-        assert.ok(true, 'Triggered error event');
-      })
-      .error()
-      .off('error')
-      .error()
-      .remove();
-  });
-});
+QUnit.test( "error() event method", function( assert ) {
+	assert.expect( 2 );
 
-QUnit.test('load() and unload() event methods', function (assert) {
-  assert.expect(jQuery.ajax ? 5 : 4);
+	expectWarning( assert, "jQuery.fn.error()", function() {
+		jQuery( "<img />" )
+			.error( function() {
+				assert.ok( true, "Triggered error event" );
+			} )
+			.error()
+			.off( "error" )
+			.error()
+			.remove();
+	} );
+} );
 
-  expectWarning(assert, 'jQuery.fn.load()', function () {
-    jQuery('<img />')
-      .load(function () {
-        assert.ok(true, 'Triggered load event');
-      })
-      .load()
-      .off('load')
-      .load()
-      .remove();
-  });
+QUnit.test( "load() and unload() event methods", function( assert ) {
+	assert.expect( jQuery.ajax ? 5 : 4 );
 
-  expectWarning(assert, 'jQuery.fn.unload()', function () {
-    jQuery('<img />')
-      .unload(function () {
-        assert.ok(true, 'Triggered unload event');
-      })
-      .unload()
-      .off('unload')
-      .unload()
-      .remove();
-  });
+	expectWarning( assert, "jQuery.fn.load()", function() {
+		jQuery( "<img />" )
+			.load( function() {
+				assert.ok( true, "Triggered load event" );
+			} )
+			.load()
+			.off( "load" )
+			.load()
+			.remove();
+	} );
 
-  if (jQuery.ajax) {
-    expectNoWarning(assert, 'ajax load', function () {
-      var start = assert.async();
-      jQuery('<div id=load138></div>')
-        .appendTo('#qunit-fixture')
-        .load('not-found.file', function () {
-          jQuery('#load138').remove();
-          start();
-        });
-    });
-  }
-});
+	expectWarning( assert, "jQuery.fn.unload()", function() {
+		jQuery( "<img />" )
+			.unload( function() {
+				assert.ok( true, "Triggered unload event" );
+			} )
+			.unload()
+			.off( "unload" )
+			.unload()
+			.remove();
+	} );
 
-QUnit.test('.bind() and .unbind()', function (assert) {
-  assert.expect(3);
+	if ( jQuery.ajax ) {
+		expectNoWarning( assert, "ajax load", function() {
+			var start = assert.async();
+			jQuery( "<div id=load138></div>" )
+				.appendTo( "#qunit-fixture" )
+				.load( "not-found.file", function() {
+					jQuery( "#load138" ).remove();
+					start();
+				} );
+		} );
+	}
+} );
 
-  var $elem = jQuery('<div />').appendTo('#qunit-fixture');
+QUnit.test( ".bind() and .unbind()", function( assert ) {
+	assert.expect( 3 );
 
-  expectWarning(assert, '.bind()', 1, function () {
-    $elem
-      .bind('click', function () {
-        assert.ok(true, 'click fired');
-      })
-      .trigger('click');
-  });
+	var $elem = jQuery( "<div />" ).appendTo( "#qunit-fixture" );
 
-  expectWarning(assert, '.unbind()', 1, function () {
-    $elem.unbind('click').trigger('click');
-  });
-});
+	expectWarning( assert, ".bind()", 1, function() {
+		$elem
+			.bind( "click", function() {
+				assert.ok( true, "click fired" );
+			} )
+			.trigger( "click" );
+	} );
 
-QUnit.test('.delegate() and .undelegate()', function (assert) {
-  assert.expect(3);
+	expectWarning( assert, ".unbind()", 1, function() {
+		$elem
+			.unbind( "click" )
+			.trigger( "click" );
+	} );
+} );
 
-  var $div = jQuery('<div />').appendTo('#qunit-fixture');
+QUnit.test( ".delegate() and .undelegate()", function( assert ) {
+	assert.expect( 3 );
 
-  jQuery('<p />').appendTo($div);
+	var $div = jQuery( "<div />" ).appendTo( "#qunit-fixture" );
 
-  expectWarning(assert, '.delegate()', 1, function () {
-    $div
-      .delegate('p', 'click', function () {
-        assert.ok(true, 'delegated click fired');
-      })
-      .find('p')
-      .trigger('click');
-  });
+	jQuery( "<p />" ).appendTo( $div );
 
-  expectWarning(assert, '.undelegate()', 1, function () {
-    $div.undelegate('p', 'click').find('p').trigger('click');
-  });
-});
+	expectWarning( assert, ".delegate()", 1, function() {
+		$div
+			.delegate( "p", "click", function() {
+				assert.ok( true, "delegated click fired" );
+			} )
+			.find( "p" ).trigger( "click" );
+	} );
 
-QUnit.test('Event aliases', function (assert) {
-  assert.expect(14);
+	expectWarning( assert, ".undelegate()", 1, function() {
+		$div
+			.undelegate( "p", "click" )
+			.find( "p" ).trigger( "click" );
+	} );
+} );
 
-  var $div = jQuery('<div />');
+QUnit.test( "Event aliases", function( assert ) {
+	assert.expect( 14 );
 
-  'scroll click submit keydown'.split(' ').forEach(function (name) {
-    expectWarning(assert, '.' + name + '()', 2, function () {
-      $div[name](function (event) {
-        assert.equal(event.type, name, name);
-        $div.off(event);
-      })[name]();
-    });
-  });
+	var $div = jQuery( "<div />" );
 
-  expectWarning(assert, '.hover() one-arg', 1, function () {
-    $div
-      .hover(function (event) {
-        assert.ok(/mouseenter|mouseleave/.test(event.type), event.type);
-        $div.off(event);
-      })
-      .trigger('mouseenter')
-      .trigger('mouseleave');
-  });
+	"scroll click submit keydown".split( " " ).forEach( function( name ) {
+		expectWarning( assert, "." + name + "()", 2, function() {
+			$div[ name ]( function( event ) {
+				assert.equal( event.type, name, name );
+				$div.off( event );
+			} )[ name ]();
+		} );
+	} );
 
-  expectWarning(assert, '.hover() two-arg', 1, function () {
-    $div
-      .hover(
-        function (event) {
-          assert.equal('mouseenter', event.type, event.type);
-        },
-        function (event) {
-          assert.equal('mouseleave', event.type, event.type);
-        }
-      )
-      .trigger('mouseenter')
-      .trigger('mouseleave');
-  });
-});
+	expectWarning( assert, ".hover() one-arg", 1, function() {
+		$div.hover( function( event ) {
+			assert.ok( /mouseenter|mouseleave/.test( event.type ), event.type );
+			$div.off( event );
+		} ).trigger( "mouseenter" ).trigger( "mouseleave" );
+	} );
 
-QUnit.test('custom ready', function (assert) {
-  assert.expect(2);
+	expectWarning( assert, ".hover() two-arg", 1, function() {
+		$div.hover(
+			function( event ) {
+				assert.equal( "mouseenter", event.type, event.type );
+			},
+			function( event ) {
+				assert.equal( "mouseleave", event.type, event.type );
+			}
+		).trigger( "mouseenter" ).trigger( "mouseleave" );
+	} );
+} );
 
-  jQuery('#qunit-fixture').append("<div id='foo'>bar</div>");
+QUnit.test( "custom ready", function( assert ) {
+	assert.expect( 2 );
 
-  expectNoWarning(assert, 'Custom ready event not on document', 1, function () {
-    jQuery('#foo')
-      .on('ready', function () {
-        assert.ok(true, 'custom ready event was triggered');
-      })
-      .trigger('ready')
-      .off('ready');
-  });
-});
+	jQuery( "#qunit-fixture" ).append( "<div id='foo'>bar</div>" );
 
-TestManager.runIframeTest(
-  'document ready',
-  'event-ready.html',
-  function (assert, jQuery) {
-    assert.expect(1);
+	expectNoWarning( assert, "Custom ready event not on document", 1, function() {
+		jQuery( "#foo" ).on( "ready", function() {
+			assert.ok( true, "custom ready event was triggered" );
+		} )
+		.trigger( "ready" )
+		.off( "ready" );
+	} );
+} );
 
-    assert.equal(
-      jQuery.migrateWarnings.length,
-      1,
-      'warnings: ' + JSON.stringify(jQuery.migrateWarnings)
-    );
-  }
-);
+TestManager.runIframeTest( "document ready", "event-ready.html",
+	function( assert, jQuery ) {
+		assert.expect( 1 );
 
-TestManager.runIframeTest(
-  'jQuery.event.props.concat',
-  'event-props-concat.html',
-  function (assert, jQuery, window, document, log, props) {
-    assert.expect(3);
+		assert.equal( jQuery.migrateWarnings.length, 1, "warnings: " +
+			JSON.stringify( jQuery.migrateWarnings ) );
+	} );
 
-    var warns = JSON.stringify(jQuery.migrateWarnings);
+TestManager.runIframeTest( "jQuery.event.props.concat", "event-props-concat.html",
+	function( assert, jQuery,  window, document, log, props ) {
+		assert.expect( 3 );
 
-    assert.equal(jQuery.migrateWarnings.length, 1, 'one warning');
-    assert.ok(warns.indexOf('props.concat') >= 0, 'warnings: ' + warns);
-    assert.equal(props[0], 'TESTING', 'used the empty props');
-  }
-);
+		var warns = JSON.stringify( jQuery.migrateWarnings );
+
+		assert.equal( jQuery.migrateWarnings.length, 1, "one warning" );
+		assert.ok( warns.indexOf( "props.concat" ) >= 0, "warnings: " + warns );
+		assert.equal( props[ 0 ], "TESTING", "used the empty props" );
+	} );
 
 // Do this as iframe because there is no way to undo prop addition
-TestManager.runIframeTest(
-  'jQuery.event.props',
-  'event-props.html',
-  function (assert, jQuery, window, document, log, test1, test2) {
-    assert.expect(2);
+TestManager.runIframeTest( "jQuery.event.props", "event-props.html",
+	function( assert, jQuery, window, document, log, test1, test2 ) {
+		assert.expect( 2 );
 
-    assert.ok(test1 && test2, 'props were processed');
-    assert.equal(
-      jQuery.migrateWarnings.length,
-      2,
-      'warnings: ' + JSON.stringify(jQuery.migrateWarnings)
-    );
-  }
-);
+		assert.ok( test1 && test2, "props were processed" );
+		assert.equal( jQuery.migrateWarnings.length, 2, "warnings: " +
+			JSON.stringify( jQuery.migrateWarnings ) );
+	} );
 
 // Do this as iframe because there is no way to undo prop addition
-TestManager.runIframeTest(
-  'jQuery.event.fixHooks',
-  'event-fixHooks.html',
-  function (assert, jQuery, window, document, log, test1, test2) {
-    assert.expect(2);
+TestManager.runIframeTest( "jQuery.event.fixHooks", "event-fixHooks.html",
+	function( assert, jQuery, window, document, log, test1, test2 ) {
+		assert.expect( 2 );
 
-    assert.ok(test1 && test2, 'hooks were processed');
-    assert.equal(
-      jQuery.migrateWarnings.length,
-      2,
-      'warnings: ' + JSON.stringify(jQuery.migrateWarnings)
-    );
-  }
-);
+		assert.ok( test1 && test2, "hooks were processed" );
+		assert.equal( jQuery.migrateWarnings.length, 2, "warnings: " +
+			JSON.stringify( jQuery.migrateWarnings ) );
+	} );
 
-TestManager.runIframeTest(
-  'Load within a ready handler',
-  'event-lateload.html',
-  function (assert, jQuery, window, document, log) {
-    assert.expect(2);
+TestManager.runIframeTest( "Load within a ready handler", "event-lateload.html",
+	function( assert, jQuery, window, document, log ) {
+		assert.expect( 2 );
 
-    assert.equal(
-      jQuery.migrateWarnings.length,
-      1,
-      'warnings: ' + JSON.stringify(jQuery.migrateWarnings)
-    );
-    assert.ok(/load/.test(jQuery.migrateWarnings[0]), 'message ok');
-  }
-);
+		assert.equal( jQuery.migrateWarnings.length, 1, "warnings: " +
+			JSON.stringify( jQuery.migrateWarnings ) );
+		assert.ok( /load/.test( jQuery.migrateWarnings[ 0 ] ), "message ok" );
+	} );

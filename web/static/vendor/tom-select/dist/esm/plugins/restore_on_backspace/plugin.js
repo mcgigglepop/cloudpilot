@@ -1,7 +1,7 @@
 /**
- * Tom Select v2.1.0
- * Licensed under the Apache License, Version 2.0 (the "License");
- */
+* Tom Select v2.1.0
+* Licensed under the Apache License, Version 2.0 (the "License");
+*/
 
 /**
  * Plugin: "restore_on_backspace" (Tom Select)
@@ -17,16 +17,13 @@
  * governing permissions and limitations under the License.
  *
  */
-function plugin(userOptions) {
+function plugin (userOptions) {
   const self = this;
-  const options = Object.assign(
-    {
-      text: (option) => {
-        return option[self.settings.labelField];
-      },
-    },
-    userOptions
-  );
+  const options = Object.assign({
+    text: option => {
+      return option[self.settings.labelField];
+    }
+  }, userOptions);
   self.on('item_remove', function (value) {
     if (!self.isFocused) {
       return;

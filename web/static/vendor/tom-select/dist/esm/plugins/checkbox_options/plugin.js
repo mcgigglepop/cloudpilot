@@ -1,7 +1,7 @@
 /**
- * Tom Select v2.1.0
- * Licensed under the Apache License, Version 2.0 (the "License");
- */
+* Tom Select v2.1.0
+* Licensed under the Apache License, Version 2.0 (the "License");
+*/
 
 /**
  * Converts a scalar to its best string representation
@@ -17,11 +17,11 @@
  *   1         -> '1'
  *
  */
-const hash_key = (value) => {
+const hash_key = value => {
   if (typeof value === 'undefined' || value === null) return null;
   return get_hash(value);
 };
-const get_hash = (value) => {
+const get_hash = value => {
   if (typeof value === 'boolean') return value ? '1' : '0';
   return value + '';
 };
@@ -42,9 +42,9 @@ const preventDefault = (evt, stop = false) => {
 
 // @ts-ignore TS2691 "An import path cannot end with a '.ts' extension"
 const latin_convert = {
-  æ: 'ae',
-  ⱥ: 'a',
-  ø: 'o',
+  'æ': 'ae',
+  'ⱥ': 'a',
+  'ø': 'o'
 };
 new RegExp(Object.keys(latin_convert).join('|'), 'gu');
 
@@ -55,7 +55,7 @@ new RegExp(Object.keys(latin_convert).join('|'), 'gu');
  * param query should be {}
  */
 
-const getDom = (query) => {
+const getDom = query => {
   if (query.jquery) {
     return query[0];
   }
@@ -73,7 +73,7 @@ const getDom = (query) => {
 
   return document.querySelector(query);
 };
-const isHtmlString = (arg) => {
+const isHtmlString = arg => {
   if (typeof arg === 'string' && arg.indexOf('<') > -1) {
     return true;
   }
@@ -95,7 +95,7 @@ const isHtmlString = (arg) => {
  * governing permissions and limitations under the License.
  *
  */
-function plugin() {
+function plugin () {
   var self = this;
   var orig_onOptionSelect = self.onOptionSelect;
   self.settings.hideSelected = false; // update the checkbox for an option
@@ -113,6 +113,7 @@ function plugin() {
       }
     }, 1);
   }; // add checkbox to option template
+
 
   self.hook('after', 'setupTemplates', () => {
     var orig_render_option = self.settings.render.option;
@@ -135,7 +136,7 @@ function plugin() {
     };
   }); // uncheck when item removed
 
-  self.on('item_remove', (value) => {
+  self.on('item_remove', value => {
     var option = self.getOption(value);
 
     if (option) {
@@ -146,7 +147,7 @@ function plugin() {
     }
   }); // check when item added
 
-  self.on('item_add', (value) => {
+  self.on('item_add', value => {
     var option = self.getOption(value);
 
     if (option) {

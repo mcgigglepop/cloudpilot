@@ -29,16 +29,16 @@ export default {
       fillOpacity: 1,
       stroke: '#FFF',
       strokeWidth: 5,
-      strokeOpacity: 0.5,
+      strokeOpacity: .5,
     },
     hover: {
       fill: '#3cc0ff',
       cursor: 'pointer',
     },
     selected: {
-      fill: 'blue',
+      fill: 'blue'
     },
-    selectedHover: {},
+    selectedHover: {}
   },
   markerLabelStyle: {
     initial: {
@@ -46,13 +46,13 @@ export default {
       fontSize: 12,
       fontWeight: 500,
       cursor: 'default',
-      fill: '#374151',
+      fill: '#374151'
     },
     hover: {
-      cursor: 'pointer',
+      cursor: 'pointer'
     },
     selected: {},
-    selectedHover: {},
+    selectedHover: {}
   },
 
   // Region options
@@ -66,13 +66,13 @@ export default {
       strokeWidth: 0,
     },
     hover: {
-      fillOpacity: 0.7,
-      cursor: 'pointer',
+      fillOpacity: .7,
+      cursor: 'pointer'
     },
     selected: {
-      fill: '#9ca3af',
+      fill: '#9ca3af'
     },
-    selectedHover: {},
+    selectedHover: {}
   },
   regionLabelStyle: {
     initial: {
@@ -80,10 +80,10 @@ export default {
       fontSize: '12',
       fontWeight: 'bold',
       cursor: 'default',
-      fill: '#35373e',
+      fill: '#35373e'
     },
     hover: {
-      cursor: 'pointer',
-    },
+      cursor: 'pointer'
+    }
   },
-};
+}

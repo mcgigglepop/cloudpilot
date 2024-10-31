@@ -19,63 +19,58 @@ import { escape_html, preventDefault, addEvent } from '../../utils';
 import { TomOption, TomItem } from '../../types/index';
 import { RBOptions } from './types';
 
-export default function (this: TomSelect, userOptions: RBOptions) {
-  const options = Object.assign(
-    {
-      label: '&times;',
-      title: 'Remove',
-      className: 'remove',
-      append: true,
-    },
-    userOptions
-  );
+export default function(this:TomSelect, userOptions:RBOptions) {
 
-  //options.className = 'remove-single';
-  var self = this;
+	const options = Object.assign({
+			label     : '&times;',
+			title     : 'Remove',
+			className : 'remove',
+			append    : true
+		}, userOptions);
 
-  // override the render method to add remove button to each item
-  if (!options.append) {
-    return;
-  }
 
-  var html =
-    '<a href="javascript:void(0)" class="' +
-    options.className +
-    '" tabindex="-1" title="' +
-    escape_html(options.title) +
-    '">' +
-    options.label +
-    '</a>';
+	//options.className = 'remove-single';
+	var self			= this;
 
-  self.hook('after', 'setupTemplates', () => {
-    var orig_render_item = self.settings.render.item;
+	// override the render method to add remove button to each item
+	if( !options.append ){
+		return;
+	}
 
-    self.settings.render.item = (
-      data: TomOption,
-      escape: typeof escape_html
-    ) => {
-      var item = getDom(orig_render_item.call(self, data, escape)) as TomItem;
+	var html = '<a href="javascript:void(0)" class="' + options.className + '" tabindex="-1" title="' + escape_html(options.title) + '">' + options.label + '</a>';
 
-      var close_button = getDom(html);
-      item.appendChild(close_button);
+	self.hook('after','setupTemplates',() => {
 
-      addEvent(close_button, 'mousedown', (evt) => {
-        preventDefault(evt, true);
-      });
+		var orig_render_item = self.settings.render.item;
 
-      addEvent(close_button, 'click', (evt) => {
-        // propagating will trigger the dropdown to show for single mode
-        preventDefault(evt, true);
+		self.settings.render.item = (data:TomOption, escape:typeof escape_html) => {
 
-        if (self.isLocked) return;
-        if (!self.shouldDelete([item], evt as MouseEvent)) return;
+			var item = getDom(orig_render_item.call(self, data, escape)) as TomItem;
 
-        self.removeItem(item);
-        self.refreshOptions(false);
-        self.inputState();
-      });
+			var close_button = getDom(html);
+			item.appendChild(close_button);
 
-      return item;
-    };
-  });
-}
+			addEvent(close_button,'mousedown',(evt) => {
+				preventDefault(evt,true);
+			});
+
+			addEvent(close_button,'click',(evt) => {
+
+				// propagating will trigger the dropdown to show for single mode
+				preventDefault(evt,true);
+
+				if( self.isLocked ) return;
+				if( !self.shouldDelete([item],evt as MouseEvent) ) return;
+
+				self.removeItem(item);
+				self.refreshOptions(false);
+				self.inputState();
+			});
+
+			return item;
+		};
+
+	});
+
+
+};

@@ -2,7 +2,7 @@ let elem = document.createElement('div');
 elem.classList.toggle('test-class', false);
 if (elem.classList.contains('test-class')) {
   let _toggle = DOMTokenList.prototype.toggle;
-  DOMTokenList.prototype.toggle = function (token, force) {
+  DOMTokenList.prototype.toggle = function(token, force) {
     if (arguments.length > 1 && !this.contains(token) === !force) {
       return force;
     } else {
@@ -12,21 +12,16 @@ if (elem.classList.contains('test-class')) {
 }
 
 if (!String.prototype.startsWith) {
-  String.prototype.startsWith = function (searchString, position) {
+  String.prototype.startsWith = function(searchString, position){
     position = position || 0;
     return this.substr(position, searchString.length) === searchString;
   };
 }
 
 if (!String.prototype.endsWith) {
-  String.prototype.endsWith = function (searchString, position) {
+  String.prototype.endsWith = function(searchString, position) {
     var subjectString = this.toString();
-    if (
-      typeof position !== 'number' ||
-      !isFinite(position) ||
-      Math.floor(position) !== position ||
-      position > subjectString.length
-    ) {
+    if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
       position = subjectString.length;
     }
     position -= searchString.length;
@@ -36,8 +31,8 @@ if (!String.prototype.endsWith) {
 }
 
 if (!Array.prototype.find) {
-  Object.defineProperty(Array.prototype, 'find', {
-    value: function (predicate) {
+  Object.defineProperty(Array.prototype, "find", {
+    value: function(predicate) {
       if (this === null) {
         throw new TypeError('Array.prototype.find called on null or undefined');
       }
@@ -56,13 +51,13 @@ if (!Array.prototype.find) {
         }
       }
       return undefined;
-    },
+    }
   });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function() {
   // Disable resizing in Firefox
-  document.execCommand('enableObjectResizing', false, false);
+  document.execCommand("enableObjectResizing", false, false);
   // Disable automatic linkifying in IE11
-  document.execCommand('autoUrlDetect', false, false);
+  document.execCommand("autoUrlDetect", false, false);
 });

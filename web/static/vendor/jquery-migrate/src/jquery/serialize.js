@@ -1,29 +1,24 @@
-import { migratePatchFunc, migrateWarn } from '../main.js';
-import '../disablePatches.js';
+import { migratePatchFunc, migrateWarn } from "../main.js";
+import "../disablePatches.js";
 
 // Support jQuery slim which excludes the ajax module
 // The jQuery.param patch is about respecting `jQuery.ajaxSettings.traditional`
 // so it doesn't make sense for the slim build.
-if (jQuery.ajax) {
-  var origParam = jQuery.param;
+if ( jQuery.ajax ) {
 
-  migratePatchFunc(
-    jQuery,
-    'param',
-    function (data, traditional) {
-      var ajaxTraditional =
-        jQuery.ajaxSettings && jQuery.ajaxSettings.traditional;
+var origParam = jQuery.param;
 
-      if (traditional === undefined && ajaxTraditional) {
-        migrateWarn(
-          'param-ajax-traditional',
-          'jQuery.param() no longer uses jQuery.ajaxSettings.traditional'
-        );
-        traditional = ajaxTraditional;
-      }
+migratePatchFunc( jQuery, "param", function( data, traditional ) {
+	var ajaxTraditional = jQuery.ajaxSettings && jQuery.ajaxSettings.traditional;
 
-      return origParam.call(this, data, traditional);
-    },
-    'param-ajax-traditional'
-  );
+	if ( traditional === undefined && ajaxTraditional ) {
+
+		migrateWarn( "param-ajax-traditional",
+			"jQuery.param() no longer uses jQuery.ajaxSettings.traditional" );
+		traditional = ajaxTraditional;
+	}
+
+	return origParam.call( this, data, traditional );
+}, "param-ajax-traditional" );
+
 }

@@ -1,201 +1,161 @@
 // Support jQuery slim which excludes the deferred module in jQuery 4.0+
-if (jQuery.Deferred) {
-  QUnit.module('deferred');
+if ( jQuery.Deferred ) {
 
-  QUnit.test('jQuery.Deferred.exceptionHook', function (assert) {
-    assert.expect(1);
+QUnit.module( "deferred" );
 
-    // Make sure our shimming didn't clobber the default hook
-    assert.ok(
-      typeof jQuery.Deferred.exceptionHook === 'function',
-      'hook is present'
-    );
-  });
+QUnit.test( "jQuery.Deferred.exceptionHook", function( assert ) {
+	assert.expect( 1 );
 
-  QUnit.test('.pipe() warnings', function (assert) {
-    assert.expect(4);
+	// Make sure our shimming didn't clobber the default hook
+	assert.ok( typeof jQuery.Deferred.exceptionHook === "function", "hook is present" );
+} );
 
-    var d = jQuery.Deferred(),
-      p = d.promise();
+QUnit.test( ".pipe() warnings", function( assert ) {
+	assert.expect( 4 );
 
-    function checkValue(v) {
-      assert.equal(v, 1, 'got correct value');
-    }
+	var d = jQuery.Deferred(),
+		p = d.promise();
 
-    // Deferred
-    expectWarning(assert, 'pipe', function () {
-      d.pipe(checkValue);
-    });
+	function checkValue( v ) {
+		assert.equal( v, 1, "got correct value" );
+	}
 
-    // Deferred's promise object
-    expectWarning(assert, 'pipe', function () {
-      p.pipe(checkValue);
-    });
+	// Deferred
+	expectWarning( assert, "pipe", function() {
+		d.pipe( checkValue );
+	} );
 
-    // Should happen synchronously for .pipe()
-    d.resolve(1);
-  });
+	// Deferred's promise object
+	expectWarning( assert, "pipe", function() {
+		p.pipe( checkValue );
+	} );
 
-  QUnit.test(
-    '[PIPE ONLY] jQuery.Deferred.pipe - filtering (fail)',
-    function (assert) {
-      assert.expect(4);
+	// Should happen synchronously for .pipe()
+	d.resolve( 1 );
+} );
 
-      var value1,
-        value2,
-        value3,
-        defer = jQuery.Deferred(),
-        piped = defer.pipe(null, function (a, b) {
-          return a * b;
-        }),
-        done = jQuery.map(new Array(3), function () {
-          return assert.async();
-        });
+QUnit.test( "[PIPE ONLY] jQuery.Deferred.pipe - filtering (fail)", function( assert ) {
 
-      piped.fail(function (result) {
-        value3 = result;
-      });
+	assert.expect( 4 );
 
-      defer.fail(function (a, b) {
-        value1 = a;
-        value2 = b;
-      });
+	var value1, value2, value3,
+		defer = jQuery.Deferred(),
+		piped = defer.pipe( null, function( a, b ) {
+			return a * b;
+		} ),
+		done = jQuery.map( new Array( 3 ), function() {
+			return assert.async();
+		} );
 
-      defer.reject(2, 3).pipe(null, function () {
-        assert.strictEqual(value1, 2, 'first reject value ok');
-        assert.strictEqual(value2, 3, 'second reject value ok');
-        assert.strictEqual(value3, 6, 'result of filter ok');
-        done.pop().call();
-      });
+	piped.fail( function( result ) {
+		value3 = result;
+	} );
 
-      jQuery
-        .Deferred()
-        .resolve()
-        .pipe(null, function () {
-          assert.ok(false, 'then should not be called on resolve');
-        })
-        .then(done.pop());
+	defer.fail( function( a, b ) {
+		value1 = a;
+		value2 = b;
+	} );
 
-      jQuery
-        .Deferred()
-        .reject()
-        .pipe(null, jQuery.noop)
-        .fail(function (value) {
-          assert.strictEqual(
-            value,
-            undefined,
-            'then fail callback can return undefined/null'
-          );
-          done.pop().call();
-        });
-    }
-  );
+	defer.reject( 2, 3 ).pipe( null, function() {
+		assert.strictEqual( value1, 2, "first reject value ok" );
+		assert.strictEqual( value2, 3, "second reject value ok" );
+		assert.strictEqual( value3, 6, "result of filter ok" );
+		done.pop().call();
+	} );
 
-  QUnit.test(
-    '[PIPE ONLY] jQuery.Deferred.pipe - deferred (progress)',
-    function (assert) {
-      assert.expect(3);
+	jQuery.Deferred().resolve().pipe( null, function() {
+		assert.ok( false, "then should not be called on resolve" );
+	} ).then( done.pop() );
 
-      var value1,
-        value2,
-        value3,
-        defer = jQuery.Deferred(),
-        piped = defer.pipe(null, null, function (a, b) {
-          return jQuery.Deferred(function (defer) {
-            defer.resolve(a * b);
-          });
-        }),
-        done = assert.async();
+	jQuery.Deferred().reject().pipe( null, jQuery.noop ).fail( function( value ) {
+		assert.strictEqual( value, undefined, "then fail callback can return undefined/null" );
+		done.pop().call();
+	} );
+} );
 
-      piped.done(function (result) {
-        value3 = result;
-      });
+QUnit.test( "[PIPE ONLY] jQuery.Deferred.pipe - deferred (progress)", function( assert ) {
 
-      defer.progress(function (a, b) {
-        value1 = a;
-        value2 = b;
-      });
+	assert.expect( 3 );
 
-      defer.notify(2, 3);
+	var value1, value2, value3,
+		defer = jQuery.Deferred(),
+		piped = defer.pipe( null, null, function( a, b ) {
+			return jQuery.Deferred( function( defer ) {
+				defer.resolve( a * b );
+			} );
+		} ),
+		done = assert.async();
 
-      piped.done(function () {
-        assert.strictEqual(value1, 2, 'first progress value ok');
-        assert.strictEqual(value2, 3, 'second progress value ok');
-        assert.strictEqual(value3, 6, 'result of filter ok');
-        done();
-      });
-    }
-  );
+	piped.done( function( result ) {
+		value3 = result;
+	} );
 
-  QUnit.test('[PIPE ONLY] jQuery.Deferred.pipe - context', function (assert) {
-    assert.expect(5);
+	defer.progress( function( a, b ) {
+		value1 = a;
+		value2 = b;
+	} );
 
-    var defer,
-      piped,
-      defer2,
-      piped2,
-      context = {},
-      done = jQuery.map(new Array(4), function () {
-        return assert.async();
-      });
+	defer.notify( 2, 3 );
 
-    jQuery
-      .Deferred()
-      .resolveWith(context, [2])
-      .pipe(function (value) {
-        return value * 3;
-      })
-      .done(function (value) {
-        assert.strictEqual(
-          this,
-          context,
-          '[PIPE ONLY] custom context correctly propagated'
-        );
-        assert.strictEqual(value, 6, 'proper value received');
-        done.pop().call();
-      });
+	piped.done( function() {
+		assert.strictEqual( value1, 2, "first progress value ok" );
+		assert.strictEqual( value2, 3, "second progress value ok" );
+		assert.strictEqual( value3, 6, "result of filter ok" );
+		done();
+	} );
+} );
 
-    jQuery
-      .Deferred()
-      .resolve()
-      .pipe(function () {
-        return jQuery.Deferred().resolveWith(context);
-      })
-      .done(function () {
-        assert.strictEqual(
-          this,
-          context,
-          'custom context of returned deferred correctly propagated'
-        );
-        done.pop().call();
-      });
+QUnit.test( "[PIPE ONLY] jQuery.Deferred.pipe - context", function( assert ) {
 
-    defer = jQuery.Deferred();
-    piped = defer.pipe(function (value) {
-      return value * 3;
-    });
+	assert.expect( 5 );
 
-    defer.resolve(2);
+	var defer, piped, defer2, piped2,
+		context = {},
+		done = jQuery.map( new Array( 4 ), function() {
+			return assert.async();
+		} );
 
-    piped.done(function (value) {
-      // `this` result changed between 1.8 and 1.9, so don't check it
-      assert.strictEqual(value, 6, 'proper value received');
-      done.pop().call();
-    });
+	jQuery.Deferred().resolveWith( context, [ 2 ] ).pipe( function( value ) {
+		return value * 3;
+	} ).done( function( value ) {
+		assert.strictEqual( this, context, "[PIPE ONLY] custom context correctly propagated" );
+		assert.strictEqual( value, 6, "proper value received" );
+		done.pop().call();
+	} );
 
-    defer2 = jQuery.Deferred();
-    piped2 = defer2.pipe();
+	jQuery.Deferred().resolve().pipe( function() {
+		return jQuery.Deferred().resolveWith( context );
+	} ).done( function() {
+		assert.strictEqual( this, context,
+			"custom context of returned deferred correctly propagated" );
+		done.pop().call();
+	} );
 
-    defer2.resolve(2);
+	defer = jQuery.Deferred();
+	piped = defer.pipe( function( value ) {
+		return value * 3;
+	} );
 
-    piped2.done(function (value) {
-      // `this` result changed between 1.8 and 1.9, so don't check it
-      assert.strictEqual(
-        value,
-        2,
-        'proper value received (without passing function)'
-      );
-      done.pop().call();
-    });
-  });
+	defer.resolve( 2 );
+
+	piped.done( function( value ) {
+
+		// `this` result changed between 1.8 and 1.9, so don't check it
+		assert.strictEqual( value, 6, "proper value received" );
+		done.pop().call();
+	} );
+
+	defer2 = jQuery.Deferred();
+	piped2 = defer2.pipe();
+
+	defer2.resolve( 2 );
+
+	piped2.done( function( value ) {
+
+		// `this` result changed between 1.8 and 1.9, so don't check it
+		assert.strictEqual( value, 2, "proper value received (without passing function)" );
+		done.pop().call();
+	} );
+} );
+
 }

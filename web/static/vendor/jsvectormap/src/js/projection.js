@@ -1,9 +1,11 @@
+
 /**
  * ------------------------------------------------------------------------
  * Object
  * ------------------------------------------------------------------------
  */
 const Proj = {
+
   /* sgn(n){
     if (n > 0) {
       return 1;
@@ -17,9 +19,7 @@ const Proj = {
   mill(lat, lng, c) {
     return {
       x: this.radius * (lng - c) * this.radDeg,
-      y:
-        (-this.radius * Math.log(Math.tan((45 + 0.4 * lat) * this.radDeg))) /
-        0.8,
+      y: - this.radius * Math.log(Math.tan((45 + 0.4 * lat) * this.radDeg)) / 0.8
     };
   },
 
@@ -33,7 +33,7 @@ const Proj = {
   merc(lat, lng, c) {
     return {
       x: this.radius * (lng - c) * this.radDeg,
-      y: -this.radius * Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360)),
+      y: - this.radius * Math.log(Math.tan(Math.PI / 4 + lat * Math.PI / 360))
     };
   },
 
@@ -46,20 +46,20 @@ const Proj = {
 
   aea(lat, lng, c) {
     var fi0 = 0,
-      lambda0 = c * this.radDeg,
-      fi1 = 29.5 * this.radDeg,
-      fi2 = 45.5 * this.radDeg,
-      fi = lat * this.radDeg,
-      lambda = lng * this.radDeg,
-      n = (Math.sin(fi1) + Math.sin(fi2)) / 2,
-      C = Math.cos(fi1) * Math.cos(fi1) + 2 * n * Math.sin(fi1),
-      theta = n * (lambda - lambda0),
-      ro = Math.sqrt(C - 2 * n * Math.sin(fi)) / n,
-      ro0 = Math.sqrt(C - 2 * n * Math.sin(fi0)) / n;
+        lambda0 = c * this.radDeg,
+        fi1 = 29.5 * this.radDeg,
+        fi2 = 45.5 * this.radDeg,
+        fi = lat * this.radDeg,
+        lambda = lng * this.radDeg,
+        n = (Math.sin(fi1)+Math.sin(fi2)) / 2,
+        C = Math.cos(fi1)*Math.cos(fi1)+2*n*Math.sin(fi1),
+        theta = n*(lambda-lambda0),
+        ro = Math.sqrt(C-2*n*Math.sin(fi))/n,
+        ro0 = Math.sqrt(C-2*n*Math.sin(fi0))/n;
 
     return {
       x: ro * Math.sin(theta) * this.radius,
-      y: -(ro0 - ro * Math.cos(theta)) * this.radius,
+      y: - (ro0 - ro * Math.cos(theta)) * this.radius
     };
   },
 
@@ -84,24 +84,19 @@ const Proj = {
 
   lcc(lat, lng, c) {
     var fi0 = 0,
-      lambda0 = c * this.radDeg,
-      lambda = lng * this.radDeg,
-      fi1 = 33 * this.radDeg,
-      fi2 = 45 * this.radDeg,
-      fi = lat * this.radDeg,
-      n =
-        Math.log(Math.cos(fi1) * (1 / Math.cos(fi2))) /
-        Math.log(
-          Math.tan(Math.PI / 4 + fi2 / 2) *
-            (1 / Math.tan(Math.PI / 4 + fi1 / 2))
-        ),
-      F = (Math.cos(fi1) * Math.pow(Math.tan(Math.PI / 4 + fi1 / 2), n)) / n,
-      ro = F * Math.pow(1 / Math.tan(Math.PI / 4 + fi / 2), n),
-      ro0 = F * Math.pow(1 / Math.tan(Math.PI / 4 + fi0 / 2), n);
+        lambda0 = c * this.radDeg,
+        lambda = lng * this.radDeg,
+        fi1 = 33 * this.radDeg,
+        fi2 = 45 * this.radDeg,
+        fi = lat * this.radDeg,
+        n = Math.log(Math.cos(fi1) * (1 / Math.cos(fi2)) ) / Math.log(Math.tan(Math.PI / 4 + fi2 / 2) * (1 / Math.tan(Math.PI / 4 + fi1 / 2) )),
+        F = (Math.cos(fi1) * Math.pow(Math.tan(Math.PI / 4 + fi1 / 2 ), n )) / n,
+        ro = F * Math.pow(1 / Math.tan(Math.PI / 4 + fi / 2), n),
+        ro0 = F * Math.pow(1 / Math.tan(Math.PI / 4 + fi0 / 2), n);
 
     return {
       x: ro * Math.sin(n * (lambda - lambda0)) * this.radius,
-      y: -(ro0 - ro * Math.cos(n * (lambda - lambda0))) * this.radius,
+      y: - (ro0 - ro * Math.cos(n * (lambda - lambda0))) * this.radius
     };
   },
 
@@ -123,10 +118,10 @@ const Proj = {
       lng: (lambda0 + theta / n) * this.degRad
     };
   } */
-};
+}
 
-Proj.degRad = 180 / Math.PI;
-Proj.radDeg = Math.PI / 180;
-Proj.radius = 6381372;
+Proj.degRad = 180 / Math.PI
+Proj.radDeg = Math.PI / 180
+Proj.radius = 6381372
 
-export default Proj;
+export default Proj
