@@ -2,12 +2,14 @@ package handlers
 
 import (
 	"net/http"
+	"log"
 	"github.com/mcgigglepop/cloudpilot/web/internal/config"
 	"github.com/mcgigglepop/cloudpilot/web/internal/driver"
 	"github.com/mcgigglepop/cloudpilot/web/internal/models"
 	"github.com/mcgigglepop/cloudpilot/web/internal/render"
 	"github.com/mcgigglepop/cloudpilot/web/internal/repository"
 	"github.com/mcgigglepop/cloudpilot/web/internal/repository/dbrepo"
+	"github.com/mcgigglepop/cloudpilot/web/internal/forms"
 )
 
 // repository used by the handlers
@@ -40,4 +42,51 @@ func (m *Repository) Index(w http.ResponseWriter, r *http.Request) {
 // Login is the login page handler
 func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "login.page.tmpl", &models.TemplateData{})
+}
+
+// PostLogin handles logging the user in
+func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
+	_ = m.App.Session.RenewToken(r.Context())
+
+	// parse the form
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		m.App.Session.Put(r.Context(), "error", err)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// get email, password
+	email := r.Form.Get("email")
+	password := r.Form.Get("password")
+
+	// required fields
+	form := forms.New(r.PostForm)
+	form.Required("email", "password")
+	form.IsEmail("email")
+
+	// check form validation
+	if !form.Valid() {
+		log.Println("Invalid form")
+		m.App.Session.Put(r.Context(), "error", "invalid form")
+		render.Template(w, r, "login.page.tmpl", &models.TemplateData{
+			Form: form,
+		})
+		return
+	}
+
+	// authenticate the user
+	id, _, err := m.DB.Authenticate(email, password)
+	if err != nil {
+		log.Println("Invalid login credentials")
+		m.App.Session.Put(r.Context(), "error", "Invalid login credentials")
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// put the user id in the session and log in user
+	m.App.Session.Put(r.Context(), "user_id", id)
+	m.App.Session.Put(r.Context(), "flash", "Logged in successfully")
+	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
 }
