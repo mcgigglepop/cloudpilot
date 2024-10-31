@@ -10,6 +10,8 @@ import (
 	"encoding/gob"
 	"github.com/alexedwards/scs/v2"
 
+	"github.com/mcgigglepop/cloudpilot/web/internal/config"
+
 )
 
 
