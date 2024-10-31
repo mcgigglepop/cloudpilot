@@ -1,5 +1,12 @@
 package main
 
+const portNumber = ":8080"
+
+var app config.AppConfig
+var session *scs.SessionManager
+var infoLog *log.Logger
+var errorLog *log.Logger
+
 // main is the main application function
 func main() {
 	// run function
