@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"runtime/debug"
+
+	"github.com/mcgigglepop/cloudpilot/web/internal/config"
 )
 
 var app *config.AppConfig

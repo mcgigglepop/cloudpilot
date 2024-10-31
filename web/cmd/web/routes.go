@@ -2,6 +2,10 @@ package main
 
 import (
 	"net/http"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"github.com/mcgigglepop/cloudpilot/web/internal/config"
+	"github.com/mcgigglepop/cloudpilot/web/internal/handlers"
 )
 
 func routes(app *config.AppConfig) http.Handler {
