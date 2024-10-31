@@ -22,6 +22,10 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/login", handlers.Repo.Login)
 	mux.Post("/login", handlers.Repo.PostLogin)
 
+	// register
+	mux.Get("/register", handlers.Repo.Register)
+	mux.Post("/register", handlers.Repo.PostRegister)
+
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 

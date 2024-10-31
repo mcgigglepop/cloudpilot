@@ -22,11 +22,11 @@ func (m *postgresDBRepo) CreateUser(u models.User) (string, error) {
 	// Check if the email already exists
 	var id int
 	
-	row := m.DB.QueryRowContext(ctx, `select id from users where username = $1`, u.Username)
+	row := m.DB.QueryRowContext(ctx, `select id from users where email = $1`, u.Email)
 	_ = row.Scan(&id)
 
 	if id != 0 {
-		return "", errors.New("username already exists")
+		return "", errors.New("email already exists")
 	}
 
 	// Hash the password
@@ -37,11 +37,13 @@ func (m *postgresDBRepo) CreateUser(u models.User) (string, error) {
 
 	// Insert the new user into the database
 	stmt := `
-		insert into users (username, password_hash, confirmed, created_at, updated_at) 
-		values ($1, $2, $3, $4, $5)
+		insert into users (first_name, last_name, email, password_hash, confirmed, created_at, updated_at) 
+		values ($1, $2, $3, $4, $5, $6, $7)
 	`
 	_, err = m.DB.ExecContext(ctx, stmt,
-		u.Username,
+		u.FirstName,
+		u.LastName,
+		u.Email,
 		hashedPassword,
 		false,
 		time.Now(),
@@ -55,18 +57,18 @@ func (m *postgresDBRepo) CreateUser(u models.User) (string, error) {
 	}
 
 	// return username
-	return u.Username, nil
+	return u.Email, nil
 }
 
 // Authenticate authenticates a user
-func (m *postgresDBRepo) Authenticate(username, password string) (int, string, error) {
+func (m *postgresDBRepo) Authenticate(email, password string) (int, string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	var id int
 	var hashedPassword string
 
-	row := m.DB.QueryRowContext(ctx, `select user_id, password from users where username = $1`, username)
+	row := m.DB.QueryRowContext(ctx, `select user_id, password_hash from users where email = $1`, email)
 	err := row.Scan(&id, &hashedPassword)
 	if err != nil {
 		return id, "", err

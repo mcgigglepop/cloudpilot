@@ -6,5 +6,5 @@ import (
 
 type DatabaseRepo interface {
 	CreateUser(u models.User) (string, error)
-	Authenticate(email, testPassword string) (int, string, error)
+	Authenticate(email, password string) (int, string, error)
 }

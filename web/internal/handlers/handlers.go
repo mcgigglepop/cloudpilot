@@ -90,3 +90,60 @@ func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 	m.App.Session.Put(r.Context(), "flash", "Logged in successfully")
 	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
 }
+
+// Register is the register page handler
+func (m *Repository) Register(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "register.page.tmpl", &models.TemplateData{})
+}
+
+// PostRegister is the post - register page handler
+func (m *Repository) PostRegister(w http.ResponseWriter, r *http.Request) {
+	_ = m.App.Session.RenewToken(r.Context())
+
+	// parse the form
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		m.App.Session.Put(r.Context(), "error", err)
+		http.Redirect(w, r, "/register", http.StatusSeeOther)
+		return
+	}
+
+	// user model
+	user := models.User{
+		FirstName: r.Form.Get("firstname"),
+		LastName:  r.Form.Get("lastname"),
+		Email:     r.Form.Get("email"),
+		Password:  r.Form.Get("password"),
+		Confirmed: false,
+	}
+
+	form := forms.New(r.PostForm)
+	form.Required("email", "password")
+	form.IsEmail("email")
+
+	// validate the form
+	if !form.Valid() {
+		log.Println("Invalid form")
+		render.Template(w, r, "register.page.tmpl", &models.TemplateData{
+			Form: form,
+		})
+		return
+	}
+
+	// create the user, returning the email for session storage
+	email, err := m.DB.CreateUser(user)
+
+	// validate the CreateUser call
+	if err != nil {
+		log.Println(err)
+		m.App.Session.Put(r.Context(), "error", err)
+		http.Redirect(w, r, "/register", http.StatusSeeOther)
+		return
+	}
+
+	// store session data and re-direct to confirm-email
+	m.App.Session.Put(r.Context(), "flash", "registered successfully")
+	m.App.Session.Put(r.Context(), "email", email)
+	http.Redirect(w, r, "/confirm-email", http.StatusSeeOther)
+}
