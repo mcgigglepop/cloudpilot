@@ -36,3 +36,8 @@ func NewHandlers(r *Repository) {
 func (m *Repository) Index(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "index.page.tmpl", &models.TemplateData{})
 }
+
+// Login is the login page handler
+func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "login.page.tmpl", &models.TemplateData{})
+}
