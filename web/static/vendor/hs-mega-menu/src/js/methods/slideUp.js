@@ -1,5 +1,4 @@
-const slideUp = (target, duration=500) => {
-
+const slideUp = (target, duration = 500) => {
   target.style.transitionProperty = 'height, margin, padding';
   target.style.transitionDuration = duration + 'ms';
   target.style.boxSizing = 'border-box';
@@ -11,7 +10,7 @@ const slideUp = (target, duration=500) => {
   target.style.paddingBottom = 0;
   target.style.marginTop = 0;
   target.style.marginBottom = 0;
-  window.setTimeout( () => {
+  window.setTimeout(() => {
     target.style.display = 'none';
     target.style.removeProperty('height');
     target.style.removeProperty('padding-top');
@@ -23,6 +22,6 @@ const slideUp = (target, duration=500) => {
     target.style.removeProperty('transition-property');
     //alert("!");
   }, duration);
-}
+};
 
-export default slideUp
+export default slideUp;

@@ -1,18 +1,21 @@
 svg {
   -ms-touch-action: none;
-      touch-action: none;
+  touch-action: none;
 }
 
-image, text, .jvm-zoomin, .jvm-zoomout {
+image,
+text,
+.jvm-zoomin,
+.jvm-zoomout {
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .jvm-container {
   -ms-touch-action: none;
-      touch-action: none;
+  touch-action: none;
   position: relative;
   overflow: hidden;
   height: 100%;
@@ -29,7 +32,7 @@ image, text, .jvm-zoomin, .jvm-zoomout {
   white-space: nowrap;
   position: absolute;
   display: none;
-  color: #FFF;
+  color: #fff;
 }
 
 .jvm-tooltip.active {
@@ -44,7 +47,7 @@ image, text, .jvm-zoomin, .jvm-zoomout {
   position: absolute;
   line-height: 10px;
   cursor: pointer;
-  color: #FFF;
+  color: #fff;
   height: 15px;
   width: 15px;
   left: 10px;
@@ -72,7 +75,7 @@ image, text, .jvm-zoomin, .jvm-zoomout {
 }
 
 .jvm-series-container .jvm-legend {
-  background-color: #FFF;
+  background-color: #fff;
   border: 1px solid #e5e7eb;
   margin-left: 0.75rem;
   border-radius: 0.25rem;
@@ -99,25 +102,36 @@ image, text, .jvm-zoomin, .jvm-zoomout {
   min-width: 40px;
 }
 
-.jvm-series-container .jvm-legend .jvm-legend-inner .jvm-legend-tick:not(:first-child) {
+.jvm-series-container
+  .jvm-legend
+  .jvm-legend-inner
+  .jvm-legend-tick:not(:first-child) {
   margin-top: 0.575rem;
 }
 
-.jvm-series-container .jvm-legend .jvm-legend-inner .jvm-legend-tick .jvm-legend-tick-sample {
+.jvm-series-container
+  .jvm-legend
+  .jvm-legend-inner
+  .jvm-legend-tick
+  .jvm-legend-tick-sample {
   border-radius: 4px;
-  margin-right: .65rem;
+  margin-right: 0.65rem;
   height: 16px;
   width: 16px;
   float: left;
 }
 
-.jvm-series-container .jvm-legend .jvm-legend-inner .jvm-legend-tick .jvm-legend-tick-text {
+.jvm-series-container
+  .jvm-legend
+  .jvm-legend-inner
+  .jvm-legend-tick
+  .jvm-legend-tick-text {
   font-size: 12px;
   text-align: center;
   float: left;
 }
 
-.jvm-line[animation="true"] {
+.jvm-line[animation='true'] {
   -webkit-animation: jvm-line-animation 10s linear forwards infinite;
   animation: jvm-line-animation 10s linear forwards infinite;
 }

@@ -17,7 +17,11 @@ export interface AnimationEvent {
 }
 
 export class Animator {
-  listen(chart: Chart, event: 'complete' | 'progress', cb: (event: AnimationEvent) => void): void;
+  listen(
+    chart: Chart,
+    event: 'complete' | 'progress',
+    cb: (event: AnimationEvent) => void
+  ): void;
   add(chart: Chart, items: readonly Animation[]): void;
   has(chart: Chart): boolean;
   start(chart: Chart): void;

@@ -1,13 +1,13 @@
 /**
-* Tom Select v2.1.0
-* Licensed under the Apache License, Version 2.0 (the "License");
-*/
+ * Tom Select v2.1.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
 
 // @ts-ignore TS2691 "An import path cannot end with a '.ts' extension"
 const latin_convert = {
-  'æ': 'ae',
-  'ⱥ': 'a',
-  'ø': 'o'
+  æ: 'ae',
+  ⱥ: 'a',
+  ø: 'o',
 };
 new RegExp(Object.keys(latin_convert).join('|'), 'gu');
 
@@ -18,7 +18,7 @@ new RegExp(Object.keys(latin_convert).join('|'), 'gu');
  * param query should be {}
  */
 
-const getDom = query => {
+const getDom = (query) => {
   if (query.jquery) {
     return query[0];
   }
@@ -36,7 +36,7 @@ const getDom = query => {
 
   return document.querySelector(query);
 };
-const isHtmlString = arg => {
+const isHtmlString = (arg) => {
   if (typeof arg === 'string' && arg.indexOf('<') > -1) {
     return true;
   }
@@ -63,8 +63,12 @@ const isHtmlString = arg => {
  *
  */
 
-const escape_html = str => {
-  return (str + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const escape_html = (str) => {
+  return (str + '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 };
 /**
  * Prevent default
@@ -103,13 +107,16 @@ const addEvent = (target, type, callback, options) => {
  * governing permissions and limitations under the License.
  *
  */
-function plugin (userOptions) {
-  const options = Object.assign({
-    label: '&times;',
-    title: 'Remove',
-    className: 'remove',
-    append: true
-  }, userOptions); //options.className = 'remove-single';
+function plugin(userOptions) {
+  const options = Object.assign(
+    {
+      label: '&times;',
+      title: 'Remove',
+      className: 'remove',
+      append: true,
+    },
+    userOptions
+  ); //options.className = 'remove-single';
 
   var self = this; // override the render method to add remove button to each item
 
@@ -117,7 +124,14 @@ function plugin (userOptions) {
     return;
   }
 
-  var html = '<a href="javascript:void(0)" class="' + options.className + '" tabindex="-1" title="' + escape_html(options.title) + '">' + options.label + '</a>';
+  var html =
+    '<a href="javascript:void(0)" class="' +
+    options.className +
+    '" tabindex="-1" title="' +
+    escape_html(options.title) +
+    '">' +
+    options.label +
+    '</a>';
   self.hook('after', 'setupTemplates', () => {
     var orig_render_item = self.settings.render.item;
 
@@ -125,10 +139,10 @@ function plugin (userOptions) {
       var item = getDom(orig_render_item.call(self, data, escape));
       var close_button = getDom(html);
       item.appendChild(close_button);
-      addEvent(close_button, 'mousedown', evt => {
+      addEvent(close_button, 'mousedown', (evt) => {
         preventDefault(evt, true);
       });
-      addEvent(close_button, 'click', evt => {
+      addEvent(close_button, 'click', (evt) => {
         // propagating will trigger the dropdown to show for single mode
         preventDefault(evt, true);
         if (self.isLocked) return;

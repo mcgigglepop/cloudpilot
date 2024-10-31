@@ -1,11 +1,7 @@
 import { BlockEmbed } from '../blots/block';
 import Link from '../formats/link';
 
-const ATTRIBUTES = [
-  'height',
-  'width'
-];
-
+const ATTRIBUTES = ['height', 'width'];
 
 class Video extends BlockEmbed {
   static create(value) {
@@ -17,7 +13,7 @@ class Video extends BlockEmbed {
   }
 
   static formats(domNode) {
-    return ATTRIBUTES.reduce(function(formats, attribute) {
+    return ATTRIBUTES.reduce(function (formats, attribute) {
       if (domNode.hasAttribute(attribute)) {
         formats[attribute] = domNode.getAttribute(attribute);
       }
@@ -48,6 +44,5 @@ class Video extends BlockEmbed {
 Video.blotName = 'video';
 Video.className = 'ql-video';
 Video.tagName = 'IFRAME';
-
 
 export default Video;

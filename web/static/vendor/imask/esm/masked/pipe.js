@@ -9,13 +9,19 @@ import '../core/change-details.js';
 var PIPE_TYPE = {
   MASKED: 'value',
   UNMASKED: 'unmaskedValue',
-  TYPED: 'typedValue'
+  TYPED: 'typedValue',
 };
 /** Creates new pipe function depending on mask type, source and destination options */
 
 function createPipe(mask) {
-  var from = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : PIPE_TYPE.MASKED;
-  var to = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : PIPE_TYPE.MASKED;
+  var from =
+    arguments.length > 1 && arguments[1] !== undefined
+      ? arguments[1]
+      : PIPE_TYPE.MASKED;
+  var to =
+    arguments.length > 2 && arguments[2] !== undefined
+      ? arguments[2]
+      : PIPE_TYPE.MASKED;
   var masked = createMask(mask);
   return function (value) {
     return masked.runIsolated(function (m) {
@@ -27,7 +33,13 @@ function createPipe(mask) {
 /** Pipes value through mask depending on mask type, source and destination options */
 
 function pipe(value) {
-  for (var _len = arguments.length, pipeArgs = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+  for (
+    var _len = arguments.length,
+      pipeArgs = new Array(_len > 1 ? _len - 1 : 0),
+      _key = 1;
+    _key < _len;
+    _key++
+  ) {
     pipeArgs[_key - 1] = arguments[_key];
   }
 

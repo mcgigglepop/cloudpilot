@@ -1,5 +1,5 @@
-import Dropzone from "./dropzone.js";
-import defaultPreviewTemplate from "./preview-template.html";
+import Dropzone from './dropzone.js';
+import defaultPreviewTemplate from './preview-template.html';
 
 let defaultOptions = {
   /**
@@ -14,7 +14,7 @@ let defaultOptions = {
    * Can be changed to `"put"` if necessary. You can also provide a function
    * that will be called with `files` and must return the method (since `v3.12.0`).
    */
-  method: "post",
+  method: 'post',
 
   /**
    * Will be set on the XHRequest.
@@ -87,7 +87,7 @@ let defaultOptions = {
    * **NOTE**: If you have the option  `uploadMultiple` set to `true`, then
    * Dropzone will append `[]` to the name.
    */
-  paramName: "file",
+  paramName: 'file',
 
   /**
    * Whether thumbnails for images should be generated
@@ -113,7 +113,7 @@ let defaultOptions = {
    * How the images should be scaled down in case both, `thumbnailWidth` and `thumbnailHeight` are provided.
    * Can be either `contain` or `crop`.
    */
-  thumbnailMethod: "crop",
+  thumbnailMethod: 'crop',
 
   /**
    * If set, images will be resized to these dimensions before being **uploaded**.
@@ -146,7 +146,7 @@ let defaultOptions = {
    * How the images should be scaled down in case both, `resizeWidth` and `resizeHeight` are provided.
    * Can be either `contain` or `crop`.
    */
-  resizeMethod: "contain",
+  resizeMethod: 'contain',
 
   /**
    * The base that is used to calculate the **displayed** filesize. You can
@@ -250,7 +250,7 @@ let defaultOptions = {
    *
    * Can be a selector string, or an element directly.
    */
-  hiddenInputContainer: "body",
+  hiddenInputContainer: 'body',
 
   /**
    * If null, no capture type will be specified
@@ -285,7 +285,7 @@ let defaultOptions = {
   /**
    * The text used before any files are dropped.
    */
-  dictDefaultMessage: "Drop files here to upload",
+  dictDefaultMessage: 'Drop files here to upload',
 
   /**
    * The text that replaces the default message text it the browser is not supported.
@@ -299,14 +299,14 @@ let defaultOptions = {
    * be ignored.
    */
   dictFallbackText:
-    "Please use the fallback form below to upload your files like in the olden days.",
+    'Please use the fallback form below to upload your files like in the olden days.',
 
   /**
    * If the filesize is too big.
    * `{{filesize}}` and `{{maxFilesize}}` will be replaced with the respective configuration values.
    */
   dictFileTooBig:
-    "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
+    'File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.',
 
   /**
    * If the file doesn't match the file type.
@@ -317,27 +317,27 @@ let defaultOptions = {
    * If the server response was invalid.
    * `{{statusCode}}` will be replaced with the servers status code.
    */
-  dictResponseError: "Server responded with {{statusCode}} code.",
+  dictResponseError: 'Server responded with {{statusCode}} code.',
 
   /**
    * If `addRemoveLinks` is true, the text to be used for the cancel upload link.
    */
-  dictCancelUpload: "Cancel upload",
+  dictCancelUpload: 'Cancel upload',
 
   /**
    * The text that is displayed if an upload was manually canceled
    */
-  dictUploadCanceled: "Upload canceled.",
+  dictUploadCanceled: 'Upload canceled.',
 
   /**
    * If `addRemoveLinks` is true, the text to be used for confirmation when cancelling upload.
    */
-  dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
+  dictCancelUploadConfirmation: 'Are you sure you want to cancel this upload?',
 
   /**
    * If `addRemoveLinks` is true, the text to be used to remove a file.
    */
-  dictRemoveFile: "Remove file",
+  dictRemoveFile: 'Remove file',
 
   /**
    * If this is not null, then the user will be prompted before removing a file.
@@ -348,13 +348,13 @@ let defaultOptions = {
    * Displayed if `maxFiles` is st and exceeded.
    * The string `{{maxFiles}}` will be replaced by the configuration value.
    */
-  dictMaxFilesExceeded: "You can not upload any more files.",
+  dictMaxFilesExceeded: 'You can not upload any more files.',
 
   /**
    * Allows you to translate the different units. Starting with `tb` for terabytes and going down to
    * `b` for bytes.
    */
-  dictFileSizeUnits: { tb: "TB", gb: "GB", mb: "MB", kb: "KB", b: "b" },
+  dictFileSizeUnits: { tb: 'TB', gb: 'GB', mb: 'MB', kb: 'KB', b: 'b' },
   /**
    * Called when dropzone initialized
    * You can add event listeners here
@@ -417,10 +417,10 @@ let defaultOptions = {
     let messageElement;
     this.element.className = `${this.element.className} dz-browser-not-supported`;
 
-    for (let child of this.element.getElementsByTagName("div")) {
+    for (let child of this.element.getElementsByTagName('div')) {
       if (/(^| )dz-message($| )/.test(child.className)) {
         messageElement = child;
-        child.className = "dz-message"; // Removes the 'dz-default' class
+        child.className = 'dz-message'; // Removes the 'dz-default' class
         break;
       }
     }
@@ -431,7 +431,7 @@ let defaultOptions = {
       this.element.appendChild(messageElement);
     }
 
-    let span = messageElement.getElementsByTagName("span")[0];
+    let span = messageElement.getElementsByTagName('span')[0];
     if (span) {
       if (span.textContent != null) {
         span.textContent = this.options.dictFallbackMessage;
@@ -483,7 +483,7 @@ let defaultOptions = {
 
     if (info.srcWidth > width || info.srcHeight > height) {
       // Image is bigger and needs rescaling
-      if (resizeMethod === "crop") {
+      if (resizeMethod === 'crop') {
         if (srcRatio > trgRatio) {
           info.srcHeight = file.height;
           info.srcWidth = info.srcHeight * trgRatio;
@@ -491,7 +491,7 @@ let defaultOptions = {
           info.srcWidth = file.width;
           info.srcHeight = info.srcWidth / trgRatio;
         }
-      } else if (resizeMethod === "contain") {
+      } else if (resizeMethod === 'contain') {
         // Method 'contain'
         if (srcRatio > trgRatio) {
           height = width / srcRatio;
@@ -565,20 +565,20 @@ let defaultOptions = {
 
   // Those are self explanatory and simply concern the DragnDrop.
   drop(e) {
-    return this.element.classList.remove("dz-drag-hover");
+    return this.element.classList.remove('dz-drag-hover');
   },
   dragstart(e) {},
   dragend(e) {
-    return this.element.classList.remove("dz-drag-hover");
+    return this.element.classList.remove('dz-drag-hover');
   },
   dragenter(e) {
-    return this.element.classList.add("dz-drag-hover");
+    return this.element.classList.add('dz-drag-hover');
   },
   dragover(e) {
-    return this.element.classList.add("dz-drag-hover");
+    return this.element.classList.add('dz-drag-hover');
   },
   dragleave(e) {
-    return this.element.classList.remove("dz-drag-hover");
+    return this.element.classList.remove('dz-drag-hover');
   },
 
   paste(e) {},
@@ -586,14 +586,14 @@ let defaultOptions = {
   // Called whenever there are no files left in the dropzone anymore, and the
   // dropzone should be displayed as if in the initial state.
   reset() {
-    return this.element.classList.remove("dz-started");
+    return this.element.classList.remove('dz-started');
   },
 
   // Called when a file is added to the queue
   // Receives `file`
   addedfile(file) {
     if (this.element === this.previewsContainer) {
-      this.element.classList.add("dz-started");
+      this.element.classList.add('dz-started');
     }
 
     if (this.previewsContainer && !this.options.disablePreviews) {
@@ -603,10 +603,10 @@ let defaultOptions = {
       file.previewTemplate = file.previewElement; // Backwards compatibility
 
       this.previewsContainer.appendChild(file.previewElement);
-      for (var node of file.previewElement.querySelectorAll("[data-dz-name]")) {
+      for (var node of file.previewElement.querySelectorAll('[data-dz-name]')) {
         node.textContent = file.name;
       }
-      for (node of file.previewElement.querySelectorAll("[data-dz-size]")) {
+      for (node of file.previewElement.querySelectorAll('[data-dz-size]')) {
         node.innerHTML = this.filesize(file.size);
       }
 
@@ -638,9 +638,9 @@ let defaultOptions = {
       };
 
       for (let removeLink of file.previewElement.querySelectorAll(
-        "[data-dz-remove]"
+        '[data-dz-remove]'
       )) {
-        removeLink.addEventListener("click", removeFileEvent);
+        removeLink.addEventListener('click', removeFileEvent);
       }
     }
   },
@@ -657,16 +657,16 @@ let defaultOptions = {
   // Receives `file` and `dataUrl`
   thumbnail(file, dataUrl) {
     if (file.previewElement) {
-      file.previewElement.classList.remove("dz-file-preview");
+      file.previewElement.classList.remove('dz-file-preview');
       for (let thumbnailElement of file.previewElement.querySelectorAll(
-        "[data-dz-thumbnail]"
+        '[data-dz-thumbnail]'
       )) {
         thumbnailElement.alt = file.name;
         thumbnailElement.src = dataUrl;
       }
 
       return setTimeout(
-        () => file.previewElement.classList.add("dz-image-preview"),
+        () => file.previewElement.classList.add('dz-image-preview'),
         1
       );
     }
@@ -676,12 +676,12 @@ let defaultOptions = {
   // Receives `file` and `message`
   error(file, message) {
     if (file.previewElement) {
-      file.previewElement.classList.add("dz-error");
-      if (typeof message !== "string" && message.error) {
+      file.previewElement.classList.add('dz-error');
+      if (typeof message !== 'string' && message.error) {
         message = message.error;
       }
       for (let node of file.previewElement.querySelectorAll(
-        "[data-dz-errormessage]"
+        '[data-dz-errormessage]'
       )) {
         node.textContent = message;
       }
@@ -695,7 +695,7 @@ let defaultOptions = {
   // Receives `file`
   processing(file) {
     if (file.previewElement) {
-      file.previewElement.classList.add("dz-processing");
+      file.previewElement.classList.add('dz-processing');
       if (file._removeLink) {
         return (file._removeLink.innerHTML = this.options.dictCancelUpload);
       }
@@ -710,9 +710,9 @@ let defaultOptions = {
   uploadprogress(file, progress, bytesSent) {
     if (file.previewElement) {
       for (let node of file.previewElement.querySelectorAll(
-        "[data-dz-uploadprogress]"
+        '[data-dz-uploadprogress]'
       )) {
-        node.nodeName === "PROGRESS"
+        node.nodeName === 'PROGRESS'
           ? (node.value = progress)
           : (node.style.width = `${progress}%`);
       }
@@ -734,7 +734,7 @@ let defaultOptions = {
   // Receives `file`
   success(file) {
     if (file.previewElement) {
-      return file.previewElement.classList.add("dz-success");
+      return file.previewElement.classList.add('dz-success');
     }
   },
 
@@ -742,7 +742,7 @@ let defaultOptions = {
 
   // When the upload is canceled.
   canceled(file) {
-    return this.emit("error", file, this.options.dictUploadCanceled);
+    return this.emit('error', file, this.options.dictUploadCanceled);
   },
 
   canceledmultiple() {},
@@ -754,7 +754,7 @@ let defaultOptions = {
       file._removeLink.innerHTML = this.options.dictRemoveFile;
     }
     if (file.previewElement) {
-      return file.previewElement.classList.add("dz-complete");
+      return file.previewElement.classList.add('dz-complete');
     }
   },
 

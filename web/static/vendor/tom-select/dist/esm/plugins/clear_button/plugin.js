@@ -1,13 +1,13 @@
 /**
-* Tom Select v2.1.0
-* Licensed under the Apache License, Version 2.0 (the "License");
-*/
+ * Tom Select v2.1.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
 
 // @ts-ignore TS2691 "An import path cannot end with a '.ts' extension"
 const latin_convert = {
-  'æ': 'ae',
-  'ⱥ': 'a',
-  'ø': 'o'
+  æ: 'ae',
+  ⱥ: 'a',
+  ø: 'o',
 };
 new RegExp(Object.keys(latin_convert).join('|'), 'gu');
 
@@ -18,7 +18,7 @@ new RegExp(Object.keys(latin_convert).join('|'), 'gu');
  * param query should be {}
  */
 
-const getDom = query => {
+const getDom = (query) => {
   if (query.jquery) {
     return query[0];
   }
@@ -36,7 +36,7 @@ const getDom = query => {
 
   return document.querySelector(query);
 };
-const isHtmlString = arg => {
+const isHtmlString = (arg) => {
   if (typeof arg === 'string' && arg.indexOf('<') > -1) {
     return true;
   }
@@ -58,18 +58,21 @@ const isHtmlString = arg => {
  * governing permissions and limitations under the License.
  *
  */
-function plugin (userOptions) {
+function plugin(userOptions) {
   const self = this;
-  const options = Object.assign({
-    className: 'clear-button',
-    title: 'Clear All',
-    html: data => {
-      return `<div class="${data.className}" title="${data.title}">&times;</div>`;
-    }
-  }, userOptions);
+  const options = Object.assign(
+    {
+      className: 'clear-button',
+      title: 'Clear All',
+      html: (data) => {
+        return `<div class="${data.className}" title="${data.title}">&times;</div>`;
+      },
+    },
+    userOptions
+  );
   self.on('initialize', () => {
     var button = getDom(options.html(options));
-    button.addEventListener('click', evt => {
+    button.addEventListener('click', (evt) => {
       if (self.isDisabled) {
         return;
       }

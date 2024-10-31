@@ -1,5 +1,4 @@
-JSZip
-=====
+# JSZip
 
 A library for creating, reading and editing .zip files with JavaScript, with a
 lovely and simple API.
@@ -9,14 +8,14 @@ See https://stuk.github.io/jszip for all the documentation.
 ```javascript
 var zip = new JSZip();
 
-zip.file("Hello.txt", "Hello World\n");
+zip.file('Hello.txt', 'Hello World\n');
 
-var img = zip.folder("images");
-img.file("smile.gif", imgData, {base64: true});
+var img = zip.folder('images');
+img.file('smile.gif', imgData, { base64: true });
 
-zip.generateAsync({type:"blob"}).then(function(content) {
-    // see FileSaver.js
-    saveAs(content, "example.zip");
+zip.generateAsync({ type: 'blob' }).then(function (content) {
+  // see FileSaver.js
+  saveAs(content, 'example.zip');
 });
 
 /*
@@ -26,8 +25,8 @@ images/
     smile.gif
 */
 ```
-License
--------
 
-JSZip is dual-licensed. You may use it under the MIT license *or* the GPLv3
+## License
+
+JSZip is dual-licensed. You may use it under the MIT license _or_ the GPLv3
 license. See [LICENSE.markdown](LICENSE.markdown).

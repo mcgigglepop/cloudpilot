@@ -2,25 +2,36 @@ import Parchment from 'parchment';
 import Quill from '../core/quill';
 import Module from '../core/module';
 
-
 class History extends Module {
   constructor(quill, options) {
     super(quill, options);
     this.lastRecorded = 0;
     this.ignoreChange = false;
     this.clear();
-    this.quill.on(Quill.events.EDITOR_CHANGE, (eventName, delta, oldDelta, source) => {
-      if (eventName !== Quill.events.TEXT_CHANGE || this.ignoreChange) return;
-      if (!this.options.userOnly || source === Quill.sources.USER) {
-        this.record(delta, oldDelta);
-      } else {
-        this.transform(delta);
+    this.quill.on(
+      Quill.events.EDITOR_CHANGE,
+      (eventName, delta, oldDelta, source) => {
+        if (eventName !== Quill.events.TEXT_CHANGE || this.ignoreChange) return;
+        if (!this.options.userOnly || source === Quill.sources.USER) {
+          this.record(delta, oldDelta);
+        } else {
+          this.transform(delta);
+        }
       }
-    });
-    this.quill.keyboard.addBinding({ key: 'Z', shortKey: true }, this.undo.bind(this));
-    this.quill.keyboard.addBinding({ key: 'Z', shortKey: true, shiftKey: true }, this.redo.bind(this));
+    );
+    this.quill.keyboard.addBinding(
+      { key: 'Z', shortKey: true },
+      this.undo.bind(this)
+    );
+    this.quill.keyboard.addBinding(
+      { key: 'Z', shortKey: true, shiftKey: true },
+      this.redo.bind(this)
+    );
     if (/Win/i.test(navigator.platform)) {
-      this.quill.keyboard.addBinding({ key: 'Y', shortKey: true }, this.redo.bind(this));
+      this.quill.keyboard.addBinding(
+        { key: 'Y', shortKey: true },
+        this.redo.bind(this)
+      );
     }
   }
 
@@ -49,7 +60,10 @@ class History extends Module {
     this.stack.redo = [];
     let undoDelta = this.quill.getContents().diff(oldDelta);
     let timestamp = Date.now();
-    if (this.lastRecorded + this.options.delay > timestamp && this.stack.undo.length > 0) {
+    if (
+      this.lastRecorded + this.options.delay > timestamp &&
+      this.stack.undo.length > 0
+    ) {
       let delta = this.stack.undo.pop();
       undoDelta = undoDelta.compose(delta.undo);
       changeDelta = delta.redo.compose(changeDelta);
@@ -58,7 +72,7 @@ class History extends Module {
     }
     this.stack.undo.push({
       redo: changeDelta,
-      undo: undoDelta
+      undo: undoDelta,
     });
     if (this.stack.undo.length > this.options.maxStack) {
       this.stack.undo.shift();
@@ -70,11 +84,11 @@ class History extends Module {
   }
 
   transform(delta) {
-    this.stack.undo.forEach(function(change) {
+    this.stack.undo.forEach(function (change) {
       change.undo = delta.transform(change.undo, true);
       change.redo = delta.transform(change.redo, true);
     });
-    this.stack.redo.forEach(function(change) {
+    this.stack.redo.forEach(function (change) {
       change.undo = delta.transform(change.undo, true);
       change.redo = delta.transform(change.redo, true);
     });
@@ -87,7 +101,7 @@ class History extends Module {
 History.DEFAULTS = {
   delay: 1000,
   maxStack: 100,
-  userOnly: false
+  userOnly: false,
 };
 
 function endsWithNewlineChange(delta) {
@@ -97,7 +111,7 @@ function endsWithNewlineChange(delta) {
     return typeof lastOp.insert === 'string' && lastOp.insert.endsWith('\n');
   }
   if (lastOp.attributes != null) {
-    return Object.keys(lastOp.attributes).some(function(attr) {
+    return Object.keys(lastOp.attributes).some(function (attr) {
       return Parchment.query(attr, Parchment.Scope.BLOCK) != null;
     });
   }
@@ -105,8 +119,8 @@ function endsWithNewlineChange(delta) {
 }
 
 function getLastChangeIndex(delta) {
-  let deleteLength = delta.reduce(function(length, op) {
-    length += (op.delete || 0);
+  let deleteLength = delta.reduce(function (length, op) {
+    length += op.delete || 0;
     return length;
   }, 0);
   let changeIndex = delta.length() - deleteLength;
@@ -115,6 +129,5 @@ function getLastChangeIndex(delta) {
   }
   return changeIndex;
 }
-
 
 export { History as default, getLastChangeIndex };

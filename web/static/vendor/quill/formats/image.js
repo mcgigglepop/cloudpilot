@@ -1,12 +1,7 @@
 import Parchment from 'parchment';
 import { sanitize } from '../formats/link';
 
-const ATTRIBUTES = [
-  'alt',
-  'height',
-  'width'
-];
-
+const ATTRIBUTES = ['alt', 'height', 'width'];
 
 class Image extends Parchment.Embed {
   static create(value) {
@@ -18,7 +13,7 @@ class Image extends Parchment.Embed {
   }
 
   static formats(domNode) {
-    return ATTRIBUTES.reduce(function(formats, attribute) {
+    return ATTRIBUTES.reduce(function (formats, attribute) {
       if (domNode.hasAttribute(attribute)) {
         formats[attribute] = domNode.getAttribute(attribute);
       }
@@ -52,6 +47,5 @@ class Image extends Parchment.Embed {
 }
 Image.blotName = 'image';
 Image.tagName = 'IMG';
-
 
 export default Image;

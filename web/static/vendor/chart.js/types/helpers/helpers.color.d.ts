@@ -4,10 +4,10 @@ export function color(value: CanvasGradient): CanvasGradient;
 export function color(value: CanvasPattern): CanvasPattern;
 export function color(
   value:
-  | string
-  | { r: number; g: number; b: number; a: number }
-  | [number, number, number]
-  | [number, number, number, number]
+    | string
+    | { r: number; g: number; b: number; a: number }
+    | [number, number, number]
+    | [number, number, number, number]
 ): ColorModel;
 
 export function isPatternOrGradient(value: string | AnyObject): boolean;

@@ -17,35 +17,36 @@ import TomSelect from '../../tom-select';
 import { getDom } from '../../vanilla';
 import { CBOptions } from './types';
 
-export default function(this:TomSelect, userOptions:CBOptions) {
-	const self = this;
+export default function (this: TomSelect, userOptions: CBOptions) {
+  const self = this;
 
-	const options = Object.assign({
-		className: 'clear-button',
-		title: 'Clear All',
-		html: (data:CBOptions) => {
-			return `<div class="${data.className}" title="${data.title}">&times;</div>`;
-		}
-	}, userOptions);
+  const options = Object.assign(
+    {
+      className: 'clear-button',
+      title: 'Clear All',
+      html: (data: CBOptions) => {
+        return `<div class="${data.className}" title="${data.title}">&times;</div>`;
+      },
+    },
+    userOptions
+  );
 
-	self.on('initialize',()=>{
-		var button = getDom(options.html(options));
-		button.addEventListener('click',(evt)=>{
+  self.on('initialize', () => {
+    var button = getDom(options.html(options));
+    button.addEventListener('click', (evt) => {
+      if (self.isDisabled) {
+        return;
+      }
 
-			if( self.isDisabled ){
-				return;
-			}
+      self.clear();
 
-			self.clear();
+      if (self.settings.mode === 'single' && self.settings.allowEmptyOption) {
+        self.addItem('');
+      }
 
-			if( self.settings.mode === 'single' && self.settings.allowEmptyOption ){
-				self.addItem('');
-			}
-
-			evt.preventDefault();
-			evt.stopPropagation();
-		});
-		self.control.appendChild(button);
-	});
-
-};
+      evt.preventDefault();
+      evt.stopPropagation();
+    });
+    self.control.appendChild(button);
+  });
+}

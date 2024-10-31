@@ -1,6 +1,5 @@
-
-import {version} from '../package.json';
-export {version};
+import { version } from '../package.json';
+export { version };
 
 // control
 export * from './control/index';

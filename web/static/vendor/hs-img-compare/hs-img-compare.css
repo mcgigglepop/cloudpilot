@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index:9;
+  z-index: 9;
   cursor: ew-resize;
   width: 40px;
   height: 40px;
@@ -33,7 +33,6 @@
   width: auto;
 }
 
-
 .hs-img-comp {
   pointer-events: none;
   -o-user-select: none;
@@ -43,9 +42,9 @@
   user-select: none;
   max-width: none;
   width: 100%;
-  margin: 0!important;
-  padding: 0!important;
-  border: 0!important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
   top: 0;
   display: block;
 }
@@ -58,5 +57,5 @@
   background-size: cover;
   background-position: 50%;
   z-index: 3;
-  height: 100%!important;
+  height: 100% !important;
 }

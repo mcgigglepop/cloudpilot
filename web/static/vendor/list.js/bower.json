@@ -2,24 +2,9 @@
   "name": "list.js",
   "main": "dist/list.js",
   "homepage": "https://listjs.com",
-  "authors": [
-    "Jonny Strömberg <jonny.stromberg@gmail.com>"
-  ],
+  "authors": ["Jonny Strömberg <jonny.stromberg@gmail.com>"],
   "description": "The perfect library for lists. Supports search, sort, filters and flexibility. Built to be invisible and work on existing HTML",
-  "keywords": [
-    "list",
-    "search",
-    "sort",
-    "table",
-    "dom",
-    "html",
-    "ui"
-  ],
+  "keywords": ["list", "search", "sort", "table", "dom", "html", "ui"],
   "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "__test__",
-    "docs"
-  ]
+  "ignore": ["**/.*", "node_modules", "__test__", "docs"]
 }

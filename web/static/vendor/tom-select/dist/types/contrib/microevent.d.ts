@@ -9,12 +9,12 @@
  */
 declare type TCallback = (...args: any) => any;
 export default class MicroEvent {
-    _events: {
-        [key: string]: TCallback[];
-    };
-    constructor();
-    on(events: string, fct: TCallback): void;
-    off(events: string, fct: TCallback): void;
-    trigger(events: string, ...args: any): void;
+  _events: {
+    [key: string]: TCallback[];
+  };
+  constructor();
+  on(events: string, fct: TCallback): void;
+  off(events: string, fct: TCallback): void;
+  trigger(events: string, ...args: any): void;
 }
 export {};

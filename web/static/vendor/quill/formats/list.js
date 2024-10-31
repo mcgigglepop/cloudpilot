@@ -2,10 +2,11 @@ import Parchment from 'parchment';
 import Block from '../blots/block';
 import Container from '../blots/container';
 
-
 class ListItem extends Block {
   static formats(domNode) {
-    return domNode.tagName === this.tagName ? undefined : super.formats(domNode);
+    return domNode.tagName === this.tagName
+      ? undefined
+      : super.formats(domNode);
   }
 
   format(name, value) {
@@ -38,7 +39,6 @@ class ListItem extends Block {
 ListItem.blotName = 'list-item';
 ListItem.tagName = 'LI';
 
-
 class List extends Container {
   static create(value) {
     let tagName = value === 'ordered' ? 'OL' : 'UL';
@@ -53,7 +53,9 @@ class List extends Container {
     if (domNode.tagName === 'OL') return 'ordered';
     if (domNode.tagName === 'UL') {
       if (domNode.hasAttribute('data-checked')) {
-        return domNode.getAttribute('data-checked') === 'true' ? 'checked' : 'unchecked';
+        return domNode.getAttribute('data-checked') === 'true'
+          ? 'checked'
+          : 'unchecked';
       } else {
         return 'bullet';
       }
@@ -69,10 +71,10 @@ class List extends Container {
       let blot = Parchment.find(e.target);
       if (format === 'checked') {
         blot.format('list', 'unchecked');
-      } else if(format === 'unchecked') {
+      } else if (format === 'unchecked') {
         blot.format('list', 'checked');
       }
-    }
+    };
 
     domNode.addEventListener('touchstart', listEventHandler);
     domNode.addEventListener('mousedown', listEventHandler);
@@ -102,10 +104,14 @@ class List extends Container {
   optimize(context) {
     super.optimize(context);
     let next = this.next;
-    if (next != null && next.prev === this &&
-        next.statics.blotName === this.statics.blotName &&
-        next.domNode.tagName === this.domNode.tagName &&
-        next.domNode.getAttribute('data-checked') === this.domNode.getAttribute('data-checked')) {
+    if (
+      next != null &&
+      next.prev === this &&
+      next.statics.blotName === this.statics.blotName &&
+      next.domNode.tagName === this.domNode.tagName &&
+      next.domNode.getAttribute('data-checked') ===
+        this.domNode.getAttribute('data-checked')
+    ) {
       next.moveChildren(this);
       next.remove();
     }
@@ -125,6 +131,5 @@ List.scope = Parchment.Scope.BLOCK_BLOT;
 List.tagName = ['OL', 'UL'];
 List.defaultChild = 'list-item';
 List.allowedChildren = [ListItem];
-
 
 export { ListItem, List as default };

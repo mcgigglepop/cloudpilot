@@ -1,21 +1,21 @@
 export default function repositionLabels() {
-  const labels = this.params.labels
+  const labels = this.params.labels;
 
   if (!labels) {
-    return
+    return;
   }
 
   // Regions labels
   if (labels.regions) {
     for (let key in this.regions) {
-      this.regions[key].element.updateLabelPosition()
+      this.regions[key].element.updateLabelPosition();
     }
   }
 
   // Markers labels
   if (labels.markers) {
     for (let key in this.markers) {
-      this.markers[key].element.updateLabelPosition()
+      this.markers[key].element.updateLabelPosition();
     }
   }
 }

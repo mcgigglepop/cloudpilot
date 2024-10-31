@@ -9,8 +9,7 @@ XHR.
 
 It's fully configurable and can be styled according to your needs.
 
-Quickstart
-----------
+## Quickstart
 
 - [📚 Full documentation](https://dropzone.gitbook.io/dropzone/)
 - [💾 Download
@@ -25,9 +24,7 @@ Quickstart
 
 &nbsp;
 
-
-Community
----------
+## Community
 
 If you need support please use the [discussions section][discussions] or
 [stackoverflow][so] with the `dropzone.js` tag and **not** the GitHub issues
@@ -39,13 +36,10 @@ If you have a feature request or want to discuss something, please use the
 [discussions]: https://github.com/dropzone/dropzone/discussions
 [so]: https://stackoverflow.com/questions/tagged/dropzone.js
 
-
 > ⚠️ **Please read the [contributing guidelines](CONTRIBUTING.md) before you start
 > working on Dropzone!**
 
-
-Main features
--------------
+## Main features
 
 - Beautiful by default
 - Image thumbnail previews. Simply register the callback `thumbnail(file, data)`

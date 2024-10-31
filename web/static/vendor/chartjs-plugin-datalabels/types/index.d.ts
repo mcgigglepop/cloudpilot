@@ -1,5 +1,5 @@
-import {ChartType, Plugin} from 'chart.js';
-import {Options} from './options';
+import { ChartType, Plugin } from 'chart.js';
+import { Options } from './options';
 
 declare module 'chart.js' {
   interface ChartDatasetProperties<TType extends ChartType, TData> {

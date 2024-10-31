@@ -16,7 +16,7 @@ Include appear.js in your page, it has no dependencies.
 Call `appear()` passing in an object with the following:
 
 - `init` function to run when dom is interactive, but before appear.js has started tracking.
-- `elements` *required* function that returns an htmlcollection of elements to track. The dom will be interactive at this point. Can alternatively be an existing htmlcollection instead of a function.
+- `elements` _required_ function that returns an htmlcollection of elements to track. The dom will be interactive at this point. Can alternatively be an existing htmlcollection instead of a function.
 - `appear` function to run when an element is in view, passed the element that has come into view. If defined then appear.js will track elements until they come into view.
 - `disappear` function to run when an element goes out of view, passed the element that has gone out of view. If defined then appear.js will track elements until they go out of view.
 - `reappear` if true appear.js will keep tracking elements for successfuive appears and dissappears. Default is false.
@@ -30,21 +30,21 @@ Call `appear()` passing in an object with the following:
 
 ```javascript
 appear({
-  init: function init(){
+  init: function init() {
     console.log('dom is ready');
   },
-  elements: function elements(){
+  elements: function elements() {
     // work with all elements with the class "track"
     return document.getElementsByClassName('track');
   },
-  appear: function appear(el){
+  appear: function appear(el) {
     console.log('visible', el);
   },
-  disappear: function disappear(el){
+  disappear: function disappear(el) {
     console.log('no longer visible', el);
   },
   bounds: 200,
-  reappear: true
+  reappear: true,
 });
 ```
 
@@ -56,7 +56,6 @@ appear({
 - `pause()` temporarily stop tracking elements.
 - `resume()` resume tracking elements.
 - `destroy()` permanently stop tracking elements.
-
 
 ## Download
 

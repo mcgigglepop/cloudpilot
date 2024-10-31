@@ -1,18 +1,18 @@
 /**
-* Tom Select v2.1.0
-* Licensed under the Apache License, Version 2.0 (the "License");
-*/
+ * Tom Select v2.1.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
 
 const KEY_ESC = 27;
 const KEY_TAB = 9;
 typeof navigator === 'undefined' ? false : /Mac/.test(navigator.userAgent);
- // ctrl key or apple key for ma
+// ctrl key or apple key for ma
 
 // @ts-ignore TS2691 "An import path cannot end with a '.ts' extension"
 const latin_convert = {
-  'æ': 'ae',
-  'ⱥ': 'a',
-  'ø': 'o'
+  æ: 'ae',
+  ⱥ: 'a',
+  ø: 'o',
 };
 new RegExp(Object.keys(latin_convert).join('|'), 'gu');
 
@@ -47,7 +47,7 @@ const iterate = (object, callback) => {
  * param query should be {}
  */
 
-const getDom = query => {
+const getDom = (query) => {
   if (query.jquery) {
     return query[0];
   }
@@ -65,7 +65,7 @@ const getDom = query => {
 
   return document.querySelector(query);
 };
-const isHtmlString = arg => {
+const isHtmlString = (arg) => {
   if (typeof arg === 'string' && arg.indexOf('<') > -1) {
     return true;
   }
@@ -80,8 +80,8 @@ const isHtmlString = arg => {
 const addClasses = (elmts, ...classes) => {
   var norm_classes = classesArray(classes);
   elmts = castAsArray(elmts);
-  elmts.map(el => {
-    norm_classes.map(cls => {
+  elmts.map((el) => {
+    norm_classes.map((cls) => {
       el.classList.add(cls);
     });
   });
@@ -91,9 +91,9 @@ const addClasses = (elmts, ...classes) => {
  *
  */
 
-const classesArray = args => {
+const classesArray = (args) => {
   var classes = [];
-  iterate(args, _classes => {
+  iterate(args, (_classes) => {
     if (typeof _classes === 'string') {
       _classes = _classes.trim().split(/[\11\12\14\15\40]/);
     }
@@ -109,7 +109,7 @@ const classesArray = args => {
  *
  */
 
-const castAsArray = arg => {
+const castAsArray = (arg) => {
   if (!Array.isArray(arg)) {
     arg = [arg];
   }
@@ -168,7 +168,7 @@ const addEvent = (target, type, callback, options) => {
  * governing permissions and limitations under the License.
  *
  */
-function plugin () {
+function plugin() {
   const self = this;
   self.settings.shouldOpen = true; // make sure the input is shown even if there are no options to display in the dropdown
 
@@ -179,13 +179,15 @@ function plugin () {
     div.append(self.control_input);
     self.dropdown.insertBefore(div, self.dropdown.firstChild); // set a placeholder in the select control
 
-    const placeholder = getDom('<input class="items-placeholder" tabindex="-1" />');
+    const placeholder = getDom(
+      '<input class="items-placeholder" tabindex="-1" />'
+    );
     placeholder.placeholder = self.settings.placeholder || '';
     self.control.append(placeholder);
   });
   self.on('initialize', () => {
     // set tabIndex on control to -1, otherwise [shift+tab] will put focus right back on control_input
-    self.control_input.addEventListener('keydown', evt => {
+    self.control_input.addEventListener('keydown', (evt) => {
       //addEvent(self.control_input,'keydown' as const,(evt:KeyboardEvent) =>{
       switch (evt.keyCode) {
         case KEY_ESC:
@@ -213,7 +215,7 @@ function plugin () {
     }); // prevent onBlur from closing when focus is on the control_input
 
     const orig_onBlur = self.onBlur;
-    self.hook('instead', 'onBlur', evt => {
+    self.hook('instead', 'onBlur', (evt) => {
       if (evt && evt.relatedTarget == self.control_input) return;
       return orig_onBlur.call(self);
     });
@@ -222,7 +224,7 @@ function plugin () {
     self.hook('before', 'close', () => {
       if (!self.isOpen) return;
       self.focus_node.focus({
-        preventScroll: true
+        preventScroll: true,
       });
     });
   });

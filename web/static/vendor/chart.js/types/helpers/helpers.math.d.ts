@@ -14,4 +14,7 @@ export function getAngleFromPoint(
   anglePoint: { x: number; y: number }
 ): { angle: number; distance: number };
 
-export function distanceBetweenPoints(pt1: { x: number; y: number }, pt2: { x: number; y: number }): number;
+export function distanceBetweenPoints(
+  pt1: { x: number; y: number },
+  pt2: { x: number; y: number }
+): number;

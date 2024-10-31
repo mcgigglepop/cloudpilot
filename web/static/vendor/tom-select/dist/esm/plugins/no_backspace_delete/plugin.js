@@ -1,7 +1,7 @@
 /**
-* Tom Select v2.1.0
-* Licensed under the Apache License, Version 2.0 (the "License");
-*/
+ * Tom Select v2.1.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
 
 /**
  * Plugin: "input_autogrow" (Tom Select)
@@ -16,10 +16,10 @@
  * governing permissions and limitations under the License.
  *
  */
-function plugin () {
+function plugin() {
   var self = this;
   var orig_deleteSelection = self.deleteSelection;
-  this.hook('instead', 'deleteSelection', evt => {
+  this.hook('instead', 'deleteSelection', (evt) => {
     if (self.activeItems.length) {
       return orig_deleteSelection.call(self, evt);
     }

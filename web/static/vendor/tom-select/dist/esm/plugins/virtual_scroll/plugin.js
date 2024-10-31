@@ -1,13 +1,13 @@
 /**
-* Tom Select v2.1.0
-* Licensed under the Apache License, Version 2.0 (the "License");
-*/
+ * Tom Select v2.1.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
 
 // @ts-ignore TS2691 "An import path cannot end with a '.ts' extension"
 const latin_convert = {
-  'æ': 'ae',
-  'ⱥ': 'a',
-  'ø': 'o'
+  æ: 'ae',
+  ⱥ: 'a',
+  ø: 'o',
 };
 new RegExp(Object.keys(latin_convert).join('|'), 'gu');
 
@@ -43,8 +43,8 @@ const iterate = (object, callback) => {
 const addClasses = (elmts, ...classes) => {
   var norm_classes = classesArray(classes);
   elmts = castAsArray(elmts);
-  elmts.map(el => {
-    norm_classes.map(cls => {
+  elmts.map((el) => {
+    norm_classes.map((cls) => {
       el.classList.add(cls);
     });
   });
@@ -54,9 +54,9 @@ const addClasses = (elmts, ...classes) => {
  *
  */
 
-const classesArray = args => {
+const classesArray = (args) => {
   var classes = [];
-  iterate(args, _classes => {
+  iterate(args, (_classes) => {
     if (typeof _classes === 'string') {
       _classes = _classes.trim().split(/[\11\12\14\15\40]/);
     }
@@ -72,7 +72,7 @@ const classesArray = args => {
  *
  */
 
-const castAsArray = arg => {
+const castAsArray = (arg) => {
   if (!Array.isArray(arg)) {
     arg = [arg];
   }
@@ -94,7 +94,7 @@ const castAsArray = arg => {
  * governing permissions and limitations under the License.
  *
  */
-function plugin () {
+function plugin() {
   const self = this;
   const orig_canLoad = self.canLoad;
   const orig_clearActiveOption = self.clearActiveOption;
@@ -108,7 +108,9 @@ function plugin () {
   if (!self.settings.shouldLoadMore) {
     // return true if additional results should be loaded
     self.settings.shouldLoadMore = () => {
-      const scroll_percent = dropdown_content.clientHeight / (dropdown_content.scrollHeight - dropdown_content.scrollTop);
+      const scroll_percent =
+        dropdown_content.clientHeight /
+        (dropdown_content.scrollHeight - dropdown_content.scrollTop);
 
       if (scroll_percent > 0.9) {
         return true;
@@ -132,15 +134,20 @@ function plugin () {
   } // in order for virtual scrolling to work,
   // options need to be ordered the same way they're returned from the remote data source
 
+  self.settings.sortField = [
+    {
+      field: '$order',
+    },
+    {
+      field: '$score',
+    },
+  ]; // can we load more results for given query?
 
-  self.settings.sortField = [{
-    field: '$order'
-  }, {
-    field: '$score'
-  }]; // can we load more results for given query?
-
-  const canLoadMore = query => {
-    if (typeof self.settings.maxOptions === 'number' && dropdown_content.children.length >= self.settings.maxOptions) {
+  const canLoadMore = (query) => {
+    if (
+      typeof self.settings.maxOptions === 'number' &&
+      dropdown_content.children.length >= self.settings.maxOptions
+    ) {
       return false;
     }
 
@@ -159,13 +166,11 @@ function plugin () {
     return false;
   }; // set the next url that will be
 
-
   self.setNextUrl = (value, next_url) => {
     pagination[value] = next_url;
   }; // getUrl() to be used in settings.load()
 
-
-  self.getUrl = query => {
+  self.getUrl = (query) => {
     if (query in pagination) {
       const next_url = pagination[query];
       pagination[query] = false;
@@ -173,12 +178,10 @@ function plugin () {
     } // if the user goes back to a previous query
     // we need to load the first page again
 
-
     pagination = {};
     return self.settings.firstUrl.call(self, query);
   }; // don't clear the active option (and cause unwanted dropdown scroll)
   // while loading more results
-
 
   self.hook('instead', 'clearActiveOption', () => {
     if (loading_more) {
@@ -188,7 +191,7 @@ function plugin () {
     return orig_clearActiveOption.call(self);
   }); // override the canLoad method
 
-  self.hook('instead', 'canLoad', query => {
+  self.hook('instead', 'canLoad', (query) => {
     // first time the query has been seen
     if (!(query in pagination)) {
       return orig_canLoad.call(self, query);
@@ -216,7 +219,7 @@ function plugin () {
 
     if (canLoadMore(query)) {
       option = self.render('loading_more', {
-        query: query
+        query: query,
       });
 
       if (option) {
@@ -224,9 +227,12 @@ function plugin () {
 
         load_more_opt = option;
       }
-    } else if (query in pagination && !dropdown_content.querySelector('.no-results')) {
+    } else if (
+      query in pagination &&
+      !dropdown_content.querySelector('.no-results')
+    ) {
       option = self.render('no_more_results', {
-        query: query
+        query: query,
       });
     }
 
@@ -240,25 +246,27 @@ function plugin () {
     default_values = Object.keys(self.options);
     dropdown_content = self.dropdown_content; // default templates
 
-    self.settings.render = Object.assign({}, {
-      loading_more: () => {
-        return `<div class="loading-more-results">Loading more results ... </div>`;
+    self.settings.render = Object.assign(
+      {},
+      {
+        loading_more: () => {
+          return `<div class="loading-more-results">Loading more results ... </div>`;
+        },
+        no_more_results: () => {
+          return `<div class="no-more-results">No more results</div>`;
+        },
       },
-      no_more_results: () => {
-        return `<div class="no-more-results">No more results</div>`;
-      }
-    }, self.settings.render); // watch dropdown content scroll position
+      self.settings.render
+    ); // watch dropdown content scroll position
 
     dropdown_content.addEventListener('scroll', () => {
       if (!self.settings.shouldLoadMore.call(self)) {
         return;
       } // !important: this will get checked again in load() but we still need to check here otherwise loading_more will be set to true
 
-
       if (!canLoadMore(self.lastValue)) {
         return;
       } // don't call load() too much
-
 
       if (loading_more) return;
       loading_more = true;

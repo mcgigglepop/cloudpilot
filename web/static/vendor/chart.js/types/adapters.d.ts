@@ -1,4 +1,13 @@
-export type TimeUnit = 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year';
+export type TimeUnit =
+  | 'millisecond'
+  | 'second'
+  | 'minute'
+  | 'hour'
+  | 'day'
+  | 'week'
+  | 'month'
+  | 'quarter'
+  | 'year';
 
 export interface DateAdapter {
   // Override one or multiple of the methods to adjust to the logic of the current date library.
@@ -48,7 +57,11 @@ export interface DateAdapter {
    * and 7 being Sunday (only needed if param *unit* is `isoWeek`).
    * @return {number}
    */
-  startOf(timestamp: number, unit: TimeUnit | 'isoWeek', weekday?: number): number;
+  startOf(
+    timestamp: number,
+    unit: TimeUnit | 'isoWeek',
+    weekday?: number
+  ): number;
   /**
    * Returns end of `unit` for the given `timestamp`.
    * @param {number} timestamp - the input timestamp

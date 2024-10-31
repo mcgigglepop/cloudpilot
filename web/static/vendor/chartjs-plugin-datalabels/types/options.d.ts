@@ -1,6 +1,14 @@
-import {Context} from './context';
+import { Context } from './context';
 
-type Align = 'bottom' | 'center' | 'end' | 'left' | 'right' | 'start' | 'top' | number;
+type Align =
+  | 'bottom'
+  | 'center'
+  | 'end'
+  | 'left'
+  | 'right'
+  | 'start'
+  | 'top'
+  | number;
 type Anchor = 'center' | 'end' | 'start';
 type Color = string | CanvasGradient | CanvasPattern;
 type Listener = (context: Context) => boolean | void;
@@ -14,12 +22,14 @@ type Font = {
   weight?: 'normal' | 'bold' | 'bolder' | 'lighter' | number;
 };
 
-type Padding = number | {
-  top?: number;
-  right?: number;
-  bottom?: number;
-  left?: number;
-};
+type Padding =
+  | number
+  | {
+      top?: number;
+      right?: number;
+      bottom?: number;
+      left?: number;
+    };
 
 // Generic types
 type Indexable<T> = T | T[];

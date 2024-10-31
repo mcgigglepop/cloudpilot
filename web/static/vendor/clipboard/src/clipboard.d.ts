@@ -35,13 +35,12 @@ declare class ClipboardJS {
    */
   static isSupported(): boolean;
 
-
   /**
    * Fires a copy action
    */
   static copy(target: string | Element, options?: CopyActionOptions): string;
 
-   /**
+  /**
    * Fires a cut action
    */
   static cut(target: string | Element): string;

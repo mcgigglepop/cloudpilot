@@ -26,7 +26,7 @@ export default class Emitter {
     // trigger a corresponding DOM event
     if (this.element) {
       this.element.dispatchEvent(
-        this.makeEvent("dropzone:" + event, { args: args })
+        this.makeEvent('dropzone:' + event, { args: args })
       );
     }
     return this;
@@ -35,12 +35,12 @@ export default class Emitter {
   makeEvent(eventName, detail) {
     let params = { bubbles: true, cancelable: true, detail: detail };
 
-    if (typeof window.CustomEvent === "function") {
+    if (typeof window.CustomEvent === 'function') {
       return new CustomEvent(eventName, params);
     } else {
       // IE 11 support
       // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
-      var evt = document.createEvent("CustomEvent");
+      var evt = document.createEvent('CustomEvent');
       evt.initCustomEvent(
         eventName,
         params.bubbles,

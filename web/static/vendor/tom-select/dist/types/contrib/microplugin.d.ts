@@ -14,58 +14,58 @@
  * @author Brian Reavis <brian@thirdroute.com>
  */
 declare type TSettings = {
-    [key: string]: any;
+  [key: string]: any;
 };
 declare type TPlugins = {
-    names: string[];
-    settings: TSettings;
-    requested: {
-        [key: string]: boolean;
-    };
-    loaded: {
-        [key: string]: any;
-    };
+  names: string[];
+  settings: TSettings;
+  requested: {
+    [key: string]: boolean;
+  };
+  loaded: {
+    [key: string]: any;
+  };
 };
 export declare type TPluginItem = {
-    name: string;
-    options: {};
+  name: string;
+  options: {};
 };
 export declare type TPluginHash = {
-    [key: string]: {};
+  [key: string]: {};
 };
 export default function MicroPlugin(Interface: any): {
-    new (): {
-        [x: string]: any;
-        plugins: TPlugins;
-        /**
-         * Initializes the listed plugins (with options).
-         * Acceptable formats:
-         *
-         * List (without options):
-         *   ['a', 'b', 'c']
-         *
-         * List (with options):
-         *   [{'name': 'a', options: {}}, {'name': 'b', options: {}}]
-         *
-         * Hash (with options):
-         *   {'a': { ... }, 'b': { ... }, 'c': { ... }}
-         *
-         * @param {array|object} plugins
-         */
-        initializePlugins(plugins: string[] | TPluginItem[] | TPluginHash): void;
-        loadPlugin(name: string): void;
-        /**
-         * Initializes a plugin.
-         *
-         */
-        require(name: string): any;
-    };
+  new (): {
     [x: string]: any;
+    plugins: TPlugins;
     /**
-     * Registers a plugin.
+     * Initializes the listed plugins (with options).
+     * Acceptable formats:
      *
-     * @param {function} fn
+     * List (without options):
+     *   ['a', 'b', 'c']
+     *
+     * List (with options):
+     *   [{'name': 'a', options: {}}, {'name': 'b', options: {}}]
+     *
+     * Hash (with options):
+     *   {'a': { ... }, 'b': { ... }, 'c': { ... }}
+     *
+     * @param {array|object} plugins
      */
-    define(name: string, fn: (this: any, settings: TSettings) => any): void;
+    initializePlugins(plugins: string[] | TPluginItem[] | TPluginHash): void;
+    loadPlugin(name: string): void;
+    /**
+     * Initializes a plugin.
+     *
+     */
+    require(name: string): any;
+  };
+  [x: string]: any;
+  /**
+   * Registers a plugin.
+   *
+   * @param {function} fn
+   */
+  define(name: string, fn: (this: any, settings: TSettings) => any): void;
 };
 export {};

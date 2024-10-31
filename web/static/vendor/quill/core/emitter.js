@@ -5,17 +5,18 @@ let debug = logger('quill:events');
 
 const EVENTS = ['selectionchange', 'mousedown', 'mouseup', 'click'];
 
-EVENTS.forEach(function(eventName) {
+EVENTS.forEach(function (eventName) {
   document.addEventListener(eventName, (...args) => {
-    [].slice.call(document.querySelectorAll('.ql-container')).forEach((node) => {
-      // TODO use WeakMap
-      if (node.__quill && node.__quill.emitter) {
-        node.__quill.emitter.handleDOM(...args);
-      }
-    });
+    [].slice
+      .call(document.querySelectorAll('.ql-container'))
+      .forEach((node) => {
+        // TODO use WeakMap
+        if (node.__quill && node.__quill.emitter) {
+          node.__quill.emitter.handleDOM(...args);
+        }
+      });
   });
 });
-
 
 class Emitter extends EventEmitter {
   constructor() {
@@ -30,7 +31,7 @@ class Emitter extends EventEmitter {
   }
 
   handleDOM(event, ...args) {
-    (this.listeners[event.type] || []).forEach(function({ node, handler }) {
+    (this.listeners[event.type] || []).forEach(function ({ node, handler }) {
       if (event.target === node || node.contains(event.target)) {
         handler(event, ...args);
       }
@@ -41,23 +42,22 @@ class Emitter extends EventEmitter {
     if (!this.listeners[eventName]) {
       this.listeners[eventName] = [];
     }
-    this.listeners[eventName].push({ node, handler })
+    this.listeners[eventName].push({ node, handler });
   }
 }
 
 Emitter.events = {
-  EDITOR_CHANGE        : 'editor-change',
-  SCROLL_BEFORE_UPDATE : 'scroll-before-update',
-  SCROLL_OPTIMIZE      : 'scroll-optimize',
-  SCROLL_UPDATE        : 'scroll-update',
-  SELECTION_CHANGE     : 'selection-change',
-  TEXT_CHANGE          : 'text-change'
+  EDITOR_CHANGE: 'editor-change',
+  SCROLL_BEFORE_UPDATE: 'scroll-before-update',
+  SCROLL_OPTIMIZE: 'scroll-optimize',
+  SCROLL_UPDATE: 'scroll-update',
+  SELECTION_CHANGE: 'selection-change',
+  TEXT_CHANGE: 'text-change',
 };
 Emitter.sources = {
-  API    : 'api',
-  SILENT : 'silent',
-  USER   : 'user'
+  API: 'api',
+  SILENT: 'silent',
+  USER: 'user',
 };
-
 
 export default Emitter;

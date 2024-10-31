@@ -5,7 +5,7 @@
 
 .hs-menu-initialized .animated {
   -webkit-animation-duration: 300ms;
-          animation-duration: 300ms;
+  animation-duration: 300ms;
 }
 
 .hs-overflow-x-locked {
@@ -25,7 +25,7 @@
     left: 0;
     top: 100%;
     z-index: 2;
-    margin-top: -.002rem;
+    margin-top: -0.002rem;
   }
 }
 
@@ -36,7 +36,7 @@
     left: 0;
     top: 100%;
     z-index: 2;
-    margin-top: -.002rem;
+    margin-top: -0.002rem;
   }
 }
 
@@ -47,7 +47,7 @@
     left: 0;
     top: 100%;
     z-index: 2;
-    margin-top: -.002rem;
+    margin-top: -0.002rem;
   }
 }
 
@@ -58,7 +58,7 @@
     left: 0;
     top: 100%;
     z-index: 2;
-    margin-top: -.002rem;
+    margin-top: -0.002rem;
   }
 }
 
@@ -147,10 +147,18 @@
   right: 0;
 }
 
-.hs-menu-initialized:not(.hs-mobile-state) .hs-sub-menu .hs-sub-menu.hs-reversed,
-.hs-menu-initialized:not(.hs-mobile-state) .hs-mega-menu .hs-sub-menu.hs-reversed,
-.hs-menu-initialized:not(.hs-mobile-state) .hs-sub-menu .hs-mega-menu.hs-reversed,
-.hs-menu-initialized:not(.hs-mobile-state) .hs-mega-menu .hs-mega-menu.hs-reversed {
+.hs-menu-initialized:not(.hs-mobile-state)
+  .hs-sub-menu
+  .hs-sub-menu.hs-reversed,
+.hs-menu-initialized:not(.hs-mobile-state)
+  .hs-mega-menu
+  .hs-sub-menu.hs-reversed,
+.hs-menu-initialized:not(.hs-mobile-state)
+  .hs-sub-menu
+  .hs-mega-menu.hs-reversed,
+.hs-menu-initialized:not(.hs-mobile-state)
+  .hs-mega-menu
+  .hs-mega-menu.hs-reversed {
   left: auto;
   right: 100%;
 }
@@ -161,10 +169,18 @@
   left: 0;
 }
 
-.hs-menu-initialized.hs-rtl:not(.hs-mobile-state) .hs-sub-menu .hs-sub-menu.hs-reversed,
-.hs-menu-initialized.hs-rtl:not(.hs-mobile-state) .hs-mega-menu .hs-sub-menu.hs-reversed,
-.hs-menu-initialized.hs-rtl:not(.hs-mobile-state) .hs-sub-menu .hs-mega-menu.hs-reversed,
-.hs-menu-initialized.hs-rtl:not(.hs-mobile-state) .hs-mega-menu .hs-mega-menu.hs-reversed {
+.hs-menu-initialized.hs-rtl:not(.hs-mobile-state)
+  .hs-sub-menu
+  .hs-sub-menu.hs-reversed,
+.hs-menu-initialized.hs-rtl:not(.hs-mobile-state)
+  .hs-mega-menu
+  .hs-sub-menu.hs-reversed,
+.hs-menu-initialized.hs-rtl:not(.hs-mobile-state)
+  .hs-sub-menu
+  .hs-mega-menu.hs-reversed,
+.hs-menu-initialized.hs-rtl:not(.hs-mobile-state)
+  .hs-mega-menu
+  .hs-mega-menu.hs-reversed {
   right: auto;
   left: 100%;
 }
@@ -188,6 +204,6 @@
   right: auto;
   left: 50%;
   -webkit-transform: translate(-50%, 0);
-      -ms-transform: translate(-50%, 0);
-          transform: translate(-50%, 0);
+  -ms-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
 }

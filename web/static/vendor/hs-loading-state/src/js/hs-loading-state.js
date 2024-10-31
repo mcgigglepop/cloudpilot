@@ -1,25 +1,24 @@
 /*
-* HSLoadingState Plugin
-* @version: 2.0.0 (Sun, 1 Aug 2021)
-* @author: HtmlStream
-* @event-namespace: .HSLoadingState
-* @license: Htmlstream Libraries (https://htmlstream.com/)
-* Copyright 2021 Htmlstream
-*/
+ * HSLoadingState Plugin
+ * @version: 2.0.0 (Sun, 1 Aug 2021)
+ * @author: HtmlStream
+ * @event-namespace: .HSLoadingState
+ * @license: Htmlstream Libraries (https://htmlstream.com/)
+ * Copyright 2021 Htmlstream
+ */
 
+import { fadeOut, createElementFromHTML } from '../utils';
+import fullscreenToggleClass from '../../../hs-fullscreen/src/js/methods/toggle-class';
+import fullscreenRemoveClass from '../../../hs-fullscreen/src/js/methods/remove-class';
 
-import {fadeOut, createElementFromHTML} from "../utils";
-import fullscreenToggleClass from "../../../hs-fullscreen/src/js/methods/toggle-class";
-import fullscreenRemoveClass from "../../../hs-fullscreen/src/js/methods/remove-class";
-
-const dataAttributeName = 'data-hs-loading-state-options'
+const dataAttributeName = 'data-hs-loading-state-options';
 const defaults = {
   targetEl: null,
   targetElStyles: {
-    position: ''
+    position: '',
   },
   targetElCustomStyles: {
-    position: 'relative'
+    position: 'relative',
   },
 
   eventType: 'click',
@@ -41,61 +40,61 @@ const defaults = {
   loaderTextExtendedClassNames: '',
 
   beforeLoading: null,
-  afterLoading: null
-}
+  afterLoading: null,
+};
 
 export default class HSLoadingState {
   constructor(el, options, id) {
-    this.collection = []
-    const that = this
-    let elems
+    this.collection = [];
+    const that = this;
+    let elems;
 
     if (el instanceof HTMLElement) {
-      elems = [el]
+      elems = [el];
     } else if (el instanceof Object) {
-      elems = el
+      elems = el;
     } else {
-      elems = document.querySelectorAll(el)
+      elems = document.querySelectorAll(el);
     }
 
     for (let i = 0; i < elems.length; i += 1) {
-      that.addToCollection(elems[i], options, id || elems[i].id)
+      that.addToCollection(elems[i], options, id || elems[i].id);
     }
 
     if (!that.collection.length) {
-      return false
+      return false;
     }
 
     // initialization calls
-    that._init()
+    that._init();
 
-    return this
+    return this;
   }
-  
+
   _init() {
     const that = this;
 
     for (let i = 0; i < that.collection.length; i += 1) {
-      let _$el
-      let _options
+      let _$el;
+      let _options;
 
       if (that.collection[i].hasOwnProperty('$initializedEl')) {
-        continue
+        continue;
       }
 
-      _$el = that.collection[i].$el
-      _options = that.collection[i].options
+      _$el = that.collection[i].$el;
+      _options = that.collection[i].options;
 
-      this._loading(_$el, _options)
+      this._loading(_$el, _options);
 
-      that.collection[i].$initializedEl = _options
+      that.collection[i].$initializedEl = _options;
     }
   }
 
   _loading($el, settings) {
-    const that = this
-    $el.addEventListener(settings.eventType,  () => {
-      const $loader = createElementFromHTML(that._selectTemplate(settings))
+    const that = this;
+    $el.addEventListener(settings.eventType, () => {
+      const $loader = createElementFromHTML(that._selectTemplate(settings));
 
       if (typeof settings.beforeLoading === 'function') {
         let before = settings.beforeLoading($el, settings);
@@ -103,18 +102,19 @@ export default class HSLoadingState {
         if (before === false) return;
       }
 
-      const $target = document.querySelector(settings.targetEl)
+      const $target = document.querySelector(settings.targetEl);
 
-      $target.style = settings.targetElCustomStyles
-      $target.appendChild($loader)
+      $target.style = settings.targetElCustomStyles;
+      $target.appendChild($loader);
 
-      $loader.style.display = 'block'
+      $loader.style.display = 'block';
 
       setTimeout(() => {
         fadeOut($loader, 400, () => {
-          document.querySelector(settings.targetEl).style = settings.targetElStyles
+          document.querySelector(settings.targetEl).style =
+            settings.targetElStyles;
 
-          $loader.parentNode.removeChild($loader)
+          $loader.parentNode.removeChild($loader);
 
           if (typeof settings.afterLoading === 'function') {
             settings.afterLoading($el, settings);
@@ -151,7 +151,7 @@ export default class HSLoadingState {
         item.hasAttribute(dataAttributeName)
           ? JSON.parse(item.getAttribute(dataAttributeName))
           : {},
-        options,
+        options
       ),
     });
   }

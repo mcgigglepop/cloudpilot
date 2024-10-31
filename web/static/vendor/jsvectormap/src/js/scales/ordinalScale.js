@@ -1,4 +1,3 @@
-
 /**
  * ------------------------------------------------------------------------
  * Class Definition
@@ -6,22 +5,22 @@
  */
 class OrdinalScale {
   constructor(scale) {
-    this._scale = scale
+    this._scale = scale;
   }
 
-  getValue(value){
-    return this._scale[value]
+  getValue(value) {
+    return this._scale[value];
   }
 
   getTicks() {
-    const ticks = []
+    const ticks = [];
 
     for (let key in this._scale) {
-      ticks.push({ label: key, value: this._scale[key] })
+      ticks.push({ label: key, value: this._scale[key] });
     }
 
-    return ticks
+    return ticks;
   }
 }
 
-export default OrdinalScale
+export default OrdinalScale;

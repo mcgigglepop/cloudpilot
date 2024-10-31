@@ -33,7 +33,7 @@ const addFlag = (country, rowDiv) => {
   countryDiv.title = country.name;
   const countrySpan = document.createElement('span');
   const countryName = document.createTextNode(country.name);
-  countrySpan.appendChild(countryName)
+  countrySpan.appendChild(countryName);
   countryDiv.appendChild(codeSpan);
   countryDiv.appendChild(countrySpan);
   const flagImg = document.createElement('img');
@@ -50,7 +50,7 @@ const addFlag = (country, rowDiv) => {
 window.onload = function () {
   const isoFlagsRow = document.getElementById('iso-flags');
   const nonIsoFlagsRow = document.getElementById('non-iso-flags');
-  loadJSON('country.json', response => {
+  loadJSON('country.json', (response) => {
     const countries = JSON.parse(response);
     for (country of countries) {
       console.log(country);

@@ -22,7 +22,9 @@ export function toFont(options: Partial<FontSpec>): CanvasFontSpec;
 export function toLineHeight(value: string, size: number): number;
 
 export function toTRBL(value: number | Partial<TRBL>): TRBL;
-export function toTRBLCorners(value: number | Partial<TRBLCorners>): TRBLCorners;
+export function toTRBLCorners(
+  value: number | Partial<TRBLCorners>
+): TRBLCorners;
 
 /**
  * Converts the given value into a padding object with pre-computed width/height.
@@ -32,8 +34,24 @@ export function toTRBLCorners(value: number | Partial<TRBLCorners>): TRBLCorners
  * @since 2.7.0
  */
 export function toPadding(
-  value?: number | { top?: number; left?: number; right?: number; bottom?: number; x?:number, y?: number }
-): { top: number; left: number; right: number; bottom: number; width: number; height: number };
+  value?:
+    | number
+    | {
+        top?: number;
+        left?: number;
+        right?: number;
+        bottom?: number;
+        x?: number;
+        y?: number;
+      }
+): {
+  top: number;
+  left: number;
+  right: number;
+  bottom: number;
+  width: number;
+  height: number;
+};
 
 /**
  * Evaluates the given `inputs` sequentially and returns the first defined value.
@@ -53,9 +71,11 @@ export function resolve<T, C>(
   info?: { cacheable?: boolean }
 ): T | undefined;
 
-
 /**
  * Create a context inheriting parentContext
  * @since 3.6.0
  */
-export function createContext<P, T>(parentContext: P, context: T): P extends null ? T : P & T;
+export function createContext<P, T>(
+  parentContext: P,
+  context: T
+): P extends null ? T : P & T;

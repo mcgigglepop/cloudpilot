@@ -5,9 +5,7 @@ import Break from './break';
 import Inline from './inline';
 import TextBlot from './text';
 
-
 const NEWLINE_LENGTH = 1;
-
 
 class BlockEmbed extends Parchment.Embed {
   attach() {
@@ -16,7 +14,10 @@ class BlockEmbed extends Parchment.Embed {
   }
 
   delta() {
-    return new Delta().insert(this.value(), extend(this.formats(), this.attributes.values()));
+    return new Delta().insert(
+      this.value(),
+      extend(this.formats(), this.attributes.values())
+    );
   }
 
   format(name, value) {
@@ -43,7 +44,6 @@ class BlockEmbed extends Parchment.Embed {
 BlockEmbed.scope = Parchment.Scope.BLOCK_BLOT;
 // It is important for cursor behavior BlockEmbeds use tags that are block level elements
 
-
 class Block extends Parchment.Block {
   constructor(domNode) {
     super(domNode);
@@ -52,13 +52,15 @@ class Block extends Parchment.Block {
 
   delta() {
     if (this.cache.delta == null) {
-      this.cache.delta = this.descendants(Parchment.Leaf).reduce((delta, leaf) => {
-        if (leaf.length() === 0) {
-          return delta;
-        } else {
-          return delta.insert(leaf.value(), bubbleFormats(leaf));
-        }
-      }, new Delta()).insert('\n', bubbleFormats(this));
+      this.cache.delta = this.descendants(Parchment.Leaf)
+        .reduce((delta, leaf) => {
+          if (leaf.length() === 0) {
+            return delta;
+          } else {
+            return delta.insert(leaf.value(), bubbleFormats(leaf));
+          }
+        }, new Delta())
+        .insert('\n', bubbleFormats(this));
     }
     return this.cache.delta;
   }
@@ -75,7 +77,12 @@ class Block extends Parchment.Block {
         this.format(name, value);
       }
     } else {
-      super.formatAt(index, Math.min(length, this.length() - index - 1), name, value);
+      super.formatAt(
+        index,
+        Math.min(length, this.length() - index - 1),
+        name,
+        value
+      );
     }
     this.cache = {};
   }
@@ -94,7 +101,7 @@ class Block extends Parchment.Block {
       this.cache = {};
     }
     let block = this;
-    lines.reduce(function(index, line) {
+    lines.reduce(function (index, line) {
       block = block.split(index, true);
       block.insertAt(0, line);
       return line.length;
@@ -158,17 +165,19 @@ Block.tagName = 'P';
 Block.defaultChild = 'break';
 Block.allowedChildren = [Inline, Parchment.Embed, TextBlot];
 
-
 function bubbleFormats(blot, formats = {}) {
   if (blot == null) return formats;
   if (typeof blot.formats === 'function') {
     formats = extend(formats, blot.formats());
   }
-  if (blot.parent == null || blot.parent.blotName == 'scroll' || blot.parent.statics.scope !== blot.statics.scope) {
+  if (
+    blot.parent == null ||
+    blot.parent.blotName == 'scroll' ||
+    blot.parent.statics.scope !== blot.statics.scope
+  ) {
     return formats;
   }
   return bubbleFormats(blot.parent, formats);
 }
-
 
 export { bubbleFormats, BlockEmbed, Block as default };

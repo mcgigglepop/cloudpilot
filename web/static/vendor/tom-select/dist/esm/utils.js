@@ -1,7 +1,7 @@
 /**
-* Tom Select v2.1.0
-* Licensed under the Apache License, Version 2.0 (the "License");
-*/
+ * Tom Select v2.1.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
 
 /**
  * Converts a scalar to its best string representation
@@ -17,11 +17,11 @@
  *   1         -> '1'
  *
  */
-const hash_key = value => {
+const hash_key = (value) => {
   if (typeof value === 'undefined' || value === null) return null;
   return get_hash(value);
 };
-const get_hash = value => {
+const get_hash = (value) => {
   if (typeof value === 'boolean') return value ? '1' : '0';
   return value + '';
 };
@@ -30,8 +30,12 @@ const get_hash = value => {
  *
  */
 
-const escape_html = str => {
-  return (str + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const escape_html = (str) => {
+  return (str + '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 };
 /**
  * Debounce the user provided load function
@@ -76,7 +80,6 @@ const debounce_events = (self, types, fn) => {
     }
   }; // invoke provided function
 
-
   fn.apply(self, []);
   self.trigger = trigger; // trigger queued events
 
@@ -94,10 +97,10 @@ const debounce_events = (self, types, fn) => {
  *
  */
 
-const getSelection = input => {
+const getSelection = (input) => {
   return {
     start: input.selectionStart || 0,
-    length: (input.selectionEnd || 0) - (input.selectionStart || 0)
+    length: (input.selectionEnd || 0) - (input.selectionStart || 0),
   };
 };
 /**
@@ -138,7 +141,11 @@ const isKeyDown = (key_name, evt) => {
     return false;
   }
 
-  var count = (evt.altKey ? 1 : 0) + (evt.ctrlKey ? 1 : 0) + (evt.shiftKey ? 1 : 0) + (evt.metaKey ? 1 : 0);
+  var count =
+    (evt.altKey ? 1 : 0) +
+    (evt.ctrlKey ? 1 : 0) +
+    (evt.shiftKey ? 1 : 0) +
+    (evt.metaKey ? 1 : 0);
 
   if (count === 1) {
     return true;
@@ -166,7 +173,7 @@ const getId = (el, id) => {
  * Returns a string with backslashes added before characters that need to be escaped.
  */
 
-const addSlashes = str => {
+const addSlashes = (str) => {
   return str.replace(/[\\"']/g, '\\$&');
 };
 /**
@@ -177,5 +184,18 @@ const append = (parent, node) => {
   if (node) parent.append(node);
 };
 
-export { addEvent, addSlashes, append, debounce_events, escape_html, getId, getSelection, get_hash, hash_key, isKeyDown, loadDebounce, preventDefault };
+export {
+  addEvent,
+  addSlashes,
+  append,
+  debounce_events,
+  escape_html,
+  getId,
+  getSelection,
+  get_hash,
+  hash_key,
+  isKeyDown,
+  loadDebounce,
+  preventDefault,
+};
 //# sourceMappingURL=utils.js.map

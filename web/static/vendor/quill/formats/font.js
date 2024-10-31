@@ -2,7 +2,7 @@ import Parchment from 'parchment';
 
 let config = {
   scope: Parchment.Scope.INLINE,
-  whitelist: ['serif', 'monospace']
+  whitelist: ['serif', 'monospace'],
 };
 
 let FontClass = new Parchment.Attributor.Class('font', 'ql-font', config);

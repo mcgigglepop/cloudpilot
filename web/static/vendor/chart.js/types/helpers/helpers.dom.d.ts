@@ -1,6 +1,11 @@
 import { ChartEvent } from '../index.esm';
 
-export function getMaximumSize(node: HTMLElement, width?: number, height?: number, aspectRatio?: number): { width: number, height: number };
+export function getMaximumSize(
+  node: HTMLElement,
+  width?: number,
+  height?: number,
+  aspectRatio?: number
+): { width: number; height: number };
 export function getRelativePosition(
   evt: MouseEvent | ChartEvent,
   chart: { readonly canvas: HTMLCanvasElement }
@@ -17,4 +22,7 @@ export function retinaScale(
   forceRatio: number,
   forceStyle?: boolean
 ): void;
-export function readUsedSize(element: HTMLElement, property: 'width' | 'height'): number | undefined;
+export function readUsedSize(
+  element: HTMLElement,
+  property: 'width' | 'height'
+): number | undefined;

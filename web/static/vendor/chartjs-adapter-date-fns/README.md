@@ -44,16 +44,15 @@ For example:
 
 ```javascript
 // import date-fns locale:
-import {de} from 'date-fns/locale';
-
+import { de } from 'date-fns/locale';
 
 // scale options:
 {
-    adapters: {
-        date: {
-            locale: de
-        }
+  adapters: {
+    date: {
+      locale: de;
     }
+  }
 }
 ```
 

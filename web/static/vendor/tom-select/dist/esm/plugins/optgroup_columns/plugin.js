@@ -1,18 +1,18 @@
 /**
-* Tom Select v2.1.0
-* Licensed under the Apache License, Version 2.0 (the "License");
-*/
+ * Tom Select v2.1.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
 
 const KEY_LEFT = 37;
 const KEY_RIGHT = 39;
 typeof navigator === 'undefined' ? false : /Mac/.test(navigator.userAgent);
- // ctrl key or apple key for ma
+// ctrl key or apple key for ma
 
 // @ts-ignore TS2691 "An import path cannot end with a '.ts' extension"
 const latin_convert = {
-  'æ': 'ae',
-  'ⱥ': 'a',
-  'ø': 'o'
+  æ: 'ae',
+  ⱥ: 'a',
+  ø: 'o',
 };
 new RegExp(Object.keys(latin_convert).join('|'), 'gu');
 
@@ -45,7 +45,7 @@ const nodeIndex = (el, amongst) => {
   amongst = amongst || el.nodeName;
   var i = 0;
 
-  while (el = el.previousElementSibling) {
+  while ((el = el.previousElementSibling)) {
     if (el.matches(amongst)) {
       i++;
     }
@@ -68,13 +68,16 @@ const nodeIndex = (el, amongst) => {
  * governing permissions and limitations under the License.
  *
  */
-function plugin () {
+function plugin() {
   var self = this;
   var orig_keydown = self.onKeyDown;
-  self.hook('instead', 'onKeyDown', evt => {
+  self.hook('instead', 'onKeyDown', (evt) => {
     var index, option, options, optgroup;
 
-    if (!self.isOpen || !(evt.keyCode === KEY_LEFT || evt.keyCode === KEY_RIGHT)) {
+    if (
+      !self.isOpen ||
+      !(evt.keyCode === KEY_LEFT || evt.keyCode === KEY_RIGHT)
+    ) {
       return orig_keydown.call(self, evt);
     }
 

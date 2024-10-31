@@ -1,10 +1,10 @@
-export default function(el) {
-  if (!el) return false
+export default function (el) {
+  if (!el) return false;
 
-  const rect = el.getBoundingClientRect()
+  const rect = el.getBoundingClientRect();
 
   return {
     top: rect.top - window.scrollY,
-    left: rect.left - window.scrollX
-  }
+    left: rect.left - window.scrollX,
+  };
 }

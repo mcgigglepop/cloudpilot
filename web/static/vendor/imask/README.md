@@ -1,4 +1,5 @@
 # imaskjs
+
 vanilla javascript input mask
 
 [![Build Status](https://travis-ci.com/uNmAnNeR/imaskjs.svg?branch=master)](https://travis-ci.com/uNmAnNeR/imaskjs)
@@ -11,9 +12,11 @@ vanilla javascript input mask
 </a>
 
 ## Docs, Examples, Demo
+
 [https://imask.js.org/](https://imask.js.org/)
 
 ## Install
+
 `npm install imask` and `import IMask from 'imask';`
 
 or use CDN:
@@ -21,7 +24,9 @@ or use CDN:
 `<script src="https://unpkg.com/imask"></script>`
 
 ## Build & Test
+
 `npm run make`
 
 ## Support Development
+
 [Paypal](https://www.paypal.me/alexeykryazhev/3)

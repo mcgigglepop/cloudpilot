@@ -1,5 +1,5 @@
-let eventRegistry = {}
-let eventUid = 1
+let eventRegistry = {};
+let eventUid = 1;
 
 /**
  * ------------------------------------------------------------------------
@@ -8,45 +8,49 @@ let eventUid = 1
  */
 const EventHandler = {
   on(element, event, handler, options = {}) {
-    const uid = `jvm:${event}::${eventUid++}`
+    const uid = `jvm:${event}::${eventUid++}`;
 
     eventRegistry[uid] = {
       selector: element,
       handler,
-    }
+    };
 
-    handler._uid = uid
+    handler._uid = uid;
 
-    element.addEventListener(event, handler, options)
+    element.addEventListener(event, handler, options);
   },
   delegate(element, event, selector, handler) {
-    event = event.split(' ')
+    event = event.split(' ');
 
-    event.forEach(eventName => {
+    event.forEach((eventName) => {
       EventHandler.on(element, eventName, (e) => {
-        const target = e.target
+        const target = e.target;
 
         if (target.matches(selector)) {
-          handler.call(target, e)
+          handler.call(target, e);
         }
-      })
-    })
+      });
+    });
   },
   off(element, event, handler) {
-    const eventType = event.split(':')[1]
+    const eventType = event.split(':')[1];
 
-    element.removeEventListener(eventType, handler)
+    element.removeEventListener(eventType, handler);
 
-    delete eventRegistry[handler._uid]
+    delete eventRegistry[handler._uid];
   },
   flush() {
-    Object.keys(eventRegistry).forEach(event => {
-      EventHandler.off(eventRegistry[event].selector, event, eventRegistry[event].handler)
-    })
+    Object.keys(eventRegistry).forEach((event) => {
+      EventHandler.off(
+        eventRegistry[event].selector,
+        event,
+        eventRegistry[event].handler
+      );
+    });
   },
   getEventRegistry() {
-    return eventRegistry
+    return eventRegistry;
   },
-}
+};
 
-export default EventHandler
+export default EventHandler;

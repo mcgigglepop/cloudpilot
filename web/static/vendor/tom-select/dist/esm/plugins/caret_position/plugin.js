@@ -1,13 +1,13 @@
 /**
-* Tom Select v2.1.0
-* Licensed under the Apache License, Version 2.0 (the "License");
-*/
+ * Tom Select v2.1.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
 
 // @ts-ignore TS2691 "An import path cannot end with a '.ts' extension"
 const latin_convert = {
-  'æ': 'ae',
-  'ⱥ': 'a',
-  'ø': 'o'
+  æ: 'ae',
+  ⱥ: 'a',
+  ø: 'o',
 };
 new RegExp(Object.keys(latin_convert).join('|'), 'gu');
 
@@ -43,8 +43,8 @@ const iterate = (object, callback) => {
 const removeClasses = (elmts, ...classes) => {
   var norm_classes = classesArray(classes);
   elmts = castAsArray(elmts);
-  elmts.map(el => {
-    norm_classes.map(cls => {
+  elmts.map((el) => {
+    norm_classes.map((cls) => {
       el.classList.remove(cls);
     });
   });
@@ -54,9 +54,9 @@ const removeClasses = (elmts, ...classes) => {
  *
  */
 
-const classesArray = args => {
+const classesArray = (args) => {
   var classes = [];
-  iterate(args, _classes => {
+  iterate(args, (_classes) => {
     if (typeof _classes === 'string') {
       _classes = _classes.trim().split(/[\11\12\14\15\40]/);
     }
@@ -72,7 +72,7 @@ const classesArray = args => {
  *
  */
 
-const castAsArray = arg => {
+const castAsArray = (arg) => {
   if (!Array.isArray(arg)) {
     arg = [arg];
   }
@@ -89,7 +89,7 @@ const nodeIndex = (el, amongst) => {
   amongst = amongst || el.nodeName;
   var i = 0;
 
-  while (el = el.previousElementSibling) {
+  while ((el = el.previousElementSibling)) {
     if (el.matches(amongst)) {
       i++;
     }
@@ -112,7 +112,7 @@ const nodeIndex = (el, amongst) => {
  * governing permissions and limitations under the License.
  *
  */
-function plugin () {
+function plugin() {
   var self = this;
   /**
    * Moves the caret to the specified index.
@@ -123,8 +123,11 @@ function plugin () {
    *
    */
 
-  self.hook('instead', 'setCaret', new_pos => {
-    if (self.settings.mode === 'single' || !self.control.contains(self.control_input)) {
+  self.hook('instead', 'setCaret', (new_pos) => {
+    if (
+      self.settings.mode === 'single' ||
+      !self.control.contains(self.control_input)
+    ) {
       new_pos = self.items.length;
     } else {
       new_pos = Math.max(0, Math.min(self.items.length, new_pos));
@@ -142,7 +145,7 @@ function plugin () {
 
     self.caretPos = new_pos;
   });
-  self.hook('instead', 'moveCaret', direction => {
+  self.hook('instead', 'moveCaret', (direction) => {
     if (!self.isFocused) return; // move caret before or after selected items
 
     const last_active = self.getLastActive(direction);

@@ -14,9 +14,9 @@ var isNull = require('./helpers').isNull;
  * @param {Object} optional default style definition
  */
 function StyleContextStack(styleDictionary, defaultStyle) {
-	this.defaultStyle = defaultStyle || {};
-	this.styleDictionary = styleDictionary;
-	this.styleOverrides = [];
+  this.defaultStyle = defaultStyle || {};
+  this.styleDictionary = styleDictionary;
+  this.styleOverrides = [];
 }
 
 /**
@@ -24,13 +24,13 @@ function StyleContextStack(styleDictionary, defaultStyle) {
  * @return {StyleContextStack} current stack snapshot
  */
 StyleContextStack.prototype.clone = function () {
-	var stack = new StyleContextStack(this.styleDictionary, this.defaultStyle);
+  var stack = new StyleContextStack(this.styleDictionary, this.defaultStyle);
 
-	this.styleOverrides.forEach(function (item) {
-		stack.styleOverrides.push(item);
-	});
+  this.styleOverrides.forEach(function (item) {
+    stack.styleOverrides.push(item);
+  });
 
-	return stack;
+  return stack;
 };
 
 /**
@@ -40,7 +40,7 @@ StyleContextStack.prototype.clone = function () {
  *                                            a new dictionary defining overriding properties
  */
 StyleContextStack.prototype.push = function (styleNameOrOverride) {
-	this.styleOverrides.push(styleNameOrOverride);
+  this.styleOverrides.push(styleNameOrOverride);
 };
 
 /**
@@ -50,11 +50,11 @@ StyleContextStack.prototype.push = function (styleNameOrOverride) {
  *                           one element will be removed from the stack)
  */
 StyleContextStack.prototype.pop = function (howMany) {
-	howMany = howMany || 1;
+  howMany = howMany || 1;
 
-	while (howMany-- > 0) {
-		this.styleOverrides.pop();
-	}
+  while (howMany-- > 0) {
+    this.styleOverrides.pop();
+  }
 };
 
 /**
@@ -66,68 +66,68 @@ StyleContextStack.prototype.pop = function (howMany) {
  * @return the number of items pushed onto the stack
  */
 StyleContextStack.prototype.autopush = function (item) {
-	if (isString(item)) {
-		return 0;
-	}
+  if (isString(item)) {
+    return 0;
+  }
 
-	var styleNames = [];
+  var styleNames = [];
 
-	if (item.style) {
-		if (isArray(item.style)) {
-			styleNames = item.style;
-		} else {
-			styleNames = [item.style];
-		}
-	}
+  if (item.style) {
+    if (isArray(item.style)) {
+      styleNames = item.style;
+    } else {
+      styleNames = [item.style];
+    }
+  }
 
-	for (var i = 0, l = styleNames.length; i < l; i++) {
-		this.push(styleNames[i]);
-	}
+  for (var i = 0, l = styleNames.length; i < l; i++) {
+    this.push(styleNames[i]);
+  }
 
-	var styleProperties = [
-		'font',
-		'fontSize',
-		'fontFeatures',
-		'bold',
-		'italics',
-		'alignment',
-		'color',
-		'columnGap',
-		'fillColor',
-		'fillOpacity',
-		'decoration',
-		'decorationStyle',
-		'decorationColor',
-		'background',
-		'lineHeight',
-		'characterSpacing',
-		'noWrap',
-		'markerColor',
-		'leadingIndent',
-		'sup',
-		'sub'
-		//'tableCellPadding'
-		// 'cellBorder',
-		// 'headerCellBorder',
-		// 'oddRowCellBorder',
-		// 'evenRowCellBorder',
-		// 'tableBorder'
-	];
-	var styleOverrideObject = {};
-	var pushStyleOverrideObject = false;
+  var styleProperties = [
+    'font',
+    'fontSize',
+    'fontFeatures',
+    'bold',
+    'italics',
+    'alignment',
+    'color',
+    'columnGap',
+    'fillColor',
+    'fillOpacity',
+    'decoration',
+    'decorationStyle',
+    'decorationColor',
+    'background',
+    'lineHeight',
+    'characterSpacing',
+    'noWrap',
+    'markerColor',
+    'leadingIndent',
+    'sup',
+    'sub',
+    //'tableCellPadding'
+    // 'cellBorder',
+    // 'headerCellBorder',
+    // 'oddRowCellBorder',
+    // 'evenRowCellBorder',
+    // 'tableBorder'
+  ];
+  var styleOverrideObject = {};
+  var pushStyleOverrideObject = false;
 
-	styleProperties.forEach(function (key) {
-		if (!isUndefined(item[key]) && !isNull(item[key])) {
-			styleOverrideObject[key] = item[key];
-			pushStyleOverrideObject = true;
-		}
-	});
+  styleProperties.forEach(function (key) {
+    if (!isUndefined(item[key]) && !isNull(item[key])) {
+      styleOverrideObject[key] = item[key];
+      pushStyleOverrideObject = true;
+    }
+  });
 
-	if (pushStyleOverrideObject) {
-		this.push(styleOverrideObject);
-	}
+  if (pushStyleOverrideObject) {
+    this.push(styleOverrideObject);
+  }
 
-	return styleNames.length + (pushStyleOverrideObject ? 1 : 0);
+  return styleNames.length + (pushStyleOverrideObject ? 1 : 0);
 };
 
 /**
@@ -139,14 +139,14 @@ StyleContextStack.prototype.autopush = function (item) {
  * @return {Object} value returned by callback
  */
 StyleContextStack.prototype.auto = function (item, callback) {
-	var pushedItems = this.autopush(item);
-	var result = callback();
+  var pushedItems = this.autopush(item);
+  var result = callback();
 
-	if (pushedItems > 0) {
-		this.pop(pushedItems);
-	}
+  if (pushedItems > 0) {
+    this.pop(pushedItems);
+  }
 
-	return result;
+  return result;
 };
 
 /**
@@ -156,24 +156,28 @@ StyleContextStack.prototype.auto = function (item, callback) {
  * @return property value or null if not found
  */
 StyleContextStack.prototype.getProperty = function (property) {
-	if (this.styleOverrides) {
-		for (var i = this.styleOverrides.length - 1; i >= 0; i--) {
-			var item = this.styleOverrides[i];
+  if (this.styleOverrides) {
+    for (var i = this.styleOverrides.length - 1; i >= 0; i--) {
+      var item = this.styleOverrides[i];
 
-			if (isString(item)) {
-				// named-style-override
-				var style = this.styleDictionary[item];
-				if (style && !isUndefined(style[property]) && !isNull(style[property])) {
-					return style[property];
-				}
-			} else if (!isUndefined(item[property]) && !isNull(item[property])) {
-				// style-overrides-object
-				return item[property];
-			}
-		}
-	}
+      if (isString(item)) {
+        // named-style-override
+        var style = this.styleDictionary[item];
+        if (
+          style &&
+          !isUndefined(style[property]) &&
+          !isNull(style[property])
+        ) {
+          return style[property];
+        }
+      } else if (!isUndefined(item[property]) && !isNull(item[property])) {
+        // style-overrides-object
+        return item[property];
+      }
+    }
+  }
 
-	return this.defaultStyle && this.defaultStyle[property];
+  return this.defaultStyle && this.defaultStyle[property];
 };
 
 module.exports = StyleContextStack;

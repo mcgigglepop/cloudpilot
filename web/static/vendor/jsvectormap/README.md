@@ -36,14 +36,15 @@ Jsvectormap supports all modern brownsers including IE9+
 
 ## What's an interactive map
 
-* Interactive map is a powerful tool for presentation.
-* It give the ability to create layers of information that can be shown or hidden at the click of a button on a region or maybe a marker.
-* Data can be quickly updated, and these updates made transparent to users. 
-* Zoom functions that allow users to focus on either the details of a particular region, or to gain a quick overview of a wider area.
+- Interactive map is a powerful tool for presentation.
+- It give the ability to create layers of information that can be shown or hidden at the click of a button on a region or maybe a marker.
+- Data can be quickly updated, and these updates made transparent to users.
+- Zoom functions that allow users to focus on either the details of a particular region, or to gain a quick overview of a wider area.
 
 ## Quick start
 
 Installing via npm
+
 ```bash
 npm i jsvectormap
 ```
@@ -51,21 +52,23 @@ npm i jsvectormap
 import your preferred map you want to work with, after importing the `jsvectormap`
 
 ```js
-import jsVectorMap from 'jsvectormap'
-import 'jsvectormap/dist/maps/world.js'
+import jsVectorMap from 'jsvectormap';
+import 'jsvectormap/dist/maps/world.js';
 
 const map = new jsVectorMap({
   selector: '#map',
   map: 'world',
-})
+});
 ```
 
 ## Contributions
+
 Your contributions always **welcome** but consider the following notes:
 
-* The build files shouldn't be updated when sending pull requests.
+- The build files shouldn't be updated when sending pull requests.
 
 ## Setup
+
 ```bash
 ### Install node via your preferred mechanism. Ensure the binaries are in your path & obtain a copy of this repository and change into the working directory
 git clone https://github.com/themustafaomar/jsvectormap.git && cd jsvectormap
@@ -82,4 +85,5 @@ npm run dev
 ```
 
 ## License
+
 jsvectormap licensed under MIT.

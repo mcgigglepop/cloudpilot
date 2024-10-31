@@ -1,7 +1,7 @@
 /**
-* Tom Select v2.1.0
-* Licensed under the Apache License, Version 2.0 (the "License");
-*/
+ * Tom Select v2.1.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
 
 /**
  * Plugin: "drag_drop" (Tom Select)
@@ -17,9 +17,10 @@
  * governing permissions and limitations under the License.
  *
  */
-function plugin () {
+function plugin() {
   var self = this;
-  if (!$.fn.sortable) throw new Error('The "drag_drop" plugin requires jQuery UI "sortable".');
+  if (!$.fn.sortable)
+    throw new Error('The "drag_drop" plugin requires jQuery UI "sortable".');
   if (self.settings.mode !== 'multi') return;
   var orig_lock = self.lock;
   var orig_unlock = self.unlock;
@@ -41,19 +42,19 @@ function plugin () {
       start: (e, ui) => {
         ui.placeholder.css('width', ui.helper.css('width'));
         $control.css({
-          overflow: 'visible'
+          overflow: 'visible',
         });
       },
       stop: () => {
         $control.css({
-          overflow: 'hidden'
+          overflow: 'hidden',
         });
         var values = [];
         $control.children('[data-value]').each(function () {
           if (this.dataset.value) values.push(this.dataset.value);
         });
         self.setValue(values);
-      }
+      },
     });
   });
 }

@@ -7,7 +7,7 @@
 import { DatasetController, Element } from 'chart.js';
 import { toTRBLCorners, addRoundedRectPath, isObject } from 'chart.js/helpers';
 
-var version = "1.1.1";
+var version = '1.1.1';
 
 class MatrixController extends DatasetController {
   initialize() {
@@ -25,22 +25,26 @@ class MatrixController extends DatasetController {
   updateElements(rects, start, count, mode) {
     const me = this;
     const reset = mode === 'reset';
-    const {xScale, yScale} = me._cachedMeta;
+    const { xScale, yScale } = me._cachedMeta;
     const firstOpts = me.resolveDataElementOptions(start, mode);
     const sharedOptions = me.getSharedOptions(mode, rects[start], firstOpts);
 
     for (let i = start; i < start + count; i++) {
       const parsed = !reset && me.getParsed(i);
-      const x = reset ? xScale.getBasePixel() : xScale.getPixelForValue(parsed.x);
-      const y = reset ? yScale.getBasePixel() : yScale.getPixelForValue(parsed.y);
+      const x = reset
+        ? xScale.getBasePixel()
+        : xScale.getPixelForValue(parsed.x);
+      const y = reset
+        ? yScale.getBasePixel()
+        : yScale.getPixelForValue(parsed.y);
       const options = me.resolveDataElementOptions(i, mode);
-      const {width, height, anchorX, anchorY} = options;
+      const { width, height, anchorX, anchorY } = options;
       const properties = {
         x: resolveX(anchorX, x, width),
         y: resolveY(anchorY, y, height),
         width,
         height,
-        options
+        options,
       };
       me.updateElement(rects[i], i, properties, mode);
     }
@@ -89,28 +93,28 @@ MatrixController.defaults = {
   animations: {
     numbers: {
       type: 'number',
-      properties: ['x', 'y', 'width', 'height']
-    }
+      properties: ['x', 'y', 'width', 'height'],
+    },
   },
   anchorX: 'center',
-  anchorY: 'center'
+  anchorY: 'center',
 };
 
 MatrixController.overrides = {
   interaction: {
     mode: 'nearest',
-    intersect: true
+    intersect: true,
   },
 
   scales: {
     x: {
       type: 'linear',
-      offset: true
+      offset: true,
     },
     y: {
       type: 'linear',
-      reverse: true
-    }
+      reverse: true,
+    },
   },
 };
 
@@ -122,8 +126,11 @@ MatrixController.overrides = {
  * @private
  */
 function getBounds(rect, useFinalPosition) {
-  const {x, y, width, height} = rect.getProps(['x', 'y', 'width', 'height'], useFinalPosition);
-  return {left: x, top: y, right: x + width, bottom: y + height};
+  const { x, y, width, height } = rect.getProps(
+    ['x', 'y', 'width', 'height'],
+    useFinalPosition
+  );
+  return { left: x, top: y, right: x + width, bottom: y + height };
 }
 
 function limit(value, min, max) {
@@ -147,7 +154,7 @@ function parseBorderWidth(rect, maxW, maxH) {
     t: limit(t, 0, maxH),
     r: limit(r, 0, maxW),
     b: limit(b, 0, maxH),
-    l: limit(l, 0, maxW)
+    l: limit(l, 0, maxW),
   };
 }
 
@@ -162,25 +169,28 @@ function boundingRects(rect) {
       x: bounds.left,
       y: bounds.top,
       w: width,
-      h: height
+      h: height,
     },
     inner: {
       x: bounds.left + border.l,
       y: bounds.top + border.t,
       w: width - border.l - border.r,
-      h: height - border.t - border.b
-    }
+      h: height - border.t - border.b,
+    },
   };
 }
 
 function inRange(rect, x, y, useFinalPosition) {
   const skipX = x === null;
   const skipY = y === null;
-  const bounds = !rect || (skipX && skipY) ? false : getBounds(rect, useFinalPosition);
+  const bounds =
+    !rect || (skipX && skipY) ? false : getBounds(rect, useFinalPosition);
 
-  return bounds
-		&& (skipX || x >= bounds.left && x <= bounds.right)
-		&& (skipY || y >= bounds.top && y <= bounds.bottom);
+  return (
+    bounds &&
+    (skipX || (x >= bounds.left && x <= bounds.right)) &&
+    (skipY || (y >= bounds.top && y <= bounds.bottom))
+  );
 }
 
 class MatrixElement extends Element {
@@ -198,22 +208,40 @@ class MatrixElement extends Element {
 
   draw(ctx) {
     const options = this.options;
-    const {inner, outer} = boundingRects(this);
+    const { inner, outer } = boundingRects(this);
     const radius = toTRBLCorners(options.borderRadius);
 
     ctx.save();
 
     if (outer.w !== inner.w || outer.h !== inner.h) {
       ctx.beginPath();
-      addRoundedRectPath(ctx, {x: outer.x, y: outer.y, w: outer.w, h: outer.h, radius});
-      addRoundedRectPath(ctx, {x: inner.x, y: inner.y, w: inner.w, h: inner.h, radius});
+      addRoundedRectPath(ctx, {
+        x: outer.x,
+        y: outer.y,
+        w: outer.w,
+        h: outer.h,
+        radius,
+      });
+      addRoundedRectPath(ctx, {
+        x: inner.x,
+        y: inner.y,
+        w: inner.w,
+        h: inner.h,
+        radius,
+      });
       ctx.fillStyle = options.backgroundColor;
       ctx.fill();
       ctx.fillStyle = options.borderColor;
       ctx.fill('evenodd');
     } else {
       ctx.beginPath();
-      addRoundedRectPath(ctx, {x: inner.x, y: inner.y, w: inner.w, h: inner.h, radius});
+      addRoundedRectPath(ctx, {
+        x: inner.x,
+        y: inner.y,
+        w: inner.w,
+        h: inner.h,
+        radius,
+      });
       ctx.fillStyle = options.backgroundColor;
       ctx.fill();
     }
@@ -234,10 +262,13 @@ class MatrixElement extends Element {
   }
 
   getCenterPoint(useFinalPosition) {
-    const {x, y, width, height} = this.getProps(['x', 'y', 'width', 'height'], useFinalPosition);
+    const { x, y, width, height } = this.getProps(
+      ['x', 'y', 'width', 'height'],
+      useFinalPosition
+    );
     return {
       x: x + width / 2,
-      y: y + height / 2
+      y: y + height / 2,
     };
   }
 
@@ -259,7 +290,7 @@ MatrixElement.defaults = {
   anchorX: undefined,
   anchorY: undefined,
   width: 20,
-  height: 20
+  height: 20,
 };
 
 export { MatrixController, MatrixElement };

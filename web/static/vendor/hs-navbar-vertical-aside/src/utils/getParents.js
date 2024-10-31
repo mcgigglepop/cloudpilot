@@ -1,6 +1,5 @@
 export default function (elem, selector) {
-
-// Element.matches() polyfill
+  // Element.matches() polyfill
   if (!Element.prototype.matches) {
     Element.prototype.matches =
       Element.prototype.matchesSelector ||
@@ -8,7 +7,7 @@ export default function (elem, selector) {
       Element.prototype.msMatchesSelector ||
       Element.prototype.oMatchesSelector ||
       Element.prototype.webkitMatchesSelector ||
-      function(s) {
+      function (s) {
         var matches = (this.document || this.ownerDocument).querySelectorAll(s),
           i = matches.length;
         while (--i >= 0 && matches.item(i) !== this) {}
@@ -20,7 +19,7 @@ export default function (elem, selector) {
   var parents = [];
 
   // Push each parent element to the array
-  for ( ; elem && elem !== document; elem = elem.parentNode ) {
+  for (; elem && elem !== document; elem = elem.parentNode) {
     if (selector) {
       if (elem.matches(selector)) {
         parents.push(elem);
@@ -32,5 +31,4 @@ export default function (elem, selector) {
 
   // Return our parent array
   return parents;
-
 }
