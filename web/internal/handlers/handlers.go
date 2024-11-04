@@ -159,3 +159,8 @@ func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	_ = m.App.Session.RenewToken(r.Context())
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
+
+// AWSOverview is the AWS Overview handler
+func (m *Repository) AWSOverview(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "aws-overview.page.tmpl", &models.TemplateData{})
+}
