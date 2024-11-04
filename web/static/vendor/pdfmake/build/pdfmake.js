@@ -10143,7 +10143,7 @@
                   if (this._xformMode == this._ENC_XFORM_MODE) {
                     modeCreator = mode.createEncryptor;
                   } else {
-                  /* if (this._xformMode == this._DEC_XFORM_MODE) */
+                    /* if (this._xformMode == this._DEC_XFORM_MODE) */
                     modeCreator = mode.createDecryptor; // Keep at least one block in the buffer for unpadding
 
                     this._minBufferSize = 1;
@@ -10170,7 +10170,7 @@
 
                     finalProcessedBlocks = this._process(!!'flush');
                   } else {
-                  /* if (this._xformMode == this._DEC_XFORM_MODE) */
+                    /* if (this._xformMode == this._DEC_XFORM_MODE) */
                     // Process final blocks
                     finalProcessedBlocks = this._process(!!'flush'); // Unpad data
 
@@ -14192,7 +14192,7 @@
                   } else if (i < 60) {
                     t += ((b & c) | (b & d) | (c & d)) - 0x70e44324;
                   } else {
-                  /* if (i < 80) */
+                    /* if (i < 80) */
                     t += (b ^ c ^ d) - 0x359d3e2a;
                   }
 
@@ -14603,7 +14603,7 @@
                     if (bitPosition < 32) {
                       roundConstantLsw ^= 1 << bitPosition;
                     } else {
-                    /* if (bitPosition >= 32) */
+                      /* if (bitPosition >= 32) */
                       roundConstantMsw ^= 1 << (bitPosition - 32);
                     }
                   } // Compute next LFSR
@@ -14727,7 +14727,7 @@
                       tLsw =
                         (laneLsw << rhoOffset) | (laneMsw >>> (32 - rhoOffset));
                     } else {
-                    /* if (rhoOffset >= 32) */
+                      /* if (rhoOffset >= 32) */
                       tMsw =
                         (laneLsw << (rhoOffset - 32)) |
                         (laneMsw >>> (64 - rhoOffset));
@@ -18255,8 +18255,7 @@ PDFAbstractReference - abstract class for PDF reference
             },
             {
               key: '_compareKeys',
-              value: function _compareKeys() /*a, b*/
-              {
+              value: function _compareKeys /*a, b*/() {
                 throw new Error('Must be implemented by subclasses');
               },
             },
@@ -18268,8 +18267,7 @@ PDFAbstractReference - abstract class for PDF reference
             },
             {
               key: '_dataForKey',
-              value: function _dataForKey() /*k*/
-              {
+              value: function _dataForKey /*k*/() {
                 throw new Error('Must be implemented by subclasses');
               },
             },
@@ -18942,23 +18940,17 @@ By Devon Govett
          */
 
         var non_ASCII_space_characters = [
-          0x00a0, 0x00a0, /* NO-BREAK SPACE */
-          0x1680, 0x1680, /* OGHAM SPACE MARK */
-          0x2000, 0x2000, /* EN QUAD */
-          0x2001, 0x2001, /* EM QUAD */
-          0x2002, 0x2002, /* EN SPACE */
-          0x2003, 0x2003, /* EM SPACE */
-          0x2004, 0x2004, /* THREE-PER-EM SPACE */
-          0x2005, 0x2005, /* FOUR-PER-EM SPACE */
-          0x2006, 0x2006, /* SIX-PER-EM SPACE */
-          0x2007, 0x2007, /* FIGURE SPACE */
-          0x2008, 0x2008, /* PUNCTUATION SPACE */
-          0x2009, 0x2009, /* THIN SPACE */
-          0x200a, 0x200a, /* HAIR SPACE */
-          0x200b, 0x200b, /* ZERO WIDTH SPACE */
-          0x202f, 0x202f, /* NARROW NO-BREAK SPACE */
-          0x205f, 0x205f, /* MEDIUM MATHEMATICAL SPACE */
-          0x3000, 0x3000,
+          0x00a0, 0x00a0 /* NO-BREAK SPACE */, 0x1680,
+          0x1680 /* OGHAM SPACE MARK */, 0x2000, 0x2000 /* EN QUAD */, 0x2001,
+          0x2001 /* EM QUAD */, 0x2002, 0x2002 /* EN SPACE */, 0x2003,
+          0x2003 /* EM SPACE */, 0x2004, 0x2004 /* THREE-PER-EM SPACE */,
+          0x2005, 0x2005 /* FOUR-PER-EM SPACE */, 0x2006,
+          0x2006 /* SIX-PER-EM SPACE */, 0x2007, 0x2007 /* FIGURE SPACE */,
+          0x2008, 0x2008 /* PUNCTUATION SPACE */, 0x2009,
+          0x2009 /* THIN SPACE */, 0x200a, 0x200a /* HAIR SPACE */, 0x200b,
+          0x200b /* ZERO WIDTH SPACE */, 0x202f,
+          0x202f /* NARROW NO-BREAK SPACE */, 0x205f,
+          0x205f /* MEDIUM MATHEMATICAL SPACE */, 0x3000, 0x3000,
           /* IDEOGRAPHIC SPACE */
         ]; // prettier-ignore-end
 
@@ -18973,22 +18965,19 @@ By Devon Govett
            * C.2.2 Non-ASCII control characters
            * @link https://tools.ietf.org/html/rfc3454#appendix-C.2.2
            */
-          0x0080, 0x009f, /* [CONTROL CHARACTERS] */
-          0x06dd, 0x06dd, /* ARABIC END OF AYAH */
-          0x070f, 0x070f, /* SYRIAC ABBREVIATION MARK */
-          0x180e, 0x180e, /* MONGOLIAN VOWEL SEPARATOR */
-          0x200c, 0x200c, /* ZERO WIDTH NON-JOINER */
-          0x200d, 0x200d, /* ZERO WIDTH JOINER */
-          0x2028, 0x2028, /* LINE SEPARATOR */
-          0x2029, 0x2029, /* PARAGRAPH SEPARATOR */
-          0x2060, 0x2060, /* WORD JOINER */
-          0x2061, 0x2061, /* FUNCTION APPLICATION */
-          0x2062, 0x2062, /* INVISIBLE TIMES */
-          0x2063, 0x2063, /* INVISIBLE SEPARATOR */
-          0x206a, 0x206f, /* [CONTROL CHARACTERS] */
-          0xfeff, 0xfeff, /* ZERO WIDTH NO-BREAK SPACE */
-          0xfff9, 0xfffc, /* [CONTROL CHARACTERS] */
-          0x1d173, 0x1d17a,
+          0x0080, 0x009f /* [CONTROL CHARACTERS] */, 0x06dd,
+          0x06dd /* ARABIC END OF AYAH */, 0x070f,
+          0x070f /* SYRIAC ABBREVIATION MARK */, 0x180e,
+          0x180e /* MONGOLIAN VOWEL SEPARATOR */, 0x200c,
+          0x200c /* ZERO WIDTH NON-JOINER */, 0x200d,
+          0x200d /* ZERO WIDTH JOINER */, 0x2028, 0x2028 /* LINE SEPARATOR */,
+          0x2029, 0x2029 /* PARAGRAPH SEPARATOR */, 0x2060,
+          0x2060 /* WORD JOINER */, 0x2061, 0x2061 /* FUNCTION APPLICATION */,
+          0x2062, 0x2062 /* INVISIBLE TIMES */, 0x2063,
+          0x2063 /* INVISIBLE SEPARATOR */, 0x206a,
+          0x206f /* [CONTROL CHARACTERS] */, 0xfeff,
+          0xfeff /* ZERO WIDTH NO-BREAK SPACE */, 0xfff9,
+          0xfffc /* [CONTROL CHARACTERS] */, 0x1d173, 0x1d17a,
           /* [MUSICAL CONTROL CHARACTERS] */
         ];
         var non_character_codepoints = [
@@ -18996,23 +18985,22 @@ By Devon Govett
            * C.4 Non-character code points
            * @link https://tools.ietf.org/html/rfc3454#appendix-C.4
            */
-          0xfdd0, 0xfdef, /* [NONCHARACTER CODE POINTS] */
-          0xfffe, 0xffff, /* [NONCHARACTER CODE POINTS] */
-          0x1fffe, 0x1ffff, /* [NONCHARACTER CODE POINTS] */
-          0x2fffe, 0x2ffff, /* [NONCHARACTER CODE POINTS] */
-          0x3fffe, 0x3ffff, /* [NONCHARACTER CODE POINTS] */
-          0x4fffe, 0x4ffff, /* [NONCHARACTER CODE POINTS] */
-          0x5fffe, 0x5ffff, /* [NONCHARACTER CODE POINTS] */
-          0x6fffe, 0x6ffff, /* [NONCHARACTER CODE POINTS] */
-          0x7fffe, 0x7ffff, /* [NONCHARACTER CODE POINTS] */
-          0x8fffe, 0x8ffff, /* [NONCHARACTER CODE POINTS] */
-          0x9fffe, 0x9ffff, /* [NONCHARACTER CODE POINTS] */
-          0xafffe, 0xaffff, /* [NONCHARACTER CODE POINTS] */
-          0xbfffe, 0xbffff, /* [NONCHARACTER CODE POINTS] */
-          0xcfffe, 0xcffff, /* [NONCHARACTER CODE POINTS] */
-          0xdfffe, 0xdffff, /* [NONCHARACTER CODE POINTS] */
-          0xefffe, 0xeffff, /* [NONCHARACTER CODE POINTS] */
-          0x10fffe, 0x10ffff,
+          0xfdd0, 0xfdef /* [NONCHARACTER CODE POINTS] */, 0xfffe,
+          0xffff /* [NONCHARACTER CODE POINTS] */, 0x1fffe,
+          0x1ffff /* [NONCHARACTER CODE POINTS] */, 0x2fffe,
+          0x2ffff /* [NONCHARACTER CODE POINTS] */, 0x3fffe,
+          0x3ffff /* [NONCHARACTER CODE POINTS] */, 0x4fffe,
+          0x4ffff /* [NONCHARACTER CODE POINTS] */, 0x5fffe,
+          0x5ffff /* [NONCHARACTER CODE POINTS] */, 0x6fffe,
+          0x6ffff /* [NONCHARACTER CODE POINTS] */, 0x7fffe,
+          0x7ffff /* [NONCHARACTER CODE POINTS] */, 0x8fffe,
+          0x8ffff /* [NONCHARACTER CODE POINTS] */, 0x9fffe,
+          0x9ffff /* [NONCHARACTER CODE POINTS] */, 0xafffe,
+          0xaffff /* [NONCHARACTER CODE POINTS] */, 0xbfffe,
+          0xbffff /* [NONCHARACTER CODE POINTS] */, 0xcfffe,
+          0xcffff /* [NONCHARACTER CODE POINTS] */, 0xdfffe,
+          0xdffff /* [NONCHARACTER CODE POINTS] */, 0xefffe,
+          0xeffff /* [NONCHARACTER CODE POINTS] */, 0x10fffe, 0x10ffff,
           /* [NONCHARACTER CODE POINTS] */
         ];
         /**
@@ -19024,62 +19012,53 @@ By Devon Govett
            * C.2.1 ASCII control characters
            * @link https://tools.ietf.org/html/rfc3454#appendix-C.2.1
            */
-          0, 0x001f, /* [CONTROL CHARACTERS] */
-          0x007f, 0x007f, /* DELETE */
-          /**
+          0, 0x001f /* [CONTROL CHARACTERS] */, 0x007f, 0x007f /* DELETE */, /**
            * C.8 Change display properties or are deprecated
            * @link https://tools.ietf.org/html/rfc3454#appendix-C.8
            */
-          0x0340, 0x0340, /* COMBINING GRAVE TONE MARK */
-          0x0341, 0x0341, /* COMBINING ACUTE TONE MARK */
-          0x200e, 0x200e, /* LEFT-TO-RIGHT MARK */
-          0x200f, 0x200f, /* RIGHT-TO-LEFT MARK */
-          0x202a, 0x202a, /* LEFT-TO-RIGHT EMBEDDING */
-          0x202b, 0x202b, /* RIGHT-TO-LEFT EMBEDDING */
-          0x202c, 0x202c, /* POP DIRECTIONAL FORMATTING */
-          0x202d, 0x202d, /* LEFT-TO-RIGHT OVERRIDE */
-          0x202e, 0x202e, /* RIGHT-TO-LEFT OVERRIDE */
-          0x206a, 0x206a, /* INHIBIT SYMMETRIC SWAPPING */
-          0x206b, 0x206b, /* ACTIVATE SYMMETRIC SWAPPING */
-          0x206c, 0x206c, /* INHIBIT ARABIC FORM SHAPING */
-          0x206d, 0x206d, /* ACTIVATE ARABIC FORM SHAPING */
-          0x206e, 0x206e, /* NATIONAL DIGIT SHAPES */
-          0x206f, 0x206f, /* NOMINAL DIGIT SHAPES */
-          /**
+          0x0340, 0x0340 /* COMBINING GRAVE TONE MARK */, 0x0341,
+          0x0341 /* COMBINING ACUTE TONE MARK */, 0x200e,
+          0x200e /* LEFT-TO-RIGHT MARK */, 0x200f,
+          0x200f /* RIGHT-TO-LEFT MARK */, 0x202a,
+          0x202a /* LEFT-TO-RIGHT EMBEDDING */, 0x202b,
+          0x202b /* RIGHT-TO-LEFT EMBEDDING */, 0x202c,
+          0x202c /* POP DIRECTIONAL FORMATTING */, 0x202d,
+          0x202d /* LEFT-TO-RIGHT OVERRIDE */, 0x202e,
+          0x202e /* RIGHT-TO-LEFT OVERRIDE */, 0x206a,
+          0x206a /* INHIBIT SYMMETRIC SWAPPING */, 0x206b,
+          0x206b /* ACTIVATE SYMMETRIC SWAPPING */, 0x206c,
+          0x206c /* INHIBIT ARABIC FORM SHAPING */, 0x206d,
+          0x206d /* ACTIVATE ARABIC FORM SHAPING */, 0x206e,
+          0x206e /* NATIONAL DIGIT SHAPES */, 0x206f,
+          0x206f /* NOMINAL DIGIT SHAPES */, /**
            * C.7 Inappropriate for canonical representation
            * @link https://tools.ietf.org/html/rfc3454#appendix-C.7
            */
-          0x2ff0, 0x2ffb, /* [IDEOGRAPHIC DESCRIPTION CHARACTERS] */
-          /**
+          0x2ff0, 0x2ffb /* [IDEOGRAPHIC DESCRIPTION CHARACTERS] */, /**
            * C.5 Surrogate codes
            * @link https://tools.ietf.org/html/rfc3454#appendix-C.5
            */
-          0xd800, 0xdfff, /**
+          0xd800, 0xdfff /**
            * C.3 Private use
            * @link https://tools.ietf.org/html/rfc3454#appendix-C.3
-           */
-          0xe000, 0xf8ff, /* [PRIVATE USE, PLANE 0] */
-          /**
+           */, 0xe000, 0xf8ff /* [PRIVATE USE, PLANE 0] */, /**
            * C.6 Inappropriate for plain text
            * @link https://tools.ietf.org/html/rfc3454#appendix-C.6
            */
-          0xfff9, 0xfff9, /* INTERLINEAR ANNOTATION ANCHOR */
-          0xfffa, 0xfffa, /* INTERLINEAR ANNOTATION SEPARATOR */
-          0xfffb, 0xfffb, /* INTERLINEAR ANNOTATION TERMINATOR */
-          0xfffc, 0xfffc, /* OBJECT REPLACEMENT CHARACTER */
-          0xfffd, 0xfffd, /* REPLACEMENT CHARACTER */
-          /**
+          0xfff9, 0xfff9 /* INTERLINEAR ANNOTATION ANCHOR */, 0xfffa,
+          0xfffa /* INTERLINEAR ANNOTATION SEPARATOR */, 0xfffb,
+          0xfffb /* INTERLINEAR ANNOTATION TERMINATOR */, 0xfffc,
+          0xfffc /* OBJECT REPLACEMENT CHARACTER */, 0xfffd,
+          0xfffd /* REPLACEMENT CHARACTER */, /**
            * C.9 Tagging characters
            * @link https://tools.ietf.org/html/rfc3454#appendix-C.9
            */
-          0xe0001, 0xe0001, /* LANGUAGE TAG */
-          0xe0020, 0xe007f, /* [TAGGING CHARACTERS] */
-          /**
+          0xe0001, 0xe0001 /* LANGUAGE TAG */, 0xe0020,
+          0xe007f /* [TAGGING CHARACTERS] */, /**
            * C.3 Private use
            * @link https://tools.ietf.org/html/rfc3454#appendix-C.3
            */
-          0xf0000, 0xffffd, /* [PRIVATE USE, PLANE 15] */
-          0x100000, 0x10fffd,
+          0xf0000, 0xffffd /* [PRIVATE USE, PLANE 15] */, 0x100000, 0x10fffd,
           /* [PRIVATE USE, PLANE 16] */
         ]; // prettier-ignore-end
 
@@ -32730,22 +32709,21 @@ By Ben Schmidt
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* UTF8 lead byte range. */
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 /* UTF8 lead byte range. */, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+          2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+          2 /* CONTEXT_SIGNED, second last byte. */, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+          1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
           2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-          2, 2, /* CONTEXT_SIGNED, second last byte. */
-          0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2,
-          2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-          2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3,
+          2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
           3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
           3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-          3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
           4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5,
           5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-          6, 6, 7,
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+          5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7,
           /* CONTEXT_SIGNED, last byte, same as the above values shifted by 3 bits. */
           0,
           8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 16, 16, 16, 16, 16, 16,
@@ -32778,22 +32756,22 @@ By Ben Schmidt
           6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
           24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
           41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
-          58, 59, 60, 61, 62, 63, /* CONTEXT_MSB6, last byte. */
-          0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5,
-          5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 11,
-          11, 11, 11, 12, 12, 12, 12, 13, 13, 13, 13, 14, 14, 14, 14, 15, 15,
-          15, 15, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19,
-          19, 20, 20, 20, 20, 21, 21, 21, 21, 22, 22, 22, 22, 23, 23, 23, 23,
-          24, 24, 24, 24, 25, 25, 25, 25, 26, 26, 26, 26, 27, 27, 27, 27, 28,
-          28, 28, 28, 29, 29, 29, 29, 30, 30, 30, 30, 31, 31, 31, 31, 32, 32,
-          32, 32, 33, 33, 33, 33, 34, 34, 34, 34, 35, 35, 35, 35, 36, 36, 36,
-          36, 37, 37, 37, 37, 38, 38, 38, 38, 39, 39, 39, 39, 40, 40, 40, 40,
-          41, 41, 41, 41, 42, 42, 42, 42, 43, 43, 43, 43, 44, 44, 44, 44, 45,
-          45, 45, 45, 46, 46, 46, 46, 47, 47, 47, 47, 48, 48, 48, 48, 49, 49,
-          49, 49, 50, 50, 50, 50, 51, 51, 51, 51, 52, 52, 52, 52, 53, 53, 53,
-          53, 54, 54, 54, 54, 55, 55, 55, 55, 56, 56, 56, 56, 57, 57, 57, 57,
-          58, 58, 58, 58, 59, 59, 59, 59, 60, 60, 60, 60, 61, 61, 61, 61, 62,
-          62, 62, 62, 63, 63, 63, 63, /* CONTEXT_{M,L}SB6, second last byte, */
+          58, 59, 60, 61, 62, 63 /* CONTEXT_MSB6, last byte. */, 0, 0, 0, 0, 1,
+          1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6,
+          7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 11,
+          12, 12, 12, 12, 13, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 15, 16,
+          16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 19, 20, 20,
+          20, 20, 21, 21, 21, 21, 22, 22, 22, 22, 23, 23, 23, 23, 24, 24, 24,
+          24, 25, 25, 25, 25, 26, 26, 26, 26, 27, 27, 27, 27, 28, 28, 28, 28,
+          29, 29, 29, 29, 30, 30, 30, 30, 31, 31, 31, 31, 32, 32, 32, 32, 33,
+          33, 33, 33, 34, 34, 34, 34, 35, 35, 35, 35, 36, 36, 36, 36, 37, 37,
+          37, 37, 38, 38, 38, 38, 39, 39, 39, 39, 40, 40, 40, 40, 41, 41, 41,
+          41, 42, 42, 42, 42, 43, 43, 43, 43, 44, 44, 44, 44, 45, 45, 45, 45,
+          46, 46, 46, 46, 47, 47, 47, 47, 48, 48, 48, 48, 49, 49, 49, 49, 50,
+          50, 50, 50, 51, 51, 51, 51, 52, 52, 52, 52, 53, 53, 53, 53, 54, 54,
+          54, 54, 55, 55, 55, 55, 56, 56, 56, 56, 57, 57, 57, 57, 58, 58, 58,
+          58, 59, 59, 59, 59, 60, 60, 60, 60, 61, 61, 61, 61, 62, 62, 62, 62,
+          63, 63, 63, 63 /* CONTEXT_{M,L}SB6, second last byte, */, 0, 0, 0, 0,
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -32804,16 +32782,13 @@ By Ben Schmidt
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-          0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ]);
 
         exports.lookupOffsets = new Uint16Array([
           /* CONTEXT_LSB6 */
-          1024, 1536, /* CONTEXT_MSB6 */
-          1280, 1536, /* CONTEXT_UTF8 */
-          0, 256, /* CONTEXT_SIGNED */
-          768, 512,
+          1024, 1536 /* CONTEXT_MSB6 */, 1280, 1536 /* CONTEXT_UTF8 */, 0,
+          256 /* CONTEXT_SIGNED */, 768, 512,
         ]);
 
         /***/
@@ -54141,7 +54116,7 @@ By Ben Schmidt
                 s.match_length <= 5 &&
                 (s.strategy === Z_FILTERED ||
                   (s.match_length === MIN_MATCH &&
-                    s.strstart - s.match_start > 4096) /*TOO_FAR*/)
+                    s.strstart - s.match_start > 4096)) /*TOO_FAR*/
               ) {
                 /* If prev_match is also MIN_MATCH, match_start is garbage
                  * but we will ignore the current match anyway.
