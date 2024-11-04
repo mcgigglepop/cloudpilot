@@ -35,10 +35,10 @@ func routes(app *config.AppConfig) http.Handler {
 		mux.Get("/dashboard", handlers.Repo.Dashboard)
 	})
 
-	// aws pages
-	mux.Route("/aws", func(mux chi.Router) {
+	// cloud pages
+	mux.Route("/cloud", func(mux chi.Router) {
 		mux.Use(Auth)
-		mux.Get("/overview", handlers.Repo.AWSOverview)
+		mux.Get("/overview", handlers.Repo.CloudOverview)
 	})
 
 	fileServer := http.FileServer(http.Dir("./static/"))

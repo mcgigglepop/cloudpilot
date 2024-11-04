@@ -160,7 +160,7 @@ func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
 
-// AWSOverview is the AWS Overview handler
-func (m *Repository) AWSOverview(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "aws-overview.page.tmpl", &models.TemplateData{})
+// CloudOverview is the Cloud Overview handler
+func (m *Repository) CloudOverview(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "cloud-overview.page.tmpl", &models.TemplateData{})
 }

@@ -167,7 +167,7 @@
                 aria-controls="navbarVerticalMenuPagesAccountMenu"
               >
                 <i class="bi-cloud nav-icon"></i>
-                <span class="nav-link-title">AWS Accounts</span>
+                <span class="nav-link-title">Cloud Accounts</span>
               </a>
 
               <div
@@ -175,7 +175,7 @@
                 class="nav-collapse collapse show"
                 data-bs-parent="#navbarVerticalMenuPagesMenu"
               >
-                <a class="nav-link active" href="/aws/overview">Overview</a>
+                <a class="nav-link active" href="/cloud/overview">Overview</a>
               </div>
             </div>
             <!-- End Collapse -->
@@ -901,16 +901,13 @@
               <li class="breadcrumb-item">
                 <a class="breadcrumb-link" href="javascript:;">Pages</a>
               </li>
-              <li class="breadcrumb-item">
-                <a class="breadcrumb-link" href="javascript:;">Account</a>
-              </li>
               <li class="breadcrumb-item active" aria-current="page">
-                API Keys
+                Cloud Accounts
               </li>
             </ol>
           </nav>
 
-          <h1 class="page-header-title">API Keys</h1>
+          <h1 class="page-header-title">Overview</h1>
         </div>
         <!-- End Col -->
 
@@ -921,7 +918,7 @@
             data-bs-toggle="modal"
             data-bs-target="#createAKIKeyModal"
           >
-            <i class="bi-plus me-1"></i> Create key
+            <i class="bi-plus me-1"></i> Add Account
           </button>
         </div>
         <!-- End Col -->
@@ -935,8 +932,33 @@
         <!-- Card -->
         <div class="card">
           <div class="card-body text-center">
-            <small class="text-cap">Projects</small>
-            <span class="js-counter d-block display-3 text-dark mb-2">150</span>
+            <small class="text-cap">AWS Accounts</small>
+            <span class="js-counter d-block display-3 text-dark mb-2">0</span>
+
+            <div class="row col-divider">
+              <div class="col text-end">
+                <span class="d-block fw-semibold text-success">
+                  <i class="bi-graph-up"></i> 12%
+                </span>
+                <span class="d-block">change</span>
+              </div>
+
+              <div class="col text-start">
+                <span class="d-block fw-semibold text-dark">5</span>
+                <span class="d-block">last week</span>
+              </div>
+            </div>
+            <!-- End Row -->
+          </div>
+        </div>
+        <!-- End Card -->
+      </div>
+      <div class="col-md-6 col-lg-4 mb-3 mb-lg-5">
+        <!-- Card -->
+        <div class="card">
+          <div class="card-body text-center">
+            <small class="text-cap">Azure Accounts</small>
+            <span class="js-counter d-block display-3 text-dark mb-2">0</span>
 
             <div class="row col-divider">
               <div class="col text-end">
@@ -957,57 +979,24 @@
         <!-- End Card -->
       </div>
       <!-- End Col -->
-
+      <!-- End Col -->
       <div class="col-md-6 col-lg-4 mb-3 mb-lg-5">
         <!-- Card -->
         <div class="card">
           <div class="card-body text-center">
-            <small class="text-cap"
-              ><span class="legend-indicator bg-success"></span> Successful
-              conversions</small
-            >
-            <span class="js-counter d-block display-3 text-dark mb-2">25</span>
+            <small class="text-cap">GCP Accounts</small>
+            <span class="js-counter d-block display-3 text-dark mb-2">0</span>
 
             <div class="row col-divider">
               <div class="col text-end">
                 <span class="d-block fw-semibold text-success">
-                  <i class="bi-graph-up"></i> 5.6%
+                  <i class="bi-graph-up"></i> 12%
                 </span>
                 <span class="d-block">change</span>
               </div>
 
               <div class="col text-start">
-                <span class="d-block fw-semibold text-dark">7</span>
-                <span class="d-block">last week</span>
-              </div>
-            </div>
-            <!-- End Row -->
-          </div>
-        </div>
-        <!-- End Card -->
-      </div>
-      <!-- End Col -->
-
-      <div class="col-md-6 col-lg-4 mb-3 mb-lg-5">
-        <!-- Card -->
-        <div class="card">
-          <div class="card-body text-center">
-            <small class="text-cap"
-              ><span class="legend-indicator bg-danger"></span> Failed
-              conversions</small
-            >
-            <span class="js-counter d-block display-3 text-dark mb-2">4</span>
-
-            <div class="row col-divider">
-              <div class="col text-end">
-                <span class="d-block fw-semibold text-danger">
-                  <i class="bi-graph-down"></i> 2.3%
-                </span>
-                <span class="d-block">change</span>
-              </div>
-
-              <div class="col text-start">
-                <span class="d-block fw-semibold text-dark">1</span>
+                <span class="d-block fw-semibold text-dark">5</span>
                 <span class="d-block">last week</span>
               </div>
             </div>
