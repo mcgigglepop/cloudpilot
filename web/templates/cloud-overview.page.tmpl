@@ -2279,24 +2279,26 @@
 >
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <!-- Header -->
-      <div class="modal-header">
-        <h4 class="modal-title" id="createAKIKeyModalLabel">
-          Add Cloud Account
-        </h4>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <!-- End Header -->
+      <form method="post" action="/cloud/add-cloud">
+        <!-- Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="createAKIKeyModalLabel">
+            Add Cloud Account
+          </h4>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <!-- End Header -->
 
-      <!-- Body -->
-      <div class="modal-body">
-        <!-- Form -->
-        <form>
+        <!-- Body -->
+        <div class="modal-body">
+          <!-- Form -->
+
+          <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
           <!-- Form -->
           <div class="row mb-4">
             <label
@@ -2320,7 +2322,7 @@
           <!-- Form -->
           <div class="row mb-4">
             <label
-              for="locationLabel"
+              for="providerLabel"
               class="col-sm-3 col-form-label form-label"
               >Provider</label
             >
@@ -2328,7 +2330,11 @@
             <div class="col-sm-9">
               <!-- Select -->
               <div class="tom-select-custom">
-                <select class="js-select form-select" id="locationLabel">
+                <select
+                  class="js-select form-select"
+                  name="provider"
+                  id="providerLabel"
+                >
                   <option
                     value="AWS"
                     data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="/static/vendor/flag-icon-css/flags/1x1/af.svg" alt="Afghanistan Flag" /><span class="text-truncate">Amazon Web Services (AWS)</span></span>'
@@ -2357,7 +2363,7 @@
           <!-- Form -->
           <div class="row mb-4">
             <label
-              for="locationLabel"
+              for="accountTypeLabel"
               class="col-sm-3 col-form-label form-label"
               >Account Type</label
             >
@@ -2365,7 +2371,11 @@
             <div class="col-sm-9">
               <!-- Select -->
               <div class="tom-select-custom mb-4">
-                <select class="js-select form-select" id="locationLabel">
+                <select
+                  class="js-select form-select"
+                  name="accountType"
+                  id="accountTypeLabel"
+                >
                   <option
                     value="DEV"
                     data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="/static/vendor/flag-icon-css/flags/1x1/af.svg" alt="Afghanistan Flag" /><span class="text-truncate">Development (DEV)</span></span>'
@@ -2390,46 +2400,48 @@
             </div>
           </div>
           <!-- End Form -->
-        </form>
 
-        <!-- End Form -->
-      </div>
-      <!-- End Body -->
-
-      <!-- Footer -->
-      <div class="modal-footer">
-        <div class="row align-items-sm-center flex-grow-1 mx-n2">
-          <div class="col-sm mb-2 mb-sm-0">
-            <p class="modal-footer-text">
-              What is this?
-              <i
-                class="bi-question-circle"
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                title="Add a cloud account to deploy applications and services. Specify these accounts in your pipeline targets."
-              ></i>
-            </p>
-          </div>
-          <!-- End Col -->
-
-          <div class="col-sm-auto">
-            <div class="d-flex gap-3">
-              <button
-                type="button"
-                class="btn btn-white"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
-                Cancel
-              </button>
-              <button type="button" class="btn btn-primary">Add Account</button>
-            </div>
-          </div>
-          <!-- End Col -->
+          <!-- End Form -->
         </div>
-        <!-- End Row -->
-      </div>
-      <!-- End Footer -->
+        <!-- End Body -->
+
+        <!-- Footer -->
+        <div class="modal-footer">
+          <div class="row align-items-sm-center flex-grow-1 mx-n2">
+            <div class="col-sm mb-2 mb-sm-0">
+              <p class="modal-footer-text">
+                What is this?
+                <i
+                  class="bi-question-circle"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Add a cloud account to deploy applications and services. Specify these accounts in your pipeline targets."
+                ></i>
+              </p>
+            </div>
+            <!-- End Col -->
+
+            <div class="col-sm-auto">
+              <div class="d-flex gap-3">
+                <button
+                  type="button"
+                  class="btn btn-white"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  Add Account
+                </button>
+              </div>
+            </div>
+            <!-- End Col -->
+          </div>
+          <!-- End Row -->
+        </div>
+        <!-- End Footer -->
+      </form>
     </div>
   </div>
 </div>

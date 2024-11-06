@@ -39,6 +39,7 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Route("/cloud", func(mux chi.Router) {
 		mux.Use(Auth)
 		mux.Get("/overview", handlers.Repo.CloudOverview)
+		mux.Post("/add-cloud", handlers.Repo.AddCloud)
 	})
 
 	fileServer := http.FileServer(http.Dir("./static/"))

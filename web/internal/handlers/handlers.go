@@ -109,15 +109,6 @@ func (m *Repository) PostRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// user model
-	user := models.User{
-		FirstName: r.Form.Get("firstname"),
-		LastName:  r.Form.Get("lastname"),
-		Email:     r.Form.Get("email"),
-		Password:  r.Form.Get("password"),
-		Confirmed: false,
-	}
-
 	form := forms.New(r.PostForm)
 	form.Required("email", "password")
 	form.IsEmail("email")
@@ -129,6 +120,24 @@ func (m *Repository) PostRegister(w http.ResponseWriter, r *http.Request) {
 			Form: form,
 		})
 		return
+	}
+
+	newOrganizationName := m.DB.RandomOrgName()
+	// create the organization
+	organization := models.Organization{
+		Name: newOrganizationName,
+	}
+
+	newOrganizationID, _ := m.DB.InsertOrganization(organization)
+
+	// user model
+	user := models.User{
+		FirstName: r.Form.Get("firstname"),
+		LastName:  r.Form.Get("lastname"),
+		Email:     r.Form.Get("email"),
+		Password:  r.Form.Get("password"),
+		Confirmed: false,
+		OrganizationId: newOrganizationID,
 	}
 
 	// create the user, returning the email for session storage
@@ -163,4 +172,51 @@ func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 // CloudOverview is the Cloud Overview handler
 func (m *Repository) CloudOverview(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "cloud-overview.page.tmpl", &models.TemplateData{})
+}
+// AddCloud is the Add Cloud handler
+func (m *Repository) AddCloud(w http.ResponseWriter, r *http.Request) {
+	_ = m.App.Session.RenewToken(r.Context())
+
+	// parse the form
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		m.App.Session.Put(r.Context(), "error", err)
+		http.Redirect(w, r, "/cloud/overview", http.StatusSeeOther)
+		return
+	}
+
+	// // cloud account model
+	// cloudAccount := models.CloudAccount{
+	// 	AccountNumber: r.Form.Get("accountNumber"),
+	// 	Provider:  r.Form.Get("provider"),
+	// 	AccountType:     r.Form.Get("accountType"),
+	// }
+
+	// // required fields
+	// form := forms.New(r.PostForm)
+	// form.Required("accountNumber", "provider", "accountType")
+
+	// // check form validation
+	// if !form.Valid() {
+	// 	log.Println("Invalid form")
+	// 	m.App.Session.Put(r.Context(), "error", "invalid form")
+	// 	render.Template(w, r, "cloud-overview.page.tmpl", &models.TemplateData{
+	// 		Form: form,
+	// 	})
+	// 	return
+	// }
+
+	// // _, err := m.DB.AddCloudAccount(cloudAccount)
+
+	// // // authenticate the user
+	// // id, _, err := m.DB.Authenticate(email, password)
+	// // if err != nil {
+	// // 	log.Println("Invalid login credentials")
+	// // 	m.App.Session.Put(r.Context(), "error", "Invalid login credentials")
+	// // 	http.Redirect(w, r, "/login", http.StatusSeeOther)
+	// // 	return
+	// // }
+
+	http.Redirect(w, r, "/cloud/overview", http.StatusSeeOther)
 }

@@ -36,6 +36,13 @@
       href="/static/vendor/tom-select/dist/css/tom-select.bootstrap5.css"
     />
 
+    <!-- toastify -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+
     <!-- CSS Front Template -->
 
     <link
@@ -1508,7 +1515,65 @@
     <script src="/static/js/theme.min.js"></script>
     <script src="/static/js/hs.theme-appearance-charts.js"></script>
 
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+
     {{block "js" .}} {{ end }}
+
+    <script>
+      {{with .Error}}
+        Toastify({
+          text: "{{.}}",
+          duration: 3000,
+          destination: "https://github.com/apvarun/toastify-js",
+          newWindow: true,
+          close: true,
+          gravity: "bottom", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "linear-gradient(to right, #B71C1C, #D32F2F)",
+          },
+          onClick: function(){} // Callback after click
+        }).showToast();
+      {{end}}
+
+      {{with .Flash}}
+        Toastify({
+          text: "{{.}}",
+          duration: 3000,
+          destination: "https://github.com/apvarun/toastify-js",
+          newWindow: true,
+          close: true,
+          gravity: "bottom", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "linear-gradient(to right, #2E7D32, #4CAF50)"
+          },
+          onClick: function(){} // Callback after click
+        }).showToast();
+      {{end}}
+
+      {{with .Warning}}
+        Toastify({
+          text: "{{.}}",
+          duration: 3000,
+          destination: "https://github.com/apvarun/toastify-js",
+          newWindow: true,
+          close: true,
+          gravity: "bottom", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "linear-gradient(to right, #E65100, #FB8C00)",
+          },
+          onClick: function(){} // Callback after click
+        }).showToast();
+      {{end}}
+    </script>
   </body>
 </html>
 {{ end }}

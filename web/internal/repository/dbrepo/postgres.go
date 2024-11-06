@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"time"
+	"math/rand"
 
 	"github.com/mcgigglepop/cloudpilot/web/internal/models"
 	"golang.org/x/crypto/bcrypt"
@@ -12,6 +13,29 @@ import (
 
 func (m *postgresDBRepo) AllUsers() bool {
 	return true
+}
+
+// InsertOrganization inserts a organization into the database
+func (m *postgresDBRepo) InsertOrganization(org models.Organization) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var newID int
+
+	stmt := `insert into organizations (name, created_at, updated_at) 
+			values ($1, $2, $3) returning id`
+
+	err := m.DB.QueryRowContext(ctx, stmt,
+		org.Name,
+		time.Now(),
+		time.Now(),
+	).Scan(&newID)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return newID, nil
 }
 
 // CreateUser creates a user in the database
@@ -37,8 +61,8 @@ func (m *postgresDBRepo) CreateUser(u models.User) (string, error) {
 
 	// Insert the new user into the database
 	stmt := `
-		insert into users (first_name, last_name, email, password_hash, confirmed, created_at, updated_at) 
-		values ($1, $2, $3, $4, $5, $6, $7)
+		insert into users (first_name, last_name, email, password_hash, confirmed, created_at, updated_at, organization_id) 
+		values ($1, $2, $3, $4, $5, $6, $7, $8)
 	`
 	_, err = m.DB.ExecContext(ctx, stmt,
 		u.FirstName,
@@ -48,6 +72,7 @@ func (m *postgresDBRepo) CreateUser(u models.User) (string, error) {
 		false,
 		time.Now(),
 		time.Now(),
+		u.OrganizationId,
 	)
 
 	// error handle
@@ -82,4 +107,11 @@ func (m *postgresDBRepo) Authenticate(email, password string) (int, string, erro
 	}
 
 	return id, hashedPassword, nil
+}
+
+// RandomOrgName creates a random organization name
+func (m *postgresDBRepo) RandomOrgName() string {
+	names := []string{"SunshineClouds", "MoonlightDev", "StarrySkies"} // Add more names as desired
+	rand.Seed(time.Now().UnixNano())
+	return names[rand.Intn(len(names))]
 }

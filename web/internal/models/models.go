@@ -14,4 +14,13 @@ type User struct {
 	Confirmed 		bool
 	CreatedAt   	time.Time
 	UpdatedAt   	time.Time
+	OrganizationId int
+}
+
+// Organization is the organization model
+type Organization struct {
+	ID          	int
+	Name    	    string
+	CreatedAt   	time.Time
+	UpdatedAt   	time.Time
 }
