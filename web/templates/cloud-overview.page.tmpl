@@ -1010,7 +1010,7 @@
     <!-- End Row -->
 
     <!-- Card -->
-    <div class="card">
+    <div class="card mb-5">
       <!-- Header -->
       <div class="card-header card-header-content-sm-between">
         <div class="mb-2 mb-sm-0">
@@ -1110,7 +1110,7 @@
           class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
           data-hs-datatables-options='{
                  "columnDefs": [{
-                    "targets": [0, 1, 2, 3, 6],
+                    "targets": [0, 1, 2, 3, 4, 5],
                     "orderable": false
                   }],
                  "order": [],
@@ -1141,10 +1141,10 @@
                   ></label>
                 </div>
               </th>
-              <th class="table-column-ps-0">Account Name</th>
+              <th class="table-column-ps-0">Account Number</th>
               <th>Provider</th>
               <th>Account Type</th>
-              <th>Created</th>
+              <th>Account Status</th>
               <th></th>
             </tr>
           </thead>
@@ -1162,7 +1162,7 @@
                   <label class="form-check-label" for="apiKeyCheck3"></label>
                 </div>
               </td>
-              <td class="table-column-ps-0">Development 1</td>
+              <td class="table-column-ps-0">1234567890</td>
               <td>
                 <a class="d-flex align-items-center text-dark" href="#">
                   <div class="flex-shrink-0">
@@ -1178,16 +1178,17 @@
                 </a>
               </td>
 
+              <td>Development</td>
               <td>
-                <span class="legend-indicator bg-success"></span> Development
+                <span class="legend-indicator bg-success"></span> Available
               </td>
-              <td>February 20, 2020</td>
               <td>
-                <div class="dropdown">
-                  <button type="button" class="btn btn-danger btn-sm">
-                    Delete
-                  </button>
-                </div>
+                <button type="button" class="btn btn-success btn-sm">
+                  <i class="bi bi-arrow-repeat"></i> Sync
+                </button>
+                <button type="button" class="btn btn-danger btn-sm">
+                  Delete
+                </button>
               </td>
             </tr>
           </tbody>
@@ -1247,6 +1248,58 @@
         <!-- End Row -->
       </div>
       <!-- End Footer -->
+    </div>
+    <!-- End Card -->
+
+    <!-- Card -->
+    <div class="card mb-7">
+      <!-- Header -->
+      <div class="card-header">
+        <!-- Nav -->
+        <!-- Heading -->
+        <h2 id="inline-text-elements" class="hs-docs-heading">
+          Cross-Account Role
+          <a
+            class="anchorjs-link"
+            href="#inline-text-elements"
+            aria-label="Anchor"
+            data-anchorjs-icon="#"
+          ></a>
+        </h2>
+        <!-- End Heading -->
+
+        <p>Create this role in your AWS account</p>
+        <!-- End Nav -->
+      </div>
+      <!-- End Header -->
+
+      <!-- Tab Content -->
+      <div class="tab-content" id="navTabContent6">
+        <div
+          class="tab-pane fade p-4 show active"
+          id="nav-result6"
+          role="tabpanel"
+          aria-labelledby="nav-resultTab6"
+        >
+          <pre>
+        <code class="language-markup" style="color: #d63384;"data-lang="json">
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::1234567890:root"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}          
+        </code>
+      </pre>
+        </div>
+      </div>
+      <!-- End Tab Content -->
     </div>
     <!-- End Card -->
   </div>
@@ -2247,20 +2300,19 @@
           <!-- Form -->
           <div class="row mb-4">
             <label
-              for="timeZoneLabel"
+              for="accountNumberLabel"
               class="col-sm-3 col-form-label form-label"
-              >Account Name</label
+              >Account Number</label
             >
 
             <div class="col-sm-9">
               <input
                 type="text"
                 class="form-control"
-                name="currentPassword"
-                id="timeZoneLabel"
-                placeholder="Your time zone"
-                aria-label="Your time zone"
-                value="GMT+01:00"
+                name="accountNumber"
+                id="accountNumberLabel"
+                placeholder="Your account number"
+                aria-label="Your account number"
               />
             </div>
           </div>
@@ -2279,19 +2331,19 @@
                 <select class="js-select form-select" id="locationLabel">
                   <option
                     value="AWS"
-                    data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="./assets/vendor/flag-icon-css/flags/1x1/af.svg" alt="Afghanistan Flag" /><span class="text-truncate">Amazon Web Services (AWS)</span></span>'
+                    data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="/static/vendor/flag-icon-css/flags/1x1/af.svg" alt="Afghanistan Flag" /><span class="text-truncate">Amazon Web Services (AWS)</span></span>'
                   >
                     Amazon Web Services (AWS)
                   </option>
                   <option
                     value="Azure"
-                    data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="./assets/vendor/flag-icon-css/flags/1x1/ax.svg" alt="Aland Islands Flag" /><span class="text-truncate">Microsoft Azure</span></span>'
+                    data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="/static/vendor/flag-icon-css/flags/1x1/ax.svg" alt="Aland Islands Flag" /><span class="text-truncate">Microsoft Azure</span></span>'
                   >
                     Microsoft Azure (Azure)
                   </option>
                   <option
                     value="GCP"
-                    data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="./assets/vendor/flag-icon-css/flags/1x1/al.svg" alt="Albania Flag" /><span class="text-truncate">Google Cloud Platform (GCP)</span></span>'
+                    data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="/static/vendor/flag-icon-css/flags/1x1/al.svg" alt="Albania Flag" /><span class="text-truncate">Google Cloud Platform (GCP)</span></span>'
                   >
                     Google Cloud Platform (GCP)
                   </option>
@@ -2316,19 +2368,19 @@
                 <select class="js-select form-select" id="locationLabel">
                   <option
                     value="DEV"
-                    data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="./assets/vendor/flag-icon-css/flags/1x1/af.svg" alt="Afghanistan Flag" /><span class="text-truncate">Development (DEV)</span></span>'
+                    data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="/static/vendor/flag-icon-css/flags/1x1/af.svg" alt="Afghanistan Flag" /><span class="text-truncate">Development (DEV)</span></span>'
                   >
                     Development (DEV)
                   </option>
                   <option
                     value="QA"
-                    data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="./assets/vendor/flag-icon-css/flags/1x1/ax.svg" alt="Aland Islands Flag" /><span class="text-truncate">Staging/QA (QA)</span></span>'
+                    data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="/static/vendor/flag-icon-css/flags/1x1/ax.svg" alt="Aland Islands Flag" /><span class="text-truncate">Staging/QA (QA)</span></span>'
                   >
                     Staging/QA (QA)
                   </option>
                   <option
                     value="PROD"
-                    data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="./assets/vendor/flag-icon-css/flags/1x1/al.svg" alt="Albania Flag" /><span class="text-truncate">Production (PROD)</span></span>'
+                    data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="/static/vendor/flag-icon-css/flags/1x1/al.svg" alt="Albania Flag" /><span class="text-truncate">Production (PROD)</span></span>'
                   >
                     Production (PROD)
                   </option>
@@ -2384,34 +2436,21 @@
 <!-- End Create New API Key Modal -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 
-<!-- JS Global Compulsory  -->
-<script src="./assets/vendor/jquery/dist/jquery.min.js"></script>
-<script src="./assets/vendor/jquery-migrate/dist/jquery-migrate.min.js"></script>
-<script src="./assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- JS Implementing Plugins -->
-<script src="./assets/vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside.min.js"></script>
-<script src="./assets/vendor/hs-form-search/dist/hs-form-search.min.js"></script>
-
-<script src="./assets/vendor/hs-counter/dist/hs-counter.min.js"></script>
-<script src="./assets/vendor/clipboard/dist/clipboard.min.js"></script>
-<script src="./assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
-<script src="./assets/vendor/datatables.net.extensions/select/select.min.js"></script>
-<script src="./assets/vendor/appear/dist/appear.min.js"></script>
-<script src="./assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-<script src="./assets/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
-<script src="./assets/vendor/jszip/dist/jszip.min.js"></script>
-<script src="./assets/vendor/pdfmake/build/pdfmake.min.js"></script>
-<script src="./assets/vendor/pdfmake/build/vfs_fonts.js"></script>
-<script src="./assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
-<script src="./assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
-<script src="./assets/vendor/datatables.net-buttons/js/buttons.colVis.min.js"></script>
-<script src="./assets/vendor/tom-select/dist/js/tom-select.complete.min.js"></script>
-
 <!-- JS Front -->
-<script src="./assets/js/theme.min.js"></script>
+{{end}} {{define "js"}}
 
+<script src="/static/vendor/hs-counter/dist/hs-counter.min.js"></script>
+<script src="/static/vendor/appear/dist/appear.min.js"></script>
+<script src="/static/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/static/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="/static/vendor/jszip/dist/jszip.min.js"></script>
+<script src="/static/vendor/pdfmake/build/pdfmake.min.js"></script>
+<script src="/static/vendor/pdfmake/build/vfs_fonts.js"></script>
+<script src="/static/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="/static/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="/static/vendor/datatables.net-buttons/js/buttons.colVis.min.js"></script>
 <!-- JS Plugins Init. -->
+
 <script>
   $(document).on('ready', function () {
     // INITIALIZATION OF DATATABLES
