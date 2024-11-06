@@ -24,3 +24,16 @@ type Organization struct {
 	CreatedAt   	time.Time
 	UpdatedAt   	time.Time
 }
+
+// CloudAccount is the cloud account model
+type CloudAccount struct {
+	ID              int       
+	AccountNumber   string    
+	ProviderName    string    
+	AccountType     string    
+	OrganizationID  int       
+	AccountStatus   string    
+	InUse           bool      
+	CreatedAt       time.Time 
+	UpdatedAt       time.Time 
+}

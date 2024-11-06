@@ -186,37 +186,38 @@ func (m *Repository) AddCloud(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// // cloud account model
-	// cloudAccount := models.CloudAccount{
-	// 	AccountNumber: r.Form.Get("accountNumber"),
-	// 	Provider:  r.Form.Get("provider"),
-	// 	AccountType:     r.Form.Get("accountType"),
-	// }
+	// required fields
+	form := forms.New(r.PostForm)
+	form.Required("accountNumber", "provider", "accountType")
 
-	// // required fields
-	// form := forms.New(r.PostForm)
-	// form.Required("accountNumber", "provider", "accountType")
+	// check form validation
+	if !form.Valid() {
+		log.Println("Invalid form")
+		m.App.Session.Put(r.Context(), "error", "invalid form")
+		render.Template(w, r, "cloud-overview.page.tmpl", &models.TemplateData{
+			Form: form,
+		})
+		return
+	}
 
-	// // check form validation
-	// if !form.Valid() {
-	// 	log.Println("Invalid form")
-	// 	m.App.Session.Put(r.Context(), "error", "invalid form")
-	// 	render.Template(w, r, "cloud-overview.page.tmpl", &models.TemplateData{
-	// 		Form: form,
-	// 	})
-	// 	return
-	// }
+	userID, _ := m.App.Session.Get(r.Context(), "user_id").(int)
 
-	// // _, err := m.DB.AddCloudAccount(cloudAccount)
+	user, err := m.DB.GetUserByID(userID)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't find user!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
 
-	// // // authenticate the user
-	// // id, _, err := m.DB.Authenticate(email, password)
-	// // if err != nil {
-	// // 	log.Println("Invalid login credentials")
-	// // 	m.App.Session.Put(r.Context(), "error", "Invalid login credentials")
-	// // 	http.Redirect(w, r, "/login", http.StatusSeeOther)
-	// // 	return
-	// // }
+	// cloud account model
+	cloudAccount := models.CloudAccount{
+		AccountNumber: r.Form.Get("accountNumber"),
+		ProviderName:  r.Form.Get("provider"),
+		AccountType:   r.Form.Get("accountType"),
+		OrganizationID: user.OrganizationId,
+	}
+
+	err = m.DB.AddCloudAccount(cloudAccount)
 
 	http.Redirect(w, r, "/cloud/overview", http.StatusSeeOther)
 }

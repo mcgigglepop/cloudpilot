@@ -9,4 +9,6 @@ type DatabaseRepo interface {
 	Authenticate(email, password string) (int, string, error)
 	RandomOrgName() string
 	InsertOrganization(org models.Organization) (int, error)
+	GetUserByID(id int) (models.User, error)
+	AddCloudAccount(c models.CloudAccount) (error)
 }

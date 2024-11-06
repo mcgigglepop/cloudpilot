@@ -85,6 +85,57 @@ func (m *postgresDBRepo) CreateUser(u models.User) (string, error) {
 	return u.Email, nil
 }
 
+// AddCloudAccount creates a cloud account in the database
+func (m *postgresDBRepo) AddCloudAccount(c models.CloudAccount) (error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `
+		insert into cloud_accounts (account_number, provider_name, account_type, organization_id, account_status, in_use, created_at, updated_at) 
+		values ($1, $2, $3, $4, $5, $6, $7, $8)
+	`
+	_, err := m.DB.ExecContext(ctx, stmt,
+		c.AccountNumber,
+		c.ProviderName, 
+		c.AccountType,
+		c.OrganizationID,
+		"unavailable",
+		false,
+		time.Now(),
+		time.Now(),
+	)
+
+	// error handle
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	
+	// return username
+	return nil
+}
+
+// GetUserByID gets a room by id
+func (m *postgresDBRepo) GetUserByID(id int) (models.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var user models.User
+	query := `
+		select user_id, organization_id from users where user_id = $1	
+`
+	row := m.DB.QueryRowContext(ctx, query, id)
+	err := row.Scan(
+		&user.ID,
+		&user.OrganizationId,
+	)
+
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
+}
 // Authenticate authenticates a user
 func (m *postgresDBRepo) Authenticate(email, password string) (int, string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
